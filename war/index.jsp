@@ -1,3 +1,10 @@
+<%@page import="com.google.appengine.api.memcache.jsr107cache.GCacheFactory"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
+<%@page import="net.sf.jsr107cache.CacheException"%>
+<%@page import="java.util.Collections"%>
+<%@page import="net.sf.jsr107cache.CacheManager"%>
+<%@page import="net.sf.jsr107cache.Cache"%>
 <%@page import="java.util.List"%>
 <%@page import="fr.cpcgifts.utils.ViewTools"%>
 <%@page import="fr.cpcgifts.persistance.GAPersistance"%>
@@ -50,7 +57,26 @@ body {
 	<div class="container">
 
 	<%
-		List<Giveaway> opengas = GAPersistance.getOpenGAs();
+	
+	Cache cache;
+	List<Giveaway> opengas;
+	
+	Map props = new HashMap();
+    props.put(GCacheFactory.EXPIRATION_DELTA, 120); // on garde la liste en cache 2 minutes
+	
+	try {
+        cache = CacheManager.getInstance().getCacheFactory().createCache(props);
+                    
+        opengas = (List<Giveaway>) cache.get("openGAsList");
+		
+		if(opengas == null) {
+			opengas = GAPersistance.getOpenGAs();
+			cache.put("openGAsList", opengas);
+		}
+		
+    } catch (CacheException e) {
+    	opengas = GAPersistance.getOpenGAs();
+    }
 	%>
 
 	<div class="row hero-unit text-center">
