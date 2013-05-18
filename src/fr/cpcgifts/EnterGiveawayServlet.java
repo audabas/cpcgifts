@@ -48,8 +48,10 @@ public class EnterGiveawayServlet extends HttpServlet {
 			Giveaway ga = pm.getObjectById(Giveaway.class, KeyFactory.createKey(Giveaway.class.getSimpleName(),Long.parseLong(gaID)));
 			
 			if(reqType.equals("enter")) {
-				ga.addEntrant(cpcuser.getKey());
-				cpcuser.addEntry(ga.getKey());
+				if(! ga.getEntrants().contains(cpcuser.getKey())) { // si l'utilisateur est déjà inscrit.
+					ga.addEntrant(cpcuser.getKey());
+					cpcuser.addEntry(ga.getKey());
+				}
 			} else {
 				ga.removeEntrant(cpcuser.getKey());
 				cpcuser.removeEntry(ga.getKey());
