@@ -10,8 +10,6 @@ import javax.jdo.Query;
 import com.google.appengine.api.datastore.Key;
 
 import fr.cpcgifts.model.Comment;
-import fr.cpcgifts.model.CpcUser;
-import fr.cpcgifts.model.Giveaway;
 
 public class CommentParsistance {
 
@@ -56,6 +54,7 @@ public class CommentParsistance {
 		return res;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<Comment> getAllComments() {
 		List<Comment> res;
 

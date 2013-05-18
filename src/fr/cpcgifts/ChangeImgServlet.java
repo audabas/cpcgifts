@@ -1,13 +1,14 @@
 package fr.cpcgifts;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -33,9 +34,10 @@ public class ChangeImgServlet extends HttpServlet {
 
 		if (user != null && cpcuser != null) {
 
-			Map params = req.getParameterMap();
+			@SuppressWarnings("unchecked")
+			Map<String, String[]> params = req.getParameterMap();
 			
-			String imgUrl = ((String[]) params.get("imgurl"))[0];
+			String imgUrl = params.get("imgurl")[0];
 			
 			cpcuser.setAvatarUrl(imgUrl);
 			

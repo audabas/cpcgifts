@@ -1,18 +1,14 @@
 package fr.cpcgifts;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-import javax.servlet.http.*;
-import javax.jdo.Query;
-import javax.mail.Session;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
@@ -21,13 +17,12 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
-import fr.cpcgifts.persistance.CpcUserPersistance;
-import fr.cpcgifts.persistance.GAPersistance;
 import fr.cpcgifts.persistance.PMF;
 
 @SuppressWarnings("serial")
 public class EnterGiveawayServlet extends HttpServlet {
 	
+	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(EnterGiveawayServlet.class.getName());
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -41,10 +36,11 @@ public class EnterGiveawayServlet extends HttpServlet {
 
 		if (user != null && cpcuser != null) {
 
-			Map params = req.getParameterMap();
+			@SuppressWarnings("unchecked")
+			Map<String, String[]> params = req.getParameterMap();
 			
-			String reqType = ((String[]) params.get("reqtype"))[0];
-			String gaID = ((String[]) params.get("gaid"))[0];
+			String reqType = params.get("reqtype")[0];
+			String gaID = params.get("gaid")[0];
 			Giveaway ga = pm.getObjectById(Giveaway.class, KeyFactory.createKey(Giveaway.class.getSimpleName(),Long.parseLong(gaID)));
 			
 			if(reqType.equals("enter")) {

@@ -2,17 +2,14 @@ package fr.cpcgifts;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-import javax.servlet.http.*;
-import javax.jdo.Query;
-import javax.mail.Session;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -20,7 +17,6 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
-import fr.cpcgifts.persistance.CpcUserPersistance;
 import fr.cpcgifts.persistance.PMF;
 
 @SuppressWarnings("serial")
@@ -39,12 +35,13 @@ public class GiveawayServlet extends HttpServlet {
 
 		if (user != null && cpcuser != null) {
 
-			Map params = req.getParameterMap();
+			@SuppressWarnings("unchecked")
+			Map<String, String[]> params = req.getParameterMap();
 			
-			String imgUrl = ((String[]) params.get("imgUrl"))[0];
-			String gameName = ((String[]) params.get("gameName"))[0];
-			String gameDescription = ((String[]) params.get("gameDescription"))[0];
-			String endDateStr = ((String[]) params.get("endDateParsed"))[0];
+			String imgUrl = params.get("imgUrl")[0];
+			String gameName = params.get("gameName")[0];
+			String gameDescription = params.get("gameDescription")[0];
+			String endDateStr = params.get("endDateParsed")[0];
 			String[] endDateSplittedStr = endDateStr.split("@");
 			String[] splittedDate = endDateSplittedStr[0].split("-");
 			String[] splittedTime = endDateSplittedStr[1].split("-");

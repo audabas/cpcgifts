@@ -9,7 +9,6 @@ import javax.jdo.Query;
 
 import com.google.appengine.api.datastore.Key;
 
-import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
 
 public class GAPersistance {
@@ -55,6 +54,7 @@ public class GAPersistance {
 		return res;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<Giveaway> getAllGA() {
 		List<Giveaway> res;
 
@@ -79,6 +79,7 @@ public class GAPersistance {
 		return getOpenGAs(true);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<Giveaway> getOpenGAs(boolean detached) {
 		List<Giveaway> res;
 

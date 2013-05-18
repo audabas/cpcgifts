@@ -1,20 +1,16 @@
 package fr.cpcgifts;
 
 import java.io.IOException;
-import java.util.List;
 
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-import javax.servlet.http.*;
-import javax.jdo.Query;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
-import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.persistance.CpcUserPersistance;
-import fr.cpcgifts.persistance.PMF;
 
 @SuppressWarnings("serial")
 public class LoginServlet extends HttpServlet {

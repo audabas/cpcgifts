@@ -10,7 +10,6 @@ import javax.jdo.Query;
 import com.google.appengine.api.datastore.Key;
 
 import fr.cpcgifts.model.CpcUser;
-import fr.cpcgifts.model.Giveaway;
 
 public class CpcUserPersistance {
 
@@ -25,6 +24,7 @@ public class CpcUserPersistance {
 		query.declareParameters("String idParam");
 
 		try {
+			@SuppressWarnings("unchecked")
 			List<CpcUser> results = (List<CpcUser>) query.execute(id);
 			if (!results.isEmpty()) {
 				for (CpcUser u : results) {
@@ -96,6 +96,7 @@ public class CpcUserPersistance {
 		return res;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static List<CpcUser> getAllUsers() {
 		List<CpcUser> res;
 		
