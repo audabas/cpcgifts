@@ -1,0 +1,11 @@
+<!-- Indices written at Sat, 18 May 2013 16:18:44 CEST -->
+
+<datastore-indexes>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Giveaway" ancestor="false" source="auto">
+        <property name="open" direction="asc"/>
+        <property name="endDate" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

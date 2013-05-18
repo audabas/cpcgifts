@@ -1,0 +1,15 @@
+<%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
+<%@page import="fr.cpcgifts.model.CpcUser"%>
+<%
+
+	CpcUser cpcuser = (CpcUser) session.getAttribute("cpcuser");
+
+	if(cpcuser == null) {
+		if (userService.isUserLoggedIn()) {
+			cpcuser = CpcUserPersistance.getCpcUser(user.getUserId());
+			session.setAttribute("cpcuser",	cpcuser);
+		}
+	}
+	
+
+%>

@@ -1,0 +1,76 @@
+
+
+<%@page import="fr.cpcgifts.model.CpcUser"%>
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse"
+				data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+				class="icon-bar"></span> <span class="icon-bar"></span>
+			</a> <a class="brand" href="/">Canard PC Gifts</a>
+			<div class="nav-collapse collapse">
+				<ul class="nav">
+					<li><a href="/">Accueil</a></li>
+					<!--<li><a href="#about">About</a></li>
+                            <li><a href="#contact">Contact</a></li>-->
+					<%
+						if (userService.isUserLoggedIn()) {
+					%>
+					<%@ include file="getuser.jspf"%>
+					<%
+							if (cpcuser != null) {
+					%>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown">Concours<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/create">Créer un concours</a></li>
+							<li class="divider"></li>
+							<li><a onclick="javascript:window.location.href = '/user?userID=<%=cpcuser.getKey().getId() %>#created'; window.location.reload(true);" href="/user?userID=<%=cpcuser.getKey().getId() %>#created">Mes concours créés</a></li>
+							<li><a onclick="javascript:window.location.href = '/user?userID=<%=cpcuser.getKey().getId() %>#entries'; javascript:window.location.reload(true);" href="/user?userID=<%=cpcuser.getKey().getId() %>#entries">Mes participations</a></li>
+							<li><a onclick="javascript:window.location.href = '/user?userID=<%=cpcuser.getKey().getId() %>#won'; window.location.reload(true);" href="/user?userID=<%=cpcuser.getKey().getId() %>#won">Concours gagnés</a></li>
+						</ul></li>
+							
+						<li><a href="/users">Liste des membres</a></li>
+
+					<%
+						} else {
+								response.sendRedirect("/sign");
+								return;
+							}
+						} else {
+							session.removeAttribute("cpcuser");
+						}
+					%>
+				</ul>
+				<div class="pull-right">
+					<%
+						if (userService.isUserLoggedIn()) {
+					%>
+					<%@ include file="getuser.jspf"%>
+					<div class="btn-group">
+						<a class="btn" href="/user?userID=<%=cpcuser.getKey().getId() %>">
+						<i
+							class="icon-user"></i> <%= cpcuser.getCpcNickname() %></a> <a
+							class="btn dropdown-toggle" data-toggle="dropdown"
+							href="#"><span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/user?userID=<%=cpcuser.getKey().getId() %>"><i class="icon-pencil"></i> Modifier votre profil</a></li>
+							<li class="divider"></li>
+							<li><a href="<%=userService.createLogoutURL("/")%>"><i class="icon-off"></i> Déconnexion</a></li>
+						</ul>
+					</div>
+
+					<%
+						} else {
+					%>
+					<a href="<%=userService.createLoginURL(request.getRequestURI())%>"
+						class="btn">Connexion</a>
+					<%
+						}
+					%>
+				</div>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+</div>
