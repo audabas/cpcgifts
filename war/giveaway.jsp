@@ -206,7 +206,12 @@ body {
 					
 				</div>
 				<div class="tab-pane" id="signature">
+				<h4>Signature texte :</h4>
 				<p class="well">[url=<%= request.getRequestURL().toString() + '?' + request.getQueryString() %>]<%= currentGA.getTitle() %>[/url]</p>
+				<% if(!currentGA.getImgUrl().equals("img/game.png")) { %>
+				<h4>Signature image :</h4>
+				<p class="well">[url=<%= request.getRequestURL().toString() + '?' + request.getQueryString() %>][IMG]<%= currentGA.getImgUrl() %>[/IMG][/url]</p>
+				<% } %>
 				</div>
 				<div class="tab-pane" id="winner">
 				
