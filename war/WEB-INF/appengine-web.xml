@@ -23,10 +23,5 @@
 	<!-- With this feature enabled, there is a very small chance your app will 
 		see stale session data. For details, see http://code.google.com/appengine/docs/java/config/appconfig.html#Enabling_Sessions -->
 
-	<!-- Appstats -->
-
-	<admin-console>
-		<page name="Appstats" url="/appstats" />
-	</admin-console>
 
 </appengine-web-app>
