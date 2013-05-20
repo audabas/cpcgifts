@@ -1,3 +1,7 @@
+<%@page import="net.sf.jsr107cache.CacheException"%>
+<%@page import="java.util.Collections"%>
+<%@page import="net.sf.jsr107cache.CacheManager"%>
+<%@page import="net.sf.jsr107cache.Cache"%>
 <%@page import="java.util.List"%>
 <%@page import="fr.cpcgifts.persistance.GAPersistance"%>
 <%@page import="fr.cpcgifts.utils.ViewTools"%>
@@ -17,16 +21,32 @@
 <%@ include file="forcelogin.jspf"%>
 
 <%
+	Cache cache;
 	CpcUser profileCpcUser = null;
 
 	String suid = request.getParameter("userID");
 
 	if (suid != null) {
 		Long uid = Long.parseLong(suid);
-		
+
 		if (uid != null) {
-	Key k = KeyFactory.createKey("CpcUser", uid);
-	profileCpcUser = CpcUserPersistance.getCpcUserUndetached(k);
+			Key k = KeyFactory.createKey("CpcUser", uid);
+			
+			try {
+	            cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+	                        
+	            profileCpcUser = (CpcUser) cache.get(k);
+	            
+				
+				if(profileCpcUser == null) {
+					profileCpcUser = profileCpcUser = CpcUserPersistance.getCpcUserUndetached(k);
+					cache.put(k, profileCpcUser);
+				}
+				
+	        } catch (CacheException e) {
+	        	profileCpcUser = CpcUserPersistance.getCpcUserUndetached(k);
+	        }
+			
 		}
 	}
 
@@ -128,8 +148,8 @@ body {
 		<div id="created">
 			<%
 				List<Giveaway> gas = GAPersistance.getGAs(profileCpcUser.getGiveaways());
-										
-									for(Giveaway ga : gas) {
+												
+											for(Giveaway ga : gas) {
 			%>
 
 			<%=ViewTools.gaView(ga)%>
@@ -143,8 +163,8 @@ body {
 
 			<%
 				List<Giveaway> entries = GAPersistance.getGAs(profileCpcUser.getEntries());
-									
-										for(Giveaway ga : entries) {
+											
+												for(Giveaway ga : entries) {
 			%>
 			<%=ViewTools.gaView(ga)%>
 			<hr>
@@ -158,8 +178,8 @@ body {
 
 			<%
 				List<Giveaway> won = GAPersistance.getGAs(profileCpcUser.getWon());
-									
-										for(Giveaway ga : won) {
+											
+												for(Giveaway ga : won) {
 			%>
 			<%=ViewTools.gaView(ga)%>
 			<hr>
