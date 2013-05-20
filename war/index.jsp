@@ -86,7 +86,7 @@ body {
 	<%
 		if(opengas.size() > 3) {
 	%>
-		<div id="featuredGAs" class="carousel slide" style="width: 460px; margin : auto;">
+		<div id="featuredGAs" class="carousel slide visible-desktop" style="width: 460px; margin : auto;">
 			<ol class="carousel-indicators">
 				<li data-target="#featuredGAs" data-slide-to="0" class="active"></li>
 				<li data-target="#featuredGAs" data-slide-to="1"></li>
