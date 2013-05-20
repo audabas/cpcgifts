@@ -1,37 +1,14 @@
-<%@page import="net.sf.jsr107cache.CacheException"%>
-<%@page import="java.util.Collections"%>
-<%@page import="net.sf.jsr107cache.CacheManager"%>
-<%@page import="net.sf.jsr107cache.Cache"%>
-<%@page import="com.google.appengine.api.datastore.Key"%>
 <%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
 <%@page import="fr.cpcgifts.model.CpcUser"%>
 <%
 
-	CpcUser cpcuser = null;
-		
-	Key cpcuserKey = (Key) session.getAttribute("cpcuserKey");
+	CpcUser cpcuser = (CpcUser) session.getAttribute("cpcuser");
 
-	if(cpcuserKey == null) {
+	if(cpcuser == null) {
 		if (userService.isUserLoggedIn()) {
 			cpcuser = CpcUserPersistance.getCpcUser(user.getUserId());
-			session.setAttribute("cpcuserKey",	cpcuser.getKey());
+			session.setAttribute("cpcuser",	cpcuser);
 		}
-	} else {
-		Cache cache;
-		
-		try {
-	        cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-	                    
-	        cpcuser = (CpcUser) cache.get(cpcuserKey);
-			
-			if(cpcuser == null) {
-				cpcuser = CpcUserPersistance.getCpcUserByKey(cpcuserKey);
-				cache.put(cpcuserKey, cpcuser);
-			}
-			
-	    } catch (CacheException e) {
-	    	cpcuser = CpcUserPersistance.getCpcUserByKey(cpcuserKey);
-	    }
 	}
 	
 
