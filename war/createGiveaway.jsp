@@ -94,7 +94,8 @@ body {
 						<h4>Description</h4>
 					</div>
 					<div class="row">
-						<textarea class="span10" name="gameDescription" id="gameDescription" rows="3"></textarea>
+						<textarea class="span10" name="gameDescription" id="gameDescription" rows="3" ></textarea>
+						<span class="help-block well">500 caractères maximum. Il vous reste <span id="descLimit">500</span> caractères. </span>
 					</div>
 				</div>
 			</div>
@@ -146,6 +147,7 @@ body {
 
 	<script src="js/main.js"></script>
 	<script src="js/datepicker.js"></script>
+	<script src="js/bootstrap-limit.js"></script>
 	
 	<script type="text/javascript">
 	
@@ -153,6 +155,14 @@ body {
 		
 		mindate.setMinutes(mindate.getMinutes() + 60);
 		
+		$("#gameDescription").limit({
+			  maxChars: 500,
+			  counter : $("#descLimit")
+			});
+
+		$("#gameDescription").on("cross" , function (e) {
+			alert("Votre description dépasse la limite de 500 caractères.");
+		});
 	
 		$("#endDate").datetimepicker({
 			minDateTime: mindate,
@@ -181,6 +191,20 @@ body {
 				alert("Date de fin invalide !");
 				return false;
 			}
+			
+			if($("#gameName").val().length >= 50) {
+				alert("Nom du jeu trop long (limite : 50 caractères) !");
+				return false;
+			}
+			if($("#imgUrl").val().length >= 500) {
+				alert("Url vers l'image trop longue (limite : 500 caractères) !");
+				return false;
+			}
+			if($("#gameDescription").val().length >= 500) {
+				alert("Description du jeu trop longue (limite : 500 caractères) !");
+				return false;
+			}
+			
 			
 		}
 		
