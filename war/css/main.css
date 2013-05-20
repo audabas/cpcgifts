@@ -7,16 +7,14 @@
 
 .img-small-ga {
 	width: 185px;
-	height: 85px;
-	max-width: none;
-	max-height: none;
+	max-height: 85px;
+	max-width: 100%;
 }
 
 .img-steam-game {
 	width: 460px;
-	height: 215px;
-	max-width: 460px;
 	max-height: 215px;
+	max-width: 100%;
 }
 
 .img-small-icon {
@@ -30,6 +28,7 @@ footer {
 
 .big-modal{
    width:940px;
+   max-width : 100%;
    margin-left:-470px;
 }
 

@@ -25,14 +25,14 @@ public class ViewTools {
 
 		CpcUser auth = CpcUserPersistance.getCpcUserByKey(ga.getAuthor());
 
-		String res = "<div class=\"row-fluid\">" + "<div class=\"span1\">"
+		String res = "<div class=\"row-fluid\">" + "<div class=\"span2\">"
 				+ "<a href=\"/giveaway?gaID="
 				+ ga.getKey().getId()
 				+ "\" ><img class=\"img-rounded img-small-ga\" src=\""
 				+ ga.getImgUrl()
 				+ "\"></a>"
 				+ "</div>"
-				+ "<div class=\"span8 offset2\">"
+				+ "<div class=\"span8 offset1\">"
 				+ "<div class=\"row\">"
 				+ "<h2 class='span8'><a href=\"/giveaway?gaID="
 				+ ga.getKey().getId()
