@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -19,6 +20,8 @@ import fr.cpcgifts.utils.TextTools;
 @PersistenceCapable(detachable="true")
 public class Giveaway implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger log = Logger.getLogger(Giveaway.class.getSimpleName());
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -173,6 +176,9 @@ public class Giveaway implements Serializable {
 
 	public void drawWinner() {
 		open = false;
+		
+		log.info("Giveaway " + getKey().getId() + ":" + title + " ended.");
+		
 		if(entrants.size() == 0)
 			return;
 		
@@ -184,6 +190,7 @@ public class Giveaway implements Serializable {
 		
 		CpcUser winnerEntity = CpcUserPersistance.getCpcUserUndetached(winner);
 		winnerEntity.addWon(this.key);
+		log.info("Winner is " + winnerEntity.getCpcNickname() + " !");
 		CpcUserPersistance.closePm();
 	}
 

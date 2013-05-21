@@ -9,14 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
-import fr.cpcgifts.persistance.CpcUserPersistance;
 import fr.cpcgifts.persistance.GAPersistance;
 
 @SuppressWarnings("serial")
 public class CloseGAServlet extends HttpServlet {
 
+	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(CloseGAServlet.class.getName());
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -30,15 +29,6 @@ public class CloseGAServlet extends HttpServlet {
 			if(ga.getEndDate().getTime() < c.getTimeInMillis()) {
 				ga.drawWinner();
 				
-				log.info("Giveaway " + ga.getKey().getId() + " ended.");
-				
-				if(ga.getWinner() != null) {
-					CpcUser winner = CpcUserPersistance.getCpcUserUndetached(ga.getWinner());
-					winner.addWon(ga.getKey());
-					CpcUserPersistance.closePm();
-					
-					log.info("Winner is " + winner.getCpcNickname() + " !");
-				}
 				
 			}
 		}
