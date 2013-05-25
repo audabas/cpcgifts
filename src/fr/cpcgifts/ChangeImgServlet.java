@@ -1,6 +1,7 @@
 package fr.cpcgifts;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -9,6 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import net.sf.jsr107cache.Cache;
+import net.sf.jsr107cache.CacheException;
+import net.sf.jsr107cache.CacheManager;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -44,6 +49,15 @@ public class ChangeImgServlet extends HttpServlet {
 			resp.sendRedirect("user?userID=" + cpcuser.getKey().getId());
 			
 			log.info(cpcuser.getCpcNickname() + ":" + cpcuser.getKey().getId() + " changed avatar with " + imgUrl);
+			
+			try {
+	            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+	            
+	            cache.remove(cpcuser.getKey());
+				
+	        } catch (CacheException e) {
+	        	//rien
+	        }
 			
 		} else {
 			resp.sendRedirect("/");
