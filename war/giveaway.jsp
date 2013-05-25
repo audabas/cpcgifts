@@ -217,7 +217,17 @@ body {
 				
 				<% if(!currentGA.isOpen() && currentGA.getWinner() != null) { %>
 				<%= ViewTools.userView(CpcUserPersistance.getCpcUserByKey(currentGA.getWinner())) %>
-				<% } %>
+					<% if(userService.isUserAdmin()) { %>
+						<hr>
+						<% if(currentGA.isRerolled()) { %>
+							<a	href="/admin/reroll?reqtype=reroll&gaid=<%= currentGA.getKey().getId() %>"
+								class="btn btn-danger"><i class="icon-warning-sign icon-white"></i> <i class="icon-repeat icon-white"></i> Re-Relancer le tirage</a>
+						<% } else { %>
+							<a	href="/admin/reroll?reqtype=reroll&gaid=<%= currentGA.getKey().getId() %>"
+								class="btn btn-warning"><i class="icon-repeat icon-white"></i> Relancer le tirage</a>
+						<% } %>
+					<%  } %>
+				<%	} %>
 				</div>
 			</div>
 		</div>

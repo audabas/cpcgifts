@@ -33,6 +33,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>EnterGAServlet</servlet-name>
 		<servlet-class>fr.cpcgifts.EnterGiveawayServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>AdminServlet</servlet-name>
+		<servlet-class>fr.cpcgifts.AdminServlet</servlet-class>
+	</servlet>
 	<!-- Mapping Java -->
 	<servlet-mapping>
 		<servlet-name>Cpcgifts</servlet-name>
@@ -61,6 +65,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet-mapping>
 		<servlet-name>EnterGAServlet</servlet-name>
 		<url-pattern>/enterga</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AdminServlet</servlet-name>
+		<url-pattern>/admin/*</url-pattern>
 	</servlet-mapping>
 	<!-- Jsp (vue) -->
 	<servlet>
@@ -126,6 +134,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 			<role-name>admin</role-name>
 		</auth-constraint>
 	</security-constraint>
+
+	<security-constraint>
+        <web-resource-collection>
+            <url-pattern>/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
 
 
 	<!-- Appstats -->

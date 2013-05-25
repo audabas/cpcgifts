@@ -195,6 +195,13 @@ public class CpcUser implements Serializable {
 		this.won.add(k);
 
 	}
+	
+	public void removeWon(Key k) {
+		getWon();
+		
+		this.won.remove(k);
+
+	}
 
 	@Override
 	public String toString() {

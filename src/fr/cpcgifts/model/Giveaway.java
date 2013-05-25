@@ -55,6 +55,8 @@ public class Giveaway implements Serializable {
 	@Persistent
 	private boolean open = true;
 	
+	@Persistent
+	private boolean rerolled = false;
 	
 	
 	public Giveaway(Key author, String title, String description, String imgUrl, Date endDate) {
@@ -192,6 +194,37 @@ public class Giveaway implements Serializable {
 		winnerEntity.addWon(this.key);
 		log.info("Winner is " + winnerEntity.getCpcNickname() + " !");
 		CpcUserPersistance.closePm();
+	}
+	
+	public void reroll() {
+		rerolled = true;
+		
+		Random rand = new Random();
+		
+		if(entrants.size() >= 2) {
+			
+			Key newWinner = winner;
+			
+			do {
+				
+				int winnerIndex = rand.nextInt(entrants.size());
+				
+				newWinner = entrants.get(winnerIndex);
+				
+			} while (newWinner == winner);
+			
+			CpcUser winnerEntity = CpcUserPersistance.getCpcUserUndetached(winner);
+			CpcUser newWinnerEntity = CpcUserPersistance.getCpcUserUndetached(newWinner);
+			newWinnerEntity.addWon(this.key);
+			winnerEntity.removeWon(this.key);
+			winner = newWinner;
+			CpcUserPersistance.closePm();
+		}
+		
+	}
+	
+	public boolean isRerolled() {
+		return rerolled;
 	}
 
 	@Override
