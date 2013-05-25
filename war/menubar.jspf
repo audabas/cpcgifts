@@ -56,7 +56,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="/user?userID=<%=cpcuser.getKey().getId() %>"><i class="icon-pencil"></i> Modifier votre profil</a></li>
 							<li class="divider"></li>
-							<li><a href="<%=userService.createLogoutURL("/")%>"><i class="icon-off"></i> Déconnexion</a></li>
+							<li><a href="<%=userService.createLogoutURL("/logout.jsp")%>"><i class="icon-off"></i> Déconnexion</a></li>
 						</ul>
 					</div>
 

@@ -1,5 +1,3 @@
-<%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
-<%@page import="fr.cpcgifts.model.CpcUser"%>
 <%
 	if (!userService.isUserLoggedIn()) {
 		session.invalidate();

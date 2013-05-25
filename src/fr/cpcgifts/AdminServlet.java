@@ -27,7 +27,6 @@ import fr.cpcgifts.persistance.PMF;
 @SuppressWarnings("serial")
 public class AdminServlet extends HttpServlet {
 	
-	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(AdminServlet.class.getName());
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
