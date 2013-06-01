@@ -1,7 +1,11 @@
 package fr.cpcgifts.persistance;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -93,6 +97,66 @@ public class GAPersistance {
 
 		try {
 			res = (List<Giveaway>) query.execute(true);
+			if (detached)
+				res = (List<Giveaway>) pm.detachCopyAll(res);
+		} finally {
+			query.closeAll();
+			if (detached)
+				pm.close();
+		}
+
+		return res;
+	}
+	
+	/**
+	 * Récupère les concours terminés sans participants inscrits.
+	 * @param detached
+	 * @return
+	 */
+	public static List<Giveaway> getClosedEmptyGAs(boolean detached) {
+		List<Giveaway> res;
+
+		PersistenceManagerFactory pmf = PMF.get();
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		Query query = pm.newQuery(Giveaway.class);
+		query.setFilter("open == openParam");
+		query.setFilter("entrants == null");
+		query.declareParameters("boolean openParam");
+
+		try {
+			res = (List<Giveaway>) query.execute(false);
+			if (detached)
+				res = (List<Giveaway>) pm.detachCopyAll(res);
+		} finally {
+			query.closeAll();
+			if (detached)
+				pm.close();
+		}
+
+		return res;
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	public static List<Giveaway> getOpenGAsToClose(boolean detached) {
+		List<Giveaway> res;
+
+		Calendar c = Calendar.getInstance();
+		
+		PersistenceManagerFactory pmf = PMF.get();
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		Query query = pm.newQuery(Giveaway.class);
+		query.setFilter("open == openParam && endDate < currentDate");
+		query.declareParameters("boolean openParam, " + Date.class.getName() +  " currentDate");
+		
+		Map parameters = new HashMap<>();
+		parameters.put("openParam", true);
+		parameters.put("currentDate", c.getTime());
+
+		try {
+			res = (List<Giveaway>) query.executeWithMap(parameters);
 			if (detached)
 				res = (List<Giveaway>) pm.detachCopyAll(res);
 		} finally {

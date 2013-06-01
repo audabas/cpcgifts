@@ -21,16 +21,10 @@ public class CloseGAServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		
-		Calendar c = Calendar.getInstance();
-		
-		List<Giveaway> gas = GAPersistance.getOpenGAs(false);
+		List<Giveaway> gas = GAPersistance.getOpenGAsToClose(false);
 		
 		for(Giveaway ga : gas) {
-			if(ga.getEndDate().getTime() < c.getTimeInMillis()) {
-				ga.drawWinner();
-				
-				
-			}
+			ga.drawWinner();
 		}
 		
 		GAPersistance.closePm();
