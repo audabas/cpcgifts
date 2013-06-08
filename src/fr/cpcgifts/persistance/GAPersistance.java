@@ -113,6 +113,7 @@ public class GAPersistance {
 	 * @param detached
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<Giveaway> getClosedEmptyGAs(boolean detached) {
 		List<Giveaway> res;
 
@@ -151,7 +152,7 @@ public class GAPersistance {
 		query.setFilter("open == openParam && endDate < currentDate");
 		query.declareParameters("boolean openParam, " + Date.class.getName() +  " currentDate");
 		
-		Map parameters = new HashMap<>();
+		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("openParam", true);
 		parameters.put("currentDate", c.getTime());
 

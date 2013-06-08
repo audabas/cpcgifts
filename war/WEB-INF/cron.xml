@@ -5,4 +5,9 @@
     <description>Ferme les concours terminés et désigne les gagnants toute les 2 minutes</description>
     <schedule>every 2 minutes</schedule>
   </cron>
+  <cron>
+    <url>/cron/cleanEmptyGA</url>
+    <description>Nettoie de la base de donnée les concours terminés sans participants inscrits</description>
+    <schedule>every months</schedule>
+  </cron>
 </cronentries>

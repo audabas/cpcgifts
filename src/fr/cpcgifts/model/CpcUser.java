@@ -153,6 +153,12 @@ public class CpcUser implements Serializable {
 		this.giveaways.add(ga);
 
 	}
+	
+	public void removeGiveaway(Key ga) {
+		getGiveaways();
+		
+		this.giveaways.remove(ga);
+	}
 
 	public List<Key> getEntries() {
 		if(entries == null)

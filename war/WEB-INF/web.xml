@@ -37,6 +37,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>AdminServlet</servlet-name>
 		<servlet-class>fr.cpcgifts.AdminServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>AdminServlet</servlet-name>
+		<servlet-class>fr.cpcgifts.AdminServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>CleanEmptyGAServlet</servlet-name>
+		<servlet-class>fr.cpcgifts.CleanEmptyGAServlet</servlet-class>
+	</servlet>
 	<!-- Mapping Java -->
 	<servlet-mapping>
 		<servlet-name>Cpcgifts</servlet-name>
@@ -57,6 +65,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet-mapping>
 		<servlet-name>CloseGAServlet</servlet-name>
 		<url-pattern>/cron/closeGA</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CleanEmptyGAServlet</servlet-name>
+		<url-pattern>/cron/cleanEmptyGA</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ChangeImgServlet</servlet-name>
