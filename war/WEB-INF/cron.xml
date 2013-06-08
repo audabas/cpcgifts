@@ -8,6 +8,6 @@
   <cron>
     <url>/cron/cleanEmptyGA</url>
     <description>Nettoie de la base de donnée les concours terminés sans participants inscrits</description>
-    <schedule>every months</schedule>
+    <schedule>1st monday of month 05:30</schedule>
   </cron>
 </cronentries>
