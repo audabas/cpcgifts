@@ -62,7 +62,7 @@ body {
 		<p>Si rien n'est précisé dans la description du concours ce sont les règles indiquées dans
 		<a href="http://forum.canardpc.com/threads/63940-Le-topic-des-canards-g%C3%A9n%C3%A9reux-R%C3%A8gle-de-bonne-conduite-dans-le-1er-post-%21%21?p=5015733&viewfull=1#post5015733">le premier post du topic des canards généreux</a>
 		qui s'appliquent.<br />
-		Les inscriptions ne sont pas filtrées mais si le gagnant enfreint une des ces règles, un nouveau gagnant sera désigné.
+		Les inscriptions ne sont pas filtrées mais si le gagnant enfreint une de ces règles, un nouveau gagnant sera désigné.
 		</p>
 		
 		<hr />
@@ -97,7 +97,7 @@ body {
 		
 		<hr />
 		<h3>Le site CPC Gifts</h3>
-		<h4>J'ai rouvé un bug, une faute d'othographe, etc...</h4>
+		<h4>J'ai trouvé un bug, une faute d'orthographe, etc...</h4>
 		<p>Merci de me le signaler dans le <a href="http://forum.canardpc.com/threads/79082-CPC-Gifts-Le-topic-des-d%C3%A9veloppeurs-g%C3%A9n%C3%A9reux-%28ou-pas%29">topic dédié à CPC Gifts</a>.
 		</p>
 
