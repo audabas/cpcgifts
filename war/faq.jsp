@@ -97,6 +97,7 @@ body {
 		
 		<hr />
 		<h3>Le site CPC Gifts</h3>
+		<hr />
 		<h4>J'ai trouvé un bug, une faute d'orthographe, etc...</h4>
 		<p>Merci de me le signaler dans le <a href="http://forum.canardpc.com/threads/79082-CPC-Gifts-Le-topic-des-d%C3%A9veloppeurs-g%C3%A9n%C3%A9reux-%28ou-pas%29">topic dédié à CPC Gifts</a>.
 		</p>
