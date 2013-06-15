@@ -161,8 +161,7 @@ body {
 		<hr>
 
 		<div class="row">
-			<div class="span10 offset1">
-				<%=currentGA.getDescription()%>
+			<div class="span10 offset1" id="description">
 			</div>
 		</div>
 
@@ -271,6 +270,10 @@ body {
 	</script>
 
 	<script src="js/vendor/bootstrap.min.js"></script>
+	
+	<script type="text/javascript" src="js/vendor/markdown/Markdown.Converter.js"></script>
+    <script type="text/javascript" src="js/vendor/markdown/Markdown.Sanitizer.js"></script>
+    <script type="text/javascript" src="js/vendor/markdown/Markdown.Editor.js"></script>
 
 	<script src="js/main.js"></script>
 	
@@ -316,7 +319,11 @@ body {
 			<form id="descform" name="descform" action="/editga" method="post">
 				<fieldset>
 					<label>Description du jeu :</label><br />
-					<textarea class="span9" name="desc" id="desc" rows="5" ><%= currentGA.getDescription() %></textarea>
+					<div class="wmd-panel">
+	            		<div id="wmd-button-bar"></div>
+						<textarea class="span9 wmd-input" name="desc" id="desc" rows="5" ><%= currentGA.getDescription() %></textarea>
+						<div id="wmd-preview" class="wmd-panel wmd-preview"></div>
+					</div>
 				</fieldset>
 				<input type="hidden" name="req" value="changedescription" />
 				<input type="hidden" name="gaid" value="<%= currentGA.getKey().getId() %>">
@@ -332,6 +339,19 @@ body {
 		function submitDescForm() {
 			$("#descform").submit();
 		}
+	</script>
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var converter = new Markdown.Converter();
+
+		    $("#description").html(converter.makeHtml($("#desc").val()));
+		    
+		    //var converter2 = Markdown.getSanitizingConverter();
+            //var editor = new Markdown.Editor(converter2);
+            //editor.run();
+		    
+		});
 	</script>
 </body>
 </html>

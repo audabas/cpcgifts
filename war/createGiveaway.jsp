@@ -96,6 +96,7 @@ body {
 					<div class="row">
 						<textarea class="span10" name="gameDescription" id="gameDescription" rows="5" ></textarea>
 						<span id="charLimitHelp" class="help-block well" style="display: none;">5000 caractères maximum. Il vous reste <span id="descLimit">500</span> caractères. </span>
+						<span class="help-block well">Vous pouvez utiliser la syntaxe <a href="http://fr.wikipedia.org/wiki/Markdown">Markdown</a>.</span>
 					</div>
 				</div>
 			</div>
