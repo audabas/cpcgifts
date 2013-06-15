@@ -37,8 +37,7 @@
 		return;
 	}
 
-	CpcUser gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA
-			.getAuthor());
+	CpcUser gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA.getAuthor());
 %>
 
 <!DOCTYPE html>
@@ -76,6 +75,8 @@ body {
 
 	<%@ include file="menubar.jspf"%>
 	<%@ include file="getuser.jspf"%>
+	
+	<% boolean isAuthor = cpcuser.getKey().equals(gaAuthor.getKey()); %>
 
 	<div class="container">
 
@@ -83,6 +84,14 @@ body {
 		<div class="row">
 			<div class="span5">
 				<img class="img-steam-game" src="<%=currentGA.getImgUrl()%>" />
+				<% if(isAuthor) { %>
+					<div class="row" style="margin-top: 10px;">
+					<a class="btn btn-success span2" href="#modif-image"
+						data-toggle="modal"> <i class="icon-pencil icon-white"></i>
+						Modifier l'image
+					</a>
+					</div>
+				<% } %>
 			</div>
 			<div class="span7">
 				<h1><%=currentGA.getTitle()%></h1>
@@ -253,5 +262,36 @@ body {
 	<script src="js/vendor/bootstrap.min.js"></script>
 
 	<script src="js/main.js"></script>
+	
+	<div id="modif-image" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"
+				aria-hidden="true">&times;</button>
+			<h3>Modifier l'image</h3>
+		</div>
+		<div class="modal-body">
+			<form id="imgform" name="imgform" action="/editga" method="post">
+				<fieldset>
+					<label>Url de l'image du jeu (460x215 pixels)</label> <input id="imgurl"
+						name="imgurl" type="text" placeholder="url" required="required">
+					<span class="help-block">Si le jeu est disponible sur steam, le plus simple est de récupérer le lien vers l'image depuis le hub de la communauté.</span>
+				</fieldset>
+				<input type="hidden" name="req" value="changeimg" />
+				<input type="hidden" name="gaid" value="<%= currentGA.getKey().getId() %>">
+			</form>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Annuler</a> <a
+				href="javascript:submitImgForm()" class="btn btn-primary">Modifier</a>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		function submitImgForm() {
+			if ($("#imgurl").val() != "") {
+				$("#imgform").submit();
+			}
+		}
+	</script>
 </body>
 </html>

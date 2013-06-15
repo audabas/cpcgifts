@@ -94,8 +94,8 @@ body {
 						<h4>Description</h4>
 					</div>
 					<div class="row">
-						<textarea class="span10" name="gameDescription" id="gameDescription" rows="3" ></textarea>
-						<span class="help-block well">500 caractères maximum. Il vous reste <span id="descLimit">500</span> caractères. </span>
+						<textarea class="span10" name="gameDescription" id="gameDescription" rows="5" ></textarea>
+						<span id="charLimitHelp" class="help-block well" style="display: none;">5000 caractères maximum. Il vous reste <span id="descLimit">500</span> caractères. </span>
 					</div>
 				</div>
 			</div>
@@ -151,17 +151,20 @@ body {
 	
 	<script type="text/javascript">
 	
+		var maxDescLength = 5000;
+	
 		var mindate = new Date();
 		
 		mindate.setMinutes(mindate.getMinutes() + 60);
 		
 		$("#gameDescription").limit({
-			  maxChars: 500,
+			  maxChars: maxDescLength,
 			  counter : $("#descLimit")
 			});
 
 		$("#gameDescription").on("cross" , function (e) {
-			alert("Votre description dépasse la limite de 500 caractères.");
+			alert("Votre description dépasse la limite de " + maxDescLength + " caractères.");
+			$("#charLimitHelp").show();
 		});
 	
 		$("#endDate").datetimepicker({
@@ -192,16 +195,17 @@ body {
 				return false;
 			}
 			
-			if($("#gameName").val().length >= 50) {
-				alert("Nom du jeu trop long (limite : 50 caractères) !");
+			if($("#gameName").val().length >= maxDescLength) {
+				alert("Nom du jeu trop long (limite : "+ maxDescLength + " caractères) !");
 				return false;
 			}
-			if($("#imgUrl").val().length >= 500) {
-				alert("Url vers l'image trop longue (limite : 500 caractères) !");
+			if($("#imgUrl").val().length >= maxDescLength) {
+				alert("Url vers l'image trop longue (limite : "+ maxDescLength + " caractères) !");
 				return false;
 			}
-			if($("#gameDescription").val().length >= 500) {
-				alert("Description du jeu trop longue (limite : 500 caractères) !");
+			if($("#gameDescription").val().length >= maxDescLength) {
+				alert("Description du jeu trop longue (limite : " + maxDescLength + " caractères) !");
+				$("#charLimitHelp").show();
 				return false;
 			}
 			

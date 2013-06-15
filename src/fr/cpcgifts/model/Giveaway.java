@@ -13,6 +13,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.Text;
 
 import fr.cpcgifts.persistance.CpcUserPersistance;
 import fr.cpcgifts.utils.TextTools;
@@ -35,6 +36,9 @@ public class Giveaway implements Serializable {
 	
 	@Persistent
 	private String description = "";
+	
+	@Persistent
+	private Text longDescription = new Text("");
 	
 	@Persistent
 	private String imgUrl = "";
@@ -97,11 +101,15 @@ public class Giveaway implements Serializable {
 	}
 
 	public String getDescription() {
-		return description;
+		if(longDescription == null || longDescription.getValue().length() == 0) {
+			return description;
+		} else {
+			return longDescription.getValue();
+		}
 	}
 
 	public void setDescription(String description) {
-		this.description = TextTools.escapeHtml(description);
+		this.longDescription = new Text(TextTools.escapeHtml(description));
 	}
 
 	public String getImgUrl() {
@@ -229,9 +237,9 @@ public class Giveaway implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Giveaway [key=" + key + ", author=" + author + ", title="
-				+ title + ", description=" + description + ", endDate="
-				+ endDate + ", winner=" + winner + ", open=" + open + "]";
+		return "Giveaway [key=" + getKey() + ", author=" + getAuthor() + ", title="
+				+ getTitle() + ", description=" + getDescription() + ", endDate="
+				+ getEndDate() + ", winner=" + getWinner() + ", open=" + isOpen() + "]";
 	}
 
 	
