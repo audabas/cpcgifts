@@ -54,9 +54,16 @@ public class EditGAServlet extends HttpServlet {
 
 				if(cpcuser.getKey().equals(ga.getAuthor())) {
 					ga.setImgUrl(imgUrl);
-					log.info(cpcuser.getCpcNickname() + ":" + cpcuser.getKey().getId() + " changed giveaway " + ga.getTitle() + "[" + ga.getKey().getId() +  "] by " + imgUrl);
+					log.info(cpcuser.getCpcNickname() + ":" + cpcuser.getKey().getId() + " changed giveaway " + ga.getTitle() + "[" + ga.getKey().getId() +  "] image by " + imgUrl);
 				}
 
+			} else if(reqType.equals("changedescription")) {
+				String newDesc = params.get("desc")[0];
+
+				if(cpcuser.getKey().equals(ga.getAuthor())) {
+					ga.setDescription(newDesc);
+					log.info(cpcuser.getCpcNickname() + ":" + cpcuser.getKey().getId() + " changed giveaway " + ga.getTitle() + "[" + ga.getKey().getId() +  "] description by " + newDesc);
+				}
 			}
 			
 			resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());
