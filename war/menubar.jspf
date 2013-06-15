@@ -41,6 +41,8 @@
 							session.removeAttribute("cpcuser");
 						}
 					%>
+					
+					<li><a href="/faq">F.A.Q.</a></li>
 				</ul>
 				<div class="pull-right">
 					<%

@@ -103,6 +103,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>Giveaway</servlet-name>
 		<jsp-file>/giveaway.jsp</jsp-file>
 	</servlet>
+	<servlet>
+		<servlet-name>FAQ</servlet-name>
+		<jsp-file>/faq.jsp</jsp-file>
+	</servlet>
 	<!-- Mapping jsp -->
 	<servlet-mapping>
 		<servlet-name>SignIn</servlet-name>
@@ -123,6 +127,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet-mapping>
 		<servlet-name>Giveaway</servlet-name>
 		<url-pattern>/giveaway</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FAQ</servlet-name>
+		<url-pattern>/faq</url-pattern>
 	</servlet-mapping>
 
 	<!-- Welcome files -->
