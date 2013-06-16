@@ -94,7 +94,7 @@ body {
 	<%@ include file="getuser.jspf"%>
 
 	<%
-		boolean isCurrentUser = profileCpcUser.getKey().getId() == cpcuser.getKey().getId();
+		boolean isCurrentUser = profileCpcUser.getKey().equals(cpcuser.getKey());
 	%>
 
 	<div class="container">

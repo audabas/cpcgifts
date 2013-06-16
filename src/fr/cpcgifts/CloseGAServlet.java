@@ -1,12 +1,17 @@
 package fr.cpcgifts;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jsr107cache.Cache;
+import net.sf.jsr107cache.CacheException;
+import net.sf.jsr107cache.CacheManager;
 
 import fr.cpcgifts.model.Giveaway;
 import fr.cpcgifts.persistance.GAPersistance;
@@ -24,6 +29,17 @@ public class CloseGAServlet extends HttpServlet {
 		
 		for(Giveaway ga : gas) {
 			ga.drawWinner();
+			
+			try {
+	            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+	            
+	            cache.remove(ga.getWinner());
+	            cache.remove(ga.getKey());
+				
+	        } catch (CacheException e) {
+	        	//rien
+	        }
+			
 		}
 		
 		GAPersistance.closePm();
