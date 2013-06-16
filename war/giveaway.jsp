@@ -19,6 +19,7 @@
 <%@ include file="forcelogin.jspf"%>
 
 <%
+	Cache cache;
 	Giveaway currentGA = null;
 
 	String gaid = request.getParameter("gaID");
@@ -28,7 +29,20 @@
 
 		if (gid != null) {
 			Key k = KeyFactory.createKey("Giveaway", gid);
-			currentGA = GAPersistance.getGA(k);
+			
+			try {
+	            cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+	            
+	            currentGA = (Giveaway) cache.get(k);
+	            
+	            if(currentGA == null) {
+					currentGA = GAPersistance.getGA(k);
+	            	cache.put(k, currentGA);
+	            }
+			} catch (CacheException e) {
+				currentGA = GAPersistance.getGA(k);
+			}
+			
 		}
 	}
 
