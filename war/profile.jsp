@@ -1,3 +1,6 @@
+<%@page import="java.util.Collection"%>
+<%@page import="org.apache.commons.collections.CollectionUtils"%>
+<%@page import="java.util.Map"%>
 <%@page import="net.sf.jsr107cache.CacheException"%>
 <%@page import="java.util.Collections"%>
 <%@page import="net.sf.jsr107cache.CacheManager"%>
@@ -147,9 +150,26 @@ body {
 
 		<div id="created">
 			<%
-				List<Giveaway> gas = GAPersistance.getGAs(profileCpcUser.getGiveaways());
-												
-											for(Giveaway ga : gas) {
+			Map<Key,Giveaway> gas = null;
+			
+			try {
+				cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+				
+				gas = cache.getAll(profileCpcUser.getGiveaways());
+				
+				Collection<Key> notCachedKeys = CollectionUtils.subtract(profileCpcUser.getGiveaways(),gas.keySet());
+				
+				for(Key k : notCachedKeys) {
+					Giveaway ga = GAPersistance.getGA(k);
+					gas.put(k, ga);
+					cache.put(k, ga);
+				}
+				
+			} catch (CacheException e) {
+				
+			}
+			
+				for(Giveaway ga : gas.values()) {
 			%>
 
 			<%=ViewTools.gaView(ga)%>
@@ -162,9 +182,28 @@ body {
 		<div id="entries" style="display: none">
 
 			<%
-				List<Giveaway> entries = GAPersistance.getGAs(profileCpcUser.getEntries());
+			
+			Map<Key,Giveaway> entries = null;
+			
+			try {
+				cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+				
+				entries = cache.getAll(profileCpcUser.getEntries());
+				
+				Collection<Key> notCachedKeys = CollectionUtils.subtract(profileCpcUser.getEntries(),entries.keySet());
+				
+				for(Key k : notCachedKeys) {
+					Giveaway ga = GAPersistance.getGA(k);
+					entries.put(k, ga);
+					cache.put(k, ga);
+				}
+				
+			} catch (CacheException e) {
+				
+			}
+				
 											
-												for(Giveaway ga : entries) {
+			for(Giveaway ga : entries.values()) {
 			%>
 			<%=ViewTools.gaView(ga)%>
 			<hr>
@@ -177,9 +216,27 @@ body {
 		<div id="won" style="display: none">
 
 			<%
-				List<Giveaway> won = GAPersistance.getGAs(profileCpcUser.getWon());
+			Map<Key,Giveaway> won = null;
+			
+			try {
+				cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+				
+				won = cache.getAll(profileCpcUser.getWon());
+				
+				Collection<Key> notCachedKeys = CollectionUtils.subtract(profileCpcUser.getWon(),won.keySet());
+				
+				for(Key k : notCachedKeys) {
+					Giveaway ga = GAPersistance.getGA(k);
+					won.put(k, ga);
+					cache.put(k, ga);
+				}
+				
+			} catch (CacheException e) {
+				
+			}
+			
 											
-												for(Giveaway ga : won) {
+			for(Giveaway ga : GAPersistance.getGAs(profileCpcUser.getWon())) {
 			%>
 			<%=ViewTools.gaView(ga)%>
 			<hr>
