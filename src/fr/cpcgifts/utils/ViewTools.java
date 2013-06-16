@@ -112,8 +112,9 @@ public class ViewTools {
 		res += "<div class='media-body'>";
 		res += "<h6 class='media-heading'>" + "<a href='/user?userID="
 				+ u.getKey().getId() + "'>" + u.getCpcNickname() + "</a>"
-				+ "</h6>";
-		res += c.getCommentText();
+				+ " <small>(il y a " + DateTools.dateDifference(c.getCommentDate()) + ")</small></h6>";
+		res += "<textarea class='hidden' id='comment-" + c.getKey().getId() + "'>" + c.getCommentText() + "</textarea>";
+		res += "<p class='' id='comment-" + c.getKey().getId() + "-display'></p>\n";
 		res += "</div>"; // /media-body
 		res += "</div>"; // /media
 		return res;

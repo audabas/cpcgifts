@@ -1,9 +1,11 @@
+<%@page import="java.util.Comparator"%>
+<%@page import="java.util.Arrays"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="java.util.Collection"%>
 <%@page import="org.apache.commons.collections.CollectionUtils"%>
 <%@page import="java.util.Map"%>
 <%@page import="fr.cpcgifts.model.Comment"%>
-<%@page import="fr.cpcgifts.persistance.CommentParsistance"%>
+<%@page import="fr.cpcgifts.persistance.CommentPersistance"%>
 <%@page import="fr.cpcgifts.utils.ViewTools"%>
 <%@page import="fr.cpcgifts.utils.DateTools"%>
 <%@page import="fr.cpcgifts.persistance.GAPersistance"%>
@@ -31,21 +33,21 @@
 		Long gid = Long.parseLong(gaid);
 
 		if (gid != null) {
-			Key k = KeyFactory.createKey("Giveaway", gid);
-			
-			try {
+	Key k = KeyFactory.createKey("Giveaway", gid);
+	
+	try {
 	            cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
 	            
 	            currentGA = (Giveaway) cache.get(k);
 	            
 	            if(currentGA == null) {
-					currentGA = GAPersistance.getGA(k);
+			currentGA = GAPersistance.getGA(k);
 	            	cache.put(k, currentGA);
 	            }
-			} catch (CacheException e) {
-				currentGA = GAPersistance.getGA(k);
-			}
-			
+	} catch (CacheException e) {
+		currentGA = GAPersistance.getGA(k);
+	}
+	
 		}
 	}
 
@@ -62,14 +64,13 @@
 		gaAuthor = (CpcUser) cache.get(currentGA.getAuthor());
 		
 		if(gaAuthor == null) {
-			gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA.getAuthor());
-			cache.put(currentGA.getAuthor(), gaAuthor);
+	gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA.getAuthor());
+	cache.put(currentGA.getAuthor(), gaAuthor);
 		}
 		
 	} catch (CacheException e) {
 		gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA.getAuthor());
 	}
-	
 %>
 
 <!DOCTYPE html>
@@ -108,7 +109,9 @@ body {
 	<%@ include file="menubar.jspf"%>
 	<%@ include file="getuser.jspf"%>
 	
-	<% boolean isAuthor = cpcuser.getKey().equals(gaAuthor.getKey()); %>
+	<%
+			boolean isAuthor = cpcuser.getKey().equals(gaAuthor.getKey());
+		%>
 
 	<div class="container">
 
@@ -116,14 +119,18 @@ body {
 		<div class="row">
 			<div class="span5">
 				<img class="img-steam-game" src="<%=currentGA.getImgUrl()%>" />
-				<% if(isAuthor) { %>
+				<%
+					if(isAuthor) {
+				%>
 					<div class="row" style="margin-top: 10px;">
 					<a class="btn btn-success span2" href="#modif-image"
 						data-toggle="modal"> <i class="icon-pencil icon-white"></i>
 						Modifier l'image
 					</a>
 					</div>
-				<% } %>
+				<%
+					}
+				%>
 			</div>
 			<div class="span7">
 				<h1><%=currentGA.getTitle()%></h1>
@@ -164,27 +171,23 @@ body {
 				<%=DateTools.dateDifference(currentGA.getEndDate())%>
 				
 				<%
-				if(currentGA.isOpen() && currentGA.getAuthor().getId() != cpcuser.getKey().getId()) {
-					if(currentGA.getEntrants().contains(cpcuser.getKey())) {
-						
-						%>
+									if(currentGA.isOpen() && currentGA.getAuthor().getId() != cpcuser.getKey().getId()) {
+											if(currentGA.getEntrants().contains(cpcuser.getKey())) {
+								%>
 						
 						<a
-						href="/enterga?reqtype=exit&gaid=<%= currentGA.getKey().getId() %>"
+						href="/enterga?reqtype=exit&gaid=<%=currentGA.getKey().getId()%>"
 						 style="margin-left: 250px" class="btn btn-danger">Ne plus participer</a>
 						
 						<%
-						
-					} else {
-						
-						%>
+													} else {
+												%>
 				<a
-					href="/enterga?reqtype=enter&gaid=<%= currentGA.getKey().getId() %>"
+					href="/enterga?reqtype=enter&gaid=<%=currentGA.getKey().getId()%>"
 					style="margin-left: 250px" class="btn btn-success">Participer</a>
 				<%
-						
 					}
-				}
+						}
 				%>
 
 			</div>
@@ -200,7 +203,9 @@ body {
 		<hr>
 		
 		
-		<% if(isAuthor) { %>
+		<%
+							if(isAuthor) {
+						%>
 				<div class="row" style="margin-top: 10px;">
 				<a class="btn btn-success span2" href="#modif-desc"
 					data-toggle="modal"> <i class="icon-pencil icon-white"></i>
@@ -208,26 +213,62 @@ body {
 				</a>
 				</div>
 				<hr />
-		<% } %>
+		<%
+			}
+		%>
 
 		<div class="tabbable">
 			<!-- Only required for left/right tabs -->
 			<ul class="nav nav-tabs">
-				<!-- <li class="active"><a href="#commentaires" data-toggle="tab">Commentaires</a></li> -->
-				<li class="active"><a href="#entrants" data-toggle="tab">Participants</a></li>
-				<% if(currentGA.getAuthor().getId() == cpcuser.getKey().getId()) { %>
+				<li class="active"><a href="#commentaires" data-toggle="tab">Commentaires</a></li>
+				<li><a href="#entrants" data-toggle="tab">Participants</a></li>
+				<%
+					if(currentGA.getAuthor().getId() == cpcuser.getKey().getId()) {
+				%>
 				<li><a href="#signature" data-toggle="tab">Signature</a></li>
-				<% } %>
-				<% if(!currentGA.isOpen() && currentGA.getWinner() != null) {%>
+				<%
+					}
+				%>
+				<%
+					if(!currentGA.isOpen() && currentGA.getWinner() != null) {
+				%>
 				<li><a href="#winner" data-toggle="tab">Gagnant</a></li>
-				<% } %>
+				<%
+					}
+				%>
 			</ul>
 			<div class="tab-content">
-				<div class="tab-pane" id="commentaires">
+				<div class="tab-pane active" id="commentaires">
 					<%
 					
-					for(Comment c : CommentParsistance.getComments(currentGA.getComments())) {
+					Map<Key,Comment> comments = null;
 					
+					try {
+						cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+						
+						comments = cache.getAll(currentGA.getComments());
+						
+						Collection<Key> notCachedKeys = CollectionUtils.subtract(currentGA.getComments(),comments.keySet());
+						
+						for(Key k : notCachedKeys) {
+							Comment c = CommentPersistance.getComment(k);
+							comments.put(k, c);
+							cache.put(k, c);
+						}
+						
+					} catch (CacheException e) {
+						
+					}
+					
+					Comment[] commentsArray = comments.values().toArray(new Comment[0]);
+					
+					Arrays.sort(commentsArray, new Comparator<Comment>() {
+						public int compare(Comment c1, Comment c2) {
+							return c1.getCommentDate().compareTo(c2.getCommentDate());
+						}
+					});
+					
+						for(Comment c : commentsArray) {
 					%>
 					
 					<%= ViewTools.commentView(c) %>
@@ -236,9 +277,20 @@ body {
 					<%
 					}
 					%>
-					
+
+					<form action="/editga" method="post">
+						<fieldset>
+							<label>Laisser un commentaire :</label>
+							<textarea class="span12" rows="3" id="comment" name="comment" required="required"></textarea>
+							<input type="hidden" name="req" value="comment" />
+							<input type="hidden" name="gaid" value="<%= currentGA.getKey().getId() %>">
+							
+							<button type="submit" class="btn">Commenter</button>
+						</fieldset>
+					</form>
+
 				</div>
-				<div class="tab-pane active" id="entrants">
+				<div class="tab-pane" id="entrants">
 					
 					<%
 					
@@ -395,14 +447,18 @@ body {
 	
 	<script type="text/javascript">
 		$(document).ready(function() {
-			var converter = new Markdown.Converter();
+			var converter = new Markdown.getSanitizingConverter();
 
-		    $("#description").html(converter.makeHtml($("#desc").val()));
+		    $("#description").html(converter.makeHtml($("#desc").html()));
 		    
 		    //var converter2 = Markdown.getSanitizingConverter();
             //var editor = new Markdown.Editor(converter2);
             //editor.run();
 		    
+            $("textarea[id^='comment-']").each(function(i) {
+            	$("#" + $(this).attr("id") + "-display").html(converter.makeHtml($(this).html()));
+            });
+            
 		});
 	</script>
 </body>

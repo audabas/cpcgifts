@@ -11,7 +11,7 @@ import com.google.appengine.api.datastore.Key;
 
 import fr.cpcgifts.model.Comment;
 
-public class CommentParsistance {
+public class CommentPersistance {
 
 	public static Comment getComment(Key key) {
 		Comment res = null;

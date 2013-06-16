@@ -20,6 +20,7 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
+import fr.cpcgifts.model.Comment;
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
 import fr.cpcgifts.persistance.PMF;
@@ -64,6 +65,14 @@ public class EditGAServlet extends HttpServlet {
 					ga.setDescription(newDesc);
 					log.info(cpcuser.getCpcNickname() + ":" + cpcuser.getKey().getId() + " changed giveaway " + ga.getTitle() + "[" + ga.getKey().getId() +  "] description by " + newDesc);
 				}
+			} else if(reqType.equals("comment")) {
+				String commentText = params.get("comment")[0];
+				
+				Comment comment = new Comment(cpcuser.getKey(), ga.getKey(), commentText);
+				
+				pm.makePersistent(comment);
+				
+				ga.addComment(comment.getKey());
 			}
 			
 			resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());
