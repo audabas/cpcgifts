@@ -1,3 +1,7 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@page import="java.util.Collection"%>
+<%@page import="org.apache.commons.collections.CollectionUtils"%>
+<%@page import="java.util.Map"%>
 <%@page import="fr.cpcgifts.model.Comment"%>
 <%@page import="fr.cpcgifts.persistance.CommentParsistance"%>
 <%@page import="fr.cpcgifts.utils.ViewTools"%>
@@ -6,7 +10,6 @@
 <%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@page import="com.google.appengine.api.datastore.KeyFactory"%>
 <%@page import="com.google.appengine.api.datastore.Key"%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
@@ -51,7 +54,22 @@
 		return;
 	}
 
-	CpcUser gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA.getAuthor());
+	CpcUser gaAuthor = null;
+	
+	try {
+        cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+
+		gaAuthor = (CpcUser) cache.get(currentGA.getAuthor());
+		
+		if(gaAuthor == null) {
+			gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA.getAuthor());
+			cache.put(currentGA.getAuthor(), gaAuthor);
+		}
+		
+	} catch (CacheException e) {
+		gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA.getAuthor());
+	}
+	
 %>
 
 <!DOCTYPE html>
@@ -224,7 +242,27 @@ body {
 					
 					<%
 					
-					for(CpcUser entrant : CpcUserPersistance.getCpcUsers(currentGA.getEntrants())) {
+					Map<Key,CpcUser> entrants = null;
+					
+					try {
+						cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+						
+						entrants = cache.getAll(currentGA.getEntrants());
+						
+						Collection<Key> notCachedKeys = CollectionUtils.subtract(currentGA.getEntrants(),entrants.keySet());
+						
+						for(Key k : notCachedKeys) {
+							CpcUser u = CpcUserPersistance.getCpcUserByKey(k);
+							entrants.put(k, u);
+							cache.put(k, u);
+						}
+						
+					} catch (CacheException e) {
+						
+					}
+					
+					
+					for(CpcUser entrant : entrants.values()) {
 						
 						%>
 						
