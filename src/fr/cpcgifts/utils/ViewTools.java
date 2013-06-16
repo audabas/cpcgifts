@@ -91,8 +91,13 @@ public class ViewTools {
 		res += "<a href=\"/giveaway?gaID=" + ga.getKey().getId() + "\" >"
 				+ "<img class=\"img-steam-game\" src=\"" + ga.getImgUrl()
 				+ "\" alt=\"\">" + "</a>" + "<div class=\"carousel-caption\">"
-				+ "<h4>" + ga.getTitle() + "</h4>" + "<p>"
-				+ ga.getDescription() + "</p>" + "</div>" + "</div>";
+				+ "<h4>" + ga.getTitle() + "</h4>" + "<p>";
+		if(ga.getDescription().length() < 150) {
+			res += ga.getDescription();
+		} else {
+			res += ga.getDescription().substring(0, 150) + " ...";
+		}
+		res += "</p>" + "</div>" + "</div>";
 
 		return res;
 	}
