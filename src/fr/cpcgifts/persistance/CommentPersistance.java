@@ -30,7 +30,7 @@ public class CommentPersistance {
 	}
 
 	public static List<Comment> getComments(List<Key> keys) {
-		List<Comment> res = new ArrayList<>();
+		List<Comment> res = new ArrayList<Comment>();
 
 		if (keys.size() == 0)
 			return res;

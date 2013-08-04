@@ -58,7 +58,7 @@ public class CpcUserPersistance {
 	}
 	
 	public static List<CpcUser> getCpcUsers(List<Key> keys) {
-		List<CpcUser> res = new ArrayList<>();
+		List<CpcUser> res = new ArrayList<CpcUser>();
 
 		if (keys.size() == 0)
 			return res;

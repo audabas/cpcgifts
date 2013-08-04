@@ -34,7 +34,7 @@ public class GAPersistance {
 	}
 
 	public static List<Giveaway> getGAs(List<Key> keys) {
-		List<Giveaway> res = new ArrayList<>();
+		List<Giveaway> res = new ArrayList<Giveaway>();
 
 		if (keys.size() == 0)
 			return res;
@@ -152,7 +152,7 @@ public class GAPersistance {
 		query.setFilter("open == openParam && endDate < currentDate");
 		query.declareParameters("boolean openParam, " + Date.class.getName() +  " currentDate");
 		
-		Map<String, Object> parameters = new HashMap<>();
+		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("openParam", true);
 		parameters.put("currentDate", c.getTime());
 
