@@ -12,7 +12,7 @@ Technologies utilisées
 -----
 
 * Le [Google App Engine pour Java](https://developers.google.com/appengine/docs/java/overview?hl=fr)
-* [Twitter Bootstrap](http://twitter.github.io/bootstrap/)
+* [Twitter Bootstrap](http://getbootstrap.com/2.3.2/)
 
 
 ## Licence
