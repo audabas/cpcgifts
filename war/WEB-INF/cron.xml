@@ -10,4 +10,10 @@
     <description>Nettoie de la base de donnée les concours terminés sans participants inscrits</description>
     <schedule>1st monday of month 05:30</schedule>
   </cron>
+  <cron>
+    <url>/_ah/datastore_admin/backup.create?name=CronDatastoreBackup&amp;kind=Comment&amp;kind=CpcUser&amp;kind=Giveaway&amp;filesystem=blobstore</url>
+    <description>Backup journalier du datastore</description>
+    <schedule>every 12 hours</schedule>
+    <target>ah-builtin-python-bundle</target>
+  </cron>
 </cronentries>
