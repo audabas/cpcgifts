@@ -1,3 +1,4 @@
+<%@page import="fr.cpcgifts.utils.DateTools"%>
 <%@page import="java.util.Collection"%>
 <%@page import="org.apache.commons.collections.CollectionUtils"%>
 <%@page import="java.util.Map"%>
@@ -169,7 +170,7 @@ body {
 				
 			}
 			
-				for(Giveaway ga : gas.values()) {
+				for(Giveaway ga : DateTools.sortGiveawaysByEndDate(gas)) {
 			%>
 
 			<%=ViewTools.gaView(ga)%>
@@ -203,7 +204,7 @@ body {
 			}
 				
 											
-			for(Giveaway ga : entries.values()) {
+			for(Giveaway ga : DateTools.sortGiveawaysByEndDate(entries)) {
 			%>
 			<%=ViewTools.gaView(ga)%>
 			<hr>
@@ -236,7 +237,7 @@ body {
 			}
 			
 											
-			for(Giveaway ga : GAPersistance.getGAs(profileCpcUser.getWon())) {
+			for(Giveaway ga : DateTools.sortGiveawaysByEndDate(won)) {
 			%>
 			<%=ViewTools.gaView(ga)%>
 			<hr>
