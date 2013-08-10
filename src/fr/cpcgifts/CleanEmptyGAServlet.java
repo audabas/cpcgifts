@@ -10,10 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.Key;
+
 import net.sf.jsr107cache.Cache;
 import net.sf.jsr107cache.CacheException;
 import net.sf.jsr107cache.CacheManager;
-
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
 import fr.cpcgifts.persistance.CpcUserPersistance;
@@ -47,9 +48,21 @@ public class CleanEmptyGAServlet extends HttpServlet {
 			
 			author.removeGiveaway(ga.getKey());
 			
+			List<Key> entrantsKeys = ga.getEntrants();
+			
+			for(Key k : entrantsKeys) {
+				try {
+					CpcUser cpcuser = CpcUserPersistance.getCpcUserUndetached(k);
+					cpcuser.removeEntry(ga.getKey());
+				} catch(javax.jdo.JDOObjectNotFoundException e) {
+					log.warning("User not found : " + e.getMessage());
+				}
+				
+			}
+			
 			pm.deletePersistent(ga);
 			
-			log.info("Giveaway " + ga.getTitle() + " [" + ga.getKey().getId() + "] by " + author.getCpcNickname() + " [" + author.getKey().getId() + "] has been cleaned up.");
+			log.info(ga + "\n by " + author.getCpcNickname() + " [" + author.getKey().getId() + "] has been cleaned up.");
 		}
 		
 		CpcUserPersistance.closePm();

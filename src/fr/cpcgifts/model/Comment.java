@@ -82,7 +82,13 @@ public class Comment implements Serializable {
 	public void setCommentDate(Date commentDate) {
 		this.commentDate = commentDate;
 	}
-	
-	
 
+	@Override
+	public String toString() {
+		return "Comment [key=" + key + ", author=" + author + ", giveaway="
+				+ giveaway + ", commentDate=" + commentDate + "]";
+	}
+	
+	
+	
 }

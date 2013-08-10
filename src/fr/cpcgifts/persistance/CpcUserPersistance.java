@@ -57,7 +57,7 @@ public class CpcUserPersistance {
 		return res;
 	}
 	
-	public static List<CpcUser> getCpcUsers(List<Key> keys) {
+	public static List<CpcUser> getCpcUsers(List<Key> keys, boolean detached) {
 		List<CpcUser> res = new ArrayList<CpcUser>();
 
 		if (keys.size() == 0)
@@ -72,11 +72,16 @@ public class CpcUserPersistance {
 
 				CpcUser u = pm.getObjectById(CpcUser.class,k);
 
-				res.add(pm.detachCopy(u));
+				if(detached) {
+					res.add(pm.detachCopy(u));
+				} else {
+					res.add(u);
+				}
 
 			}
 		} finally {
-			pm.close();
+			if(detached)
+				pm.close();
 		}
 
 		return res;
