@@ -1,1 +1,20 @@
-Ce site crée par un membre de la communauté Canard PC n'est aucunement lié au réseau CPC ou au magazine Canard PC, propriété de Presse Non Stop SAS.
+<footer>
+	<div class="google-ads">
+		<script type="text/javascript"><!--
+			google_ad_client = "ca-pub-5343568348617875";
+			/* CPC Gifts footer */
+			google_ad_slot = "9766028407";
+			google_ad_width = 970;
+			google_ad_height = 90;
+			//-->
+		</script>
+		<script type="text/javascript"
+			src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+		</script>
+	</div>
+
+	<hr />
+	<p class="xx-small">
+		Ce site crée par un membre de la communauté Canard PC n'est aucunement lié au réseau CPC ou au magazine Canard PC, propriété de Presse Non Stop SAS.
+	</p>
+</footer>

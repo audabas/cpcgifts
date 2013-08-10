@@ -22,7 +22,7 @@
 	max-height: 25px;
 }
 
-footer {
+.xx-small {
 	font-size: xx-small;
 }
 
@@ -40,6 +40,9 @@ footer {
 
 .carousel .item > img { display: inline-block; }
 
+.gray {
+	color: gray;
+}
 
 /* css for timepicker */
 .ui-timepicker-div .ui-widget-header {
@@ -84,8 +87,4 @@ footer {
 
 .ui-datepicker-current {
 	display: none;
-}
-
-.gray {
-	color: gray;
 }
