@@ -33,20 +33,20 @@
 		Long gid = Long.parseLong(gaid);
 
 		if (gid != null) {
-	Key k = KeyFactory.createKey("Giveaway", gid);
-	
-	try {
-	            cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-	            
-	            currentGA = (Giveaway) cache.get(k);
-	            
-	            if(currentGA == null) {
-			currentGA = GAPersistance.getGA(k);
-	            	cache.put(k, currentGA);
-	            }
-	} catch (CacheException e) {
-		currentGA = GAPersistance.getGA(k);
-	}
+			Key k = KeyFactory.createKey("Giveaway", gid);
+			
+			try {
+			            cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+			            
+			            currentGA = (Giveaway) cache.get(k);
+			            
+			            if(currentGA == null) {
+					currentGA = GAPersistance.getGA(k);
+			            	cache.put(k, currentGA);
+			            }
+			} catch (CacheException e) {
+				currentGA = GAPersistance.getGA(k);
+			}
 	
 		}
 	}
@@ -220,8 +220,8 @@ body {
 		<div class="tabbable">
 			<!-- Only required for left/right tabs -->
 			<ul class="nav nav-tabs">
-				<li class="active"><a href="#commentaires" data-toggle="tab">Commentaires</a></li>
-				<li><a href="#entrants" data-toggle="tab">Participants</a></li>
+				<li class="active"><a href="#commentaires" data-toggle="tab">Commentaires <span class="gray">(<%= currentGA.getComments().size() %>)</span></a></li>
+				<li><a href="#entrants" data-toggle="tab">Participants <span class="gray">(<%= currentGA.getEntrants().size() %>)</span></a></li>
 				<%
 					if(currentGA.getAuthor().getId() == cpcuser.getKey().getId()) {
 				%>

@@ -85,3 +85,7 @@ footer {
 .ui-datepicker-current {
 	display: none;
 }
+
+.gray {
+	color: gray;
+}

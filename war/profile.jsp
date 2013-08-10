@@ -141,12 +141,11 @@ body {
 		<ul class="nav nav-tabs">
 			<li id="created-button" class="active"><a
 				onclick="javascript:changeSection('#created');" href="#created">Concours
-					créés</a></li>
+					créés <span class="gray">(<%= profileCpcUser.getGiveaways().size() %>)</span></a></li>
 			<li id="entries-button"><a
-				onclick="javascript:changeSection('#entries');" href="#entries">Participations</a></li>
+				onclick="javascript:changeSection('#entries');" href="#entries">Participations <span class="gray">(<%= profileCpcUser.getEntries().size() %>)</span></a></li>
 			<li id="won-button"><a
-				onclick="javascript:changeSection('#won');" href="#won">Concours
-					gagnés</a></li>
+				onclick="javascript:changeSection('#won');" href="#won">Concours gagnés <span class="gray">(<%= profileCpcUser.getWon().size() %>)</span></a></li>
 		</ul>
 
 		<div id="created">
