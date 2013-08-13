@@ -99,6 +99,7 @@ public class CpcUser implements Serializable {
 	}
 
 	public void setGuser(User guser) {
+		this.id = guser.getUserId();
 		this.guser = guser;
 	}
 

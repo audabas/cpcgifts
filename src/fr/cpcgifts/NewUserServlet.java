@@ -29,7 +29,7 @@ public class NewUserServlet extends HttpServlet { // /signin-serv
 		
 		if (user != null) {
 		
-		resp.getWriter().print(CpcUserPersistance.getCpcUser(user.getUserId()) != null);
+			resp.getWriter().print(CpcUserPersistance.getCpcUser(user.getUserId()) != null);
 		
 		} else {
 			resp.getWriter().print(false);
@@ -48,14 +48,28 @@ public class NewUserServlet extends HttpServlet { // /signin-serv
 
 			CpcUser cpcuser = new CpcUser(user, req.getParameter("idCPC"));
 			
-			log.info("New user registred : " + cpcuser.getCpcNickname());
-
-			try {
-				pm.makePersistent(cpcuser);
-			} finally {
-				pm.close();
-			}
+			CpcUser existingUser = CpcUserPersistance.getCpcUserByCpcProfileId(cpcuser.getCpcProfileId(), false);
 			
+			if(existingUser != null) {
+			
+				log.info("User change email : " + cpcuser + " : " + user.getEmail());
+				
+				existingUser.setGuser(user);
+				
+				CpcUserPersistance.closePm();
+				pm.close();				
+				
+			} else {
+			
+				log.info("New user registred : " + cpcuser.getCpcNickname());
+	
+				try {
+					pm.makePersistent(cpcuser);
+				} finally {
+					pm.close();
+				}
+			
+			}
 		}
 
 		resp.sendRedirect("/");

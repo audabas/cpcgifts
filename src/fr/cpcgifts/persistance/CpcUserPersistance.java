@@ -57,6 +57,34 @@ public class CpcUserPersistance {
 		return res;
 	}
 	
+	public static CpcUser getCpcUserByCpcProfileId(String cpcProfileId, boolean detached) {
+		CpcUser res = null;
+		
+		PersistenceManagerFactory pmf = PMF.get();
+		PersistenceManager pm = pmf.getPersistenceManager();
+		
+		Query query = pm.newQuery(CpcUser.class);
+		query.setFilter("cpcProfileId == idParam");
+		query.declareParameters("String idParam");
+		
+		try {
+			@SuppressWarnings("unchecked")
+			List<CpcUser> results = (List<CpcUser>) query.execute(cpcProfileId);
+			if (!results.isEmpty()) {
+					res = results.get(0);
+					if(detached)
+						res = pm.detachCopy(res);
+			}
+		} finally {
+			query.closeAll();
+			
+			if(detached)
+				pm.close();
+		}
+		
+		return res;
+	}
+	
 	public static List<CpcUser> getCpcUsers(List<Key> keys, boolean detached) {
 		List<CpcUser> res = new ArrayList<CpcUser>();
 
