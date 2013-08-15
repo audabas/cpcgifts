@@ -123,13 +123,6 @@ body {
 			</div>
 		</form>
 
-
-
-
-		<footer>
-			<p><%@ include file="footer.jspf" %></p>
-		</footer>
-
 	</div>
 	<!-- /container -->
 
