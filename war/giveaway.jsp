@@ -134,6 +134,14 @@ body {
 			</div>
 			<div class="span7">
 				<h1><%=currentGA.getTitle()%></h1>
+				<% if(userService.isUserAdmin()) { %>
+				<div class="row">
+					<a class="btn btn-success span2" href="#modif-title"
+					data-toggle="modal"> <i class="icon-pencil icon-white"></i>
+					Modifier le titre
+					</a>
+				</div>
+				<% } %>
 				<hr>
 				<div class="span2">
 					<h4>Créé par :</h4>
@@ -180,14 +188,14 @@ body {
 						 style="margin-left: 250px" class="btn btn-danger">Ne plus participer</a>
 						
 						<%
-													} else {
+											} else {
 												%>
 				<a
 					href="/enterga?reqtype=enter&gaid=<%=currentGA.getKey().getId()%>"
 					style="margin-left: 250px" class="btn btn-success">Participer</a>
 				<%
-					}
-						}
+											}
+									}
 				%>
 
 			</div>
@@ -379,6 +387,7 @@ body {
 
 	<script src="js/main.js"></script>
 	
+	<!-- Modal modification image -->
 	<div id="modif-image" class="modal hide fade">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
@@ -411,6 +420,7 @@ body {
 		}
 	</script>
 	
+	<!-- Modal modification de la description -->
 	<div id="modif-desc" class="modal big-modal hide fade">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
@@ -436,12 +446,46 @@ body {
 				href="javascript:submitDescForm()" class="btn btn-primary">Modifier</a>
 		</div>
 	</div>
-
+	
 	<script type="text/javascript">
 		function submitDescForm() {
 			$("#descform").submit();
 		}
 	</script>
+	
+	<!-- Modal modification du titre -->
+	<div id="modif-title" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"
+				aria-hidden="true">&times;</button>
+			<h3>Modifier le titre</h3>
+		</div>
+		<div class="modal-body">
+			<form id="titleform" name="titleform" action="/editga" method="post">
+				<fieldset>
+					<label>Titre du concours</label>
+					<input id="title" class="span4"
+						name="title" type="text" required="required" value="<%= currentGA.getTitle() %>">
+					<span class="help-block">Admin uniquement.</span>
+				</fieldset>
+				<input type="hidden" name="req" value="changetitle" />
+				<input type="hidden" name="gaid" value="<%= currentGA.getKey().getId() %>">
+			</form>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Annuler</a> <a
+				href="javascript:submitTitleForm()" class="btn btn-primary">Modifier</a>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		function submitTitleForm() {
+			if ($("#title").val() != "") {
+				$("#titleform").submit();
+			}
+		}
+	</script>
+	
 	
 	<script type="text/javascript">
 		$(document).ready(function() {

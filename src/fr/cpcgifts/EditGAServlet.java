@@ -73,6 +73,13 @@ public class EditGAServlet extends HttpServlet {
 				pm.makePersistent(comment);
 				
 				ga.addComment(comment.getKey());
+			} else if(reqType.equals("changetitle")) {
+				String newTitle = params.get("title")[0];
+				
+				if(userService.isUserAdmin()) {
+					log.info(cpcuser + " changed giveway title " + ga + " by " + newTitle);
+					ga.setTitle(newTitle);
+				}
 			}
 			
 			resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());
