@@ -134,14 +134,6 @@ body {
 			</div>
 			<div class="span7">
 				<h1><%=currentGA.getTitle()%></h1>
-				<% if(userService.isUserAdmin()) { %>
-				<div class="row">
-					<a class="btn btn-success span2" href="#modif-title"
-					data-toggle="modal"> <i class="icon-pencil icon-white"></i>
-					Modifier le titre
-					</a>
-				</div>
-				<% } %>
 				<hr>
 				<div class="span2">
 					<h4>Créé par :</h4>
@@ -241,6 +233,13 @@ body {
 					if(!currentGA.isOpen() && currentGA.getWinner() != null) {
 				%>
 				<li><a href="#winner" data-toggle="tab">Gagnant</a></li>
+				<%
+					}
+				%>
+				<% 
+					if(userService.isUserAdmin()) {
+				%>
+				<li><a href="#admin" data-toggle="tab">Admin</a></li>
 				<%
 					}
 				%>
@@ -347,20 +346,40 @@ body {
 				<div class="tab-pane" id="winner">
 				
 				<% if(!currentGA.isOpen() && currentGA.getWinner() != null) { %>
-				<%= ViewTools.userView(CpcUserPersistance.getCpcUserByKey(currentGA.getWinner())) %>
-					<% if(userService.isUserAdmin()) { %>
-						<hr>
-						<% if(currentGA.isRerolled()) { %>
+				<%= ViewTools.userView(CpcUserPersistance.getCpcUserByKey(currentGA.getWinner())) %>					
+				<%	} %>
+				</div>
+				<% if(userService.isUserAdmin()) { %>
+				<div class="tab-pane" id="admin">
+					<div class="row offset1">
+						<a class="btn btn-success" href="#modif-title"
+						data-toggle="modal"> <i class="icon-pencil icon-white"></i>
+						Modifier le titre
+						</a>
+					</div>
+					<hr />
+					<div class="row offset1">
+						<% if(currentGA.isRerolled() && !currentGA.isOpen()) { %>
 							<a	href="/admin/reroll?reqtype=reroll&gaid=<%= currentGA.getKey().getId() %>"
 								class="btn btn-danger"><i class="icon-warning-sign icon-white"></i> <i class="icon-repeat icon-white"></i> Re-Relancer le tirage</a>
-						<% } else { %>
+						<% } else if(!currentGA.isOpen()) { %>
 							<a	href="/admin/reroll?reqtype=reroll&gaid=<%= currentGA.getKey().getId() %>"
 								class="btn btn-warning"><i class="icon-repeat icon-white"></i> Relancer le tirage</a>
 						<% } %>
-					<%  } %>
-				<%	} %>
+					</div>
+					<hr />
+					<div class="row offset1">
+						<a	href="/admin/closega?reqtype=closeGa&gaid=<%= currentGA.getKey().getId() %>"
+									class="btn btn-warning"><i class="icon-trash icon-white"></i> Fermer le concours</a>
+					</div>
+					<hr />
+					<div class="row offset1">
+						<a	href="/admin/openga?reqtype=openGa&gaid=<%= currentGA.getKey().getId() %>"
+									class="btn btn-warning"><i class="icon-repeat icon-white"></i> Rouvrir le concours</a> (ne modifie pas la date de fin du concours)
+					</div>
 				</div>
-			</div>
+				<% } %>
+			</div>			
 		</div>
 
 

@@ -47,14 +47,18 @@ public class AdminServlet extends HttpServlet {
 			String gaID = params.get("gaid")[0];
 			Giveaway ga = pm.getObjectById(Giveaway.class, KeyFactory.createKey(Giveaway.class.getSimpleName(),Long.parseLong(gaID)));
 			
-			if(reqType.equals("reroll")) {
+			if(reqType.equals("reroll")) { //reroll
 				ga.reroll();
-				log.info("[ADMIN] <a href='/user?userID=" + cpcuser.getKey().getId() + "'>" + cpcuser.getCpcNickname()
-						+ "</a> rerolled the giveaway <a href='/giveaway?gaID=" + ga.getKey().getId() + "'>"
-						+ ga.getTitle() + "</a>." + "\n"
-						+ "New winner is : "
-						+ "<a href='/user?userID=" + ga.getWinner().getId() + "'>" + ga.getWinner().getId() + "</a>."
+				log.info("[ADMIN] " + cpcuser + " rerolled the giveaway " + ga + "." + "\n"
+						+ "New winner is : " + ga.getWinner() + "."
 						);
+			} else if("closeGa".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " closed the giveaway " + ga + ".");
+				ga.setTitle(ga.getTitle() + " (Fermé par " + cpcuser.getCpcNickname() + ")");
+				ga.setOpen(false);
+			} else if("openGa".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " reopened the giveaway " + ga + ".");
+				ga.setOpen(true);
 			}
 			
 			resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());
