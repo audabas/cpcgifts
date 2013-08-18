@@ -388,23 +388,6 @@ body {
 		<%@ include file="footer.jspf" %>
 
 	</div>
-	<!-- /container -->
-
-	<script
-		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script>
-		window.jQuery
-				|| document
-						.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')
-	</script>
-
-	<script src="js/vendor/bootstrap.min.js"></script>
-	
-	<script type="text/javascript" src="js/vendor/markdown/Markdown.Converter.js"></script>
-    <script type="text/javascript" src="js/vendor/markdown/Markdown.Sanitizer.js"></script>
-    <script type="text/javascript" src="js/vendor/markdown/Markdown.Editor.js"></script>
-
-	<script src="js/main.js"></script>
 	
 	<!-- Modal modification image -->
 	<div id="modif-image" class="modal hide fade">
@@ -505,7 +488,14 @@ body {
 		}
 	</script>
 	
+	<!-- /container -->
+
+	<%@ include file="jscripts.jspf" %>
 	
+	<script type="text/javascript" src="js/vendor/markdown/Markdown.Converter.js"></script>
+    <script type="text/javascript" src="js/vendor/markdown/Markdown.Sanitizer.js"></script>
+    <script type="text/javascript" src="js/vendor/markdown/Markdown.Editor.js"></script>
+
 	<script type="text/javascript">
 		$(document).ready(function() {
 			var converter = new Markdown.getSanitizingConverter();
@@ -522,5 +512,6 @@ body {
             
 		});
 	</script>
+	
 </body>
 </html>

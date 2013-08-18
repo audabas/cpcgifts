@@ -251,35 +251,6 @@ body {
 	</div>
 	<!-- /container -->
 
-	<script
-		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script>
-		window.jQuery
-				|| document
-						.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')
-	</script>
-
-	<script src="js/vendor/bootstrap.min.js"></script>
-
-	<script src="js/main.js"></script>
-
-	<script type="text/javascript">
-		var changeSection = function(sectionName) {
-			if (sectionName != "") {
-				$('.nav > li').removeClass("active");
-				$("#created, #entries, #won").hide();
-
-				$(sectionName + '-button').addClass("active");
-				$(sectionName).show();
-
-			} else {
-				changeSection("#created");
-			}
-		}
-
-		changeSection(window.location.hash);
-	</script>
-
 	<div id="modif-image" class="modal hide fade">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
@@ -308,6 +279,25 @@ body {
 				$("#imgform").submit();
 			}
 		}
+	</script>
+
+	<%@ include file="jscripts.jspf" %>
+	
+	<script type="text/javascript">
+		var changeSection = function(sectionName) {
+			if (sectionName != "") {
+				$('.nav > li').removeClass("active");
+				$("#created, #entries, #won").hide();
+
+				$(sectionName + '-button').addClass("active");
+				$(sectionName).show();
+
+			} else {
+				changeSection("#created");
+			}
+		}
+
+		changeSection(window.location.hash);
 	</script>
 
 </body>

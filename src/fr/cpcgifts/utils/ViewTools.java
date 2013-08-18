@@ -12,7 +12,7 @@ public class ViewTools {
 		String res = "<div class=\"row\">"
 				+ "<div class=\"span1\"><a href=\"/user?userID="
 				+ u.getKey().getId()
-				+ "\"><img class=\"img-rounded img-small-avatar\" src=\""
+				+ "\"><img class=\"img-rounded img-small-avatar lazy\" src=\"img/avatar.jpg\" data-original=\""
 				+ u.getAvatarUrl() + "\" /></a></div>"
 				+ "<div class=\"span3\"><a  href=\"/user?userID="
 				+ u.getKey().getId() + "\">" + u.getCpcNickname()
@@ -28,7 +28,7 @@ public class ViewTools {
 		String res = "<div class=\"row-fluid\">" + "<div class=\"span2\">"
 				+ "<a href=\"/giveaway?gaID="
 				+ ga.getKey().getId()
-				+ "\" ><img class=\"img-rounded img-small-ga\" src=\""
+				+ "\" ><img class=\"img-rounded img-small-ga lazy\" src=\"img/game.png\" data-original=\""
 				+ ga.getImgUrl()
 				+ "\"></a>"
 				+ "</div>"
@@ -45,8 +45,8 @@ public class ViewTools {
 				+ "href=\"/user?userID="
 				+ auth.getKey().getId()
 				+ "\"> <img "
-				+ "class=\"media-object img-small-avatar\""
-				+ "src=\" "
+				+ "class=\"media-object img-small-avatar lazy\" src=\"img/avatar.jpg\""
+				+ "data-original=\""
 				+ auth.getAvatarUrl()
 				+ "\">"
 				+ "</a>"
