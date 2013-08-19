@@ -6,30 +6,34 @@
 <%@page import="fr.cpcgifts.model.CpcUser"%>
 <%
 
-	CpcUser cpcuser;
+	CpcUser cpcuser = null;
 
-	try {
+	if(userService.isUserLoggedIn()) {
 
-		Cache cacheCpcUser = CacheManager.getInstance()
-				.getCacheFactory().createCache(Collections.emptyMap());
-
-		cpcuser = (CpcUser) cacheCpcUser.get(session.getId()
-				+ "-cpcuser");
-
-		if (cpcuser == null) {
+		try {
+	
+			Cache cacheCpcUser = CacheManager.getInstance()
+					.getCacheFactory().createCache(Collections.emptyMap());
+	
+			cpcuser = (CpcUser) cacheCpcUser.get(session.getId()
+					+ "-cpcuser");
+	
+			if (cpcuser == null) {
+				cpcuser = (CpcUser) session.getAttribute("cpcuser");
+				cacheCpcUser.put(session.getId() + "-cpcuser", cpcuser);
+			} else {
+			}
+	
+		} catch (CacheException e) {
 			cpcuser = (CpcUser) session.getAttribute("cpcuser");
-			cacheCpcUser.put(session.getId() + "-cpcuser", cpcuser);
-		} else {
 		}
-
-	} catch (CacheException e) {
-		cpcuser = (CpcUser) session.getAttribute("cpcuser");
-	}
-
-	if (cpcuser == null) {
-		if (userService.isUserLoggedIn()) {
-			cpcuser = CpcUserPersistance.getCpcUser(user.getUserId());
-			session.setAttribute("cpcuser", cpcuser);
+	
+		if (cpcuser == null) {
+			if (userService.isUserLoggedIn()) {
+				cpcuser = CpcUserPersistance.getCpcUser(user.getUserId());
+				session.setAttribute("cpcuser", cpcuser);
+			}
 		}
+		
 	}
 %>

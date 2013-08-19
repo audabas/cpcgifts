@@ -21,7 +21,6 @@
 	User user = userService.getCurrentUser();
 %>
 
-<%@ include file="forcelogin.jspf"%>
 
 <%
 	Cache cache;
@@ -110,7 +109,7 @@ body {
 	<%@ include file="getuser.jspf"%>
 	
 	<%
-			boolean isAuthor = cpcuser.getKey().equals(gaAuthor.getKey());
+			boolean isAuthor = cpcuser != null && cpcuser.getKey().equals(gaAuthor.getKey());
 		%>
 
 	<div class="container">
@@ -171,7 +170,7 @@ body {
 				<%=DateTools.dateDifference(currentGA.getEndDate())%>
 				
 				<%
-									if(currentGA.isOpen() && currentGA.getAuthor().getId() != cpcuser.getKey().getId()) {
+									if(currentGA.isOpen() && !isAuthor && userService.isUserLoggedIn()) {
 											if(currentGA.getEntrants().contains(cpcuser.getKey())) {
 								%>
 						
@@ -223,7 +222,7 @@ body {
 				<li class="active"><a href="#commentaires" data-toggle="tab">Commentaires <span class="gray">(<%= currentGA.getComments().size() %>)</span></a></li>
 				<li><a href="#entrants" data-toggle="tab">Participants <span class="gray">(<%= currentGA.getEntrants().size() %>)</span></a></li>
 				<%
-					if(currentGA.getAuthor().getId() == cpcuser.getKey().getId()) {
+					if(isAuthor || (userService.isUserLoggedIn() && userService.isUserAdmin())) {
 				%>
 				<li><a href="#signature" data-toggle="tab">Signature</a></li>
 				<%
@@ -237,7 +236,7 @@ body {
 					}
 				%>
 				<% 
-					if(userService.isUserAdmin()) {
+					if(userService.isUserLoggedIn() && userService.isUserAdmin()) {
 				%>
 				<li><a href="#admin" data-toggle="tab">Admin</a></li>
 				<%
@@ -285,6 +284,8 @@ body {
 					}
 					%>
 
+					<% if(userService.isUserLoggedIn() && cpcuser != null) { %>
+
 					<form action="/editga" method="post">
 						<fieldset>
 							<label>Laisser un commentaire :</label>
@@ -295,6 +296,7 @@ body {
 							<button type="submit" class="btn">Commenter</button>
 						</fieldset>
 					</form>
+					<% } %>
 
 				</div>
 				<div class="tab-pane" id="entrants">
@@ -349,7 +351,7 @@ body {
 				<%= ViewTools.userView(CpcUserPersistance.getCpcUserByKey(currentGA.getWinner())) %>					
 				<%	} %>
 				</div>
-				<% if(userService.isUserAdmin()) { %>
+				<% if(userService.isUserLoggedIn() && userService.isUserAdmin()) { %>
 				<div class="tab-pane" id="admin">
 					<div class="row offset1">
 						<a class="btn btn-success" href="#modif-title"

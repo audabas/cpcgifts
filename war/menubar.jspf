@@ -65,7 +65,7 @@
 					<%
 						} else {
 					%>
-					<a href="<%=userService.createLoginURL(request.getRequestURI())%>"
+					<a href="<%=userService.createLoginURL(request.getRequestURI() + '?' + request.getQueryString())%>"
 						class="btn">Connexion</a>
 					<%
 						}

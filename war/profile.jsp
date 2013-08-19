@@ -22,8 +22,6 @@
 	User user = userService.getCurrentUser();
 %>
 
-<%@ include file="forcelogin.jspf"%>
-
 <%
 	Cache cache;
 	CpcUser profileCpcUser = null;
@@ -43,7 +41,7 @@
 	            
 				
 				if(profileCpcUser == null) {
-					profileCpcUser = profileCpcUser = CpcUserPersistance.getCpcUserUndetached(k);
+					profileCpcUser = CpcUserPersistance.getCpcUserUndetached(k);
 					cache.put(k, profileCpcUser);
 				}
 				
@@ -98,7 +96,7 @@ body {
 	<%@ include file="getuser.jspf"%>
 
 	<%
-		boolean isCurrentUser = profileCpcUser.getKey().equals(cpcuser.getKey());
+		boolean isCurrentUser = userService.isUserLoggedIn() && profileCpcUser.getKey().equals(cpcuser.getKey());
 	%>
 
 	<div class="container">
