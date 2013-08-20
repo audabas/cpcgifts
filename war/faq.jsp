@@ -105,7 +105,6 @@ body {
 		<hr />
 		
 		<footer>
-			<p><%@ include file="footer.jspf"%></p>
 		</footer>
 	
 	</div>
