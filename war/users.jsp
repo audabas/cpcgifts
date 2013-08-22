@@ -87,8 +87,6 @@ body {
 		%>
 
 
-		<%@ include file="footer.jspf" %>
-
 	</div>
 	<!-- /container -->
 

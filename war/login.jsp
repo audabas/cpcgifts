@@ -113,7 +113,6 @@ body {
 
 		<hr>
 
-		<%@ include file="footer.jspf"%>
 
 	</div>
 	<!-- /container -->
