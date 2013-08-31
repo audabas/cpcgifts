@@ -8,7 +8,7 @@
   <cron>
     <url>/cron/cleanEmptyGA</url>
     <description>Nettoie de la base de donnée les concours terminés sans participants inscrits</description>
-    <schedule>1st monday of month 05:30</schedule>
+    <schedule>every friday 05:30</schedule>
   </cron>
   <cron>
     <url>/_ah/datastore_admin/backup.create?name=CronDatastoreBackup&amp;kind=Comment&amp;kind=CpcUser&amp;kind=Giveaway&amp;filesystem=blobstore</url>

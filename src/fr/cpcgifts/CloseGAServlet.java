@@ -33,7 +33,7 @@ public class CloseGAServlet extends HttpServlet {
 			try {
 	            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
 	            
-	            cache.remove(ga.getWinner());
+	            cache.remove(ga.getWinners());
 	            cache.remove(ga.getKey());
 				
 	        } catch (CacheException e) {

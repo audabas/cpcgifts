@@ -1,0 +1,9 @@
+<backends>
+	<backend name="admin-backend">
+		<class>B1</class>
+		<instances>1</instances>
+		<options>
+			<dynamic>true</dynamic>
+		</options>
+	</backend>
+</backends>

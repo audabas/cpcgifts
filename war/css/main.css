@@ -26,6 +26,10 @@
 	font-size: xx-small;
 }
 
+.small-number-input {
+	width: 35px;
+}
+
 .big-modal{
    width:940px;
    max-width : 100%;

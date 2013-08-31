@@ -1,10 +1,11 @@
 package fr.cpcgifts.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -34,8 +35,11 @@ public class Giveaway implements Serializable {
 	@Persistent
 	private String title = "";
 	
+	/**
+	 * @deprecated
+	 */
 	@Persistent
-	private String description = "";
+	public String description = "";
 	
 	@Persistent
 	private Text longDescription = new Text("");
@@ -44,17 +48,29 @@ public class Giveaway implements Serializable {
 	private String imgUrl = "";
 	
 	@Persistent
-	private List<Key> entrants;
+	private Set<Key> entrants;
 	
 	@Persistent
-	private List<Key> comments;
+	private Set<Key> comments;
 	
 	/* TimeZone en UTC */
 	@Persistent
 	private Date endDate;
 	
+	/**
+	 * @deprecated
+	 */
 	@Persistent
-	private Key winner;
+	public Key winner;
+	
+	@Persistent
+	private Set<Key> winners;
+	
+	@Persistent
+	private int nbWinners = 0;
+	
+	@Persistent
+	private int nbCopies = 1;
 	
 	@Persistent
 	private boolean open = true;
@@ -63,14 +79,16 @@ public class Giveaway implements Serializable {
 	private boolean rerolled = false;
 	
 	
-	public Giveaway(Key author, String title, String description, String imgUrl, Date endDate) {
+	public Giveaway(Key author, String title, String description, String imgUrl, Date endDate, int nbCopies) {
 		this.author = author;		
 		setTitle(title);
 		setDescription(description);
 		setImgUrl(imgUrl);
+		setNbCopies(nbCopies);
 		
-		this.entrants = new ArrayList<Key>();
-		this.comments = new ArrayList<Key>();
+		this.entrants = new HashSet<Key>();
+		this.comments = new HashSet<Key>();
+		this.winners = new HashSet<Key>();
 		
 		this.endDate = endDate;
 		
@@ -101,11 +119,7 @@ public class Giveaway implements Serializable {
 	}
 
 	public String getDescription() {
-		if(longDescription == null || longDescription.getValue().length() == 0) {
-			return description;
-		} else {
-			return longDescription.getValue();
-		}
+		return longDescription.getValue();
 	}
 
 	public void setDescription(String description) {
@@ -123,9 +137,9 @@ public class Giveaway implements Serializable {
 		this.imgUrl = imgUrl;
 	}
 
-	public List<Key> getEntrants() {
+	public Set<Key> getEntrants() {
 		if(entrants == null)
-			entrants = new ArrayList<Key>();
+			entrants = new HashSet<Key>();
 		
 		return entrants;
 	}
@@ -142,14 +156,14 @@ public class Giveaway implements Serializable {
 		return entrants.remove(cpcuser);
 	}
 
-	public List<Key> getComments() {
+	public Set<Key> getComments() {
 		if(comments == null)
-			comments = new ArrayList<Key>();
+			comments = new HashSet<Key>();
 		
 		return comments;
 	}
 
-	public void setComments(List<Key> comments) {
+	public void setComments(Set<Key> comments) {
 		this.comments = comments;
 	}
 	
@@ -168,12 +182,27 @@ public class Giveaway implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public Key getWinner() {
-		return winner;
+	public Set<Key> getWinners() {
+		if(winners == null)
+			this.winners = new HashSet<Key>();
+		
+		return winners;
 	}
 
-	public void setWinner(Key winner) {
-		this.winner = winner;
+	public void addWinner(Key winner) {
+		getWinners();
+		
+		winners.add(winner);
+		
+		nbWinners = winners.size();
+	}
+	
+	public void removeWinner(Key winner) {
+		getWinners();
+		
+		winners.remove(winner);
+		
+		nbWinners = winners.size();
 	}
 
 	public boolean isOpen() {
@@ -182,6 +211,14 @@ public class Giveaway implements Serializable {
 
 	public void setOpen(boolean open) {
 		this.open = open;
+	}
+
+	public int getNbCopies() {
+		return nbCopies;
+	}
+
+	public void setNbCopies(int nbCopies) {
+		this.nbCopies = nbCopies;
 	}
 
 	public void drawWinner() {
@@ -194,38 +231,48 @@ public class Giveaway implements Serializable {
 		
 		Random rand = new Random();
 		
-		int winnerIndex = rand.nextInt(entrants.size());
+		int nbWinners = Math.min(nbCopies, entrants.size());
 		
-		winner = entrants.get(winnerIndex);
-		
-		CpcUser winnerEntity = CpcUserPersistance.getCpcUserUndetached(winner);
-		winnerEntity.addWon(this.key);
-		log.info("Winner is " + winnerEntity.getCpcNickname() + " !");
+		while(winners.size() < nbWinners) {
+			int winnerIndex = rand.nextInt(entrants.size());
+			
+			Key winner = (Key) entrants.toArray()[winnerIndex];
+			
+			boolean newInSet = winners.add(winner);
+			
+			if(newInSet) {
+				CpcUser winnerEntity = CpcUserPersistance.getCpcUserUndetached(winner);
+				winnerEntity.addWon(this.key);
+				log.info("Winner is " + winnerEntity.getCpcNickname() + " !");
+			}
+		}
+			
 		CpcUserPersistance.closePm();
 	}
 	
-	public void reroll() {
+	public void reroll(Key winnerToReroll) {
 		rerolled = true;
 		
 		Random rand = new Random();
 		
-		if(entrants.size() >= 2) {
+		if(entrants.size() > winners.size()) {
 			
-			Key newWinner = winner;
+			Key newWinner = winnerToReroll;
 			
 			do {
 				
 				int winnerIndex = rand.nextInt(entrants.size());
 				
-				newWinner = entrants.get(winnerIndex);
+				newWinner = (Key) entrants.toArray()[winnerIndex];
 				
-			} while (newWinner == winner);
+			} while (winners.contains(newWinner));
 			
-			CpcUser winnerEntity = CpcUserPersistance.getCpcUserUndetached(winner);
+			CpcUser winnerEntity = CpcUserPersistance.getCpcUserUndetached(winnerToReroll);
 			CpcUser newWinnerEntity = CpcUserPersistance.getCpcUserUndetached(newWinner);
 			newWinnerEntity.addWon(this.key);
+			addWinner(newWinner);
 			winnerEntity.removeWon(this.key);
-			winner = newWinner;
+			removeWinner(winnerToReroll);
 			CpcUserPersistance.closePm();
 		}
 		
@@ -239,7 +286,7 @@ public class Giveaway implements Serializable {
 	public String toString() {
 		return "Giveaway [key=" + getKey() + ", author=" + getAuthor() + ", title="
 				+ getTitle() + ", description=" + getDescription() + ", endDate="
-				+ getEndDate() + ", winner=" + getWinner() + ", open=" + isOpen() + "]";
+				+ getEndDate() + ", winners=" + Arrays.deepToString(winners.toArray()) + ", open=" + isOpen() + "]";
 	}
 
 	

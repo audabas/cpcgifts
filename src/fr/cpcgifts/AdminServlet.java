@@ -1,6 +1,7 @@
 package fr.cpcgifts;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -48,9 +49,11 @@ public class AdminServlet extends HttpServlet {
 			Giveaway ga = pm.getObjectById(Giveaway.class, KeyFactory.createKey(Giveaway.class.getSimpleName(),Long.parseLong(gaID)));
 			
 			if(reqType.equals("reroll")) { //reroll
-				ga.reroll();
+				String winnerToRerollId = params.get("winnerToReroll")[0];
+				
+				ga.reroll(KeyFactory.createKey(CpcUser.class.getSimpleName(), Long.parseLong(winnerToRerollId)));
 				log.info("[ADMIN] " + cpcuser + " rerolled the giveaway " + ga + "." + "\n"
-						+ "New winner is : " + ga.getWinner() + "."
+						+ "New winners are : " + Arrays.deepToString(ga.getWinners().toArray()) + "."
 						);
 			} else if("closeGa".equals(reqType)) {
 				log.info("[ADMIN] " + cpcuser + " closed the giveaway " + ga + ".");

@@ -132,7 +132,11 @@ body {
 				%>
 			</div>
 			<div class="span7">
-				<h1><%=currentGA.getTitle()%></h1>
+				<h1><%=currentGA.getTitle()%>
+				<% if(currentGA.getNbCopies() > 1) { %>
+				<span class="gray">(<%= currentGA.getNbCopies() %> copies)</span>
+				<% } %>
+				</h1>
 				<hr>
 				<div class="span2">
 					<h4>Créé par :</h4>
@@ -203,7 +207,7 @@ body {
 		
 		
 		<%
-							if(isAuthor) {
+			if(isAuthor) {
 						%>
 				<div class="row" style="margin-top: 10px;">
 				<a class="btn btn-success span2" href="#modif-desc"
@@ -229,10 +233,14 @@ body {
 					}
 				%>
 				<%
-					if(!currentGA.isOpen() && currentGA.getWinner() != null) {
+					if(!currentGA.isOpen() && currentGA.getWinners().size() == 1) {
 				%>
 				<li><a href="#winner" data-toggle="tab">Gagnant</a></li>
 				<%
+					} else if(!currentGA.isOpen() && currentGA.getWinners().size() > 1) {
+				%>
+				<li><a href="#winner" data-toggle="tab">Gagnants <span class="gray">(<%= currentGA.getWinners().size() %>)</span></a></li>
+				<% 
 					}
 				%>
 				<% 
@@ -347,9 +355,21 @@ body {
 				</div>
 				<div class="tab-pane" id="winner">
 				
-				<% if(!currentGA.isOpen() && currentGA.getWinner() != null) { %>
-				<%= ViewTools.userView(CpcUserPersistance.getCpcUserByKey(currentGA.getWinner())) %>					
-				<%	} %>
+				<% 
+				if(!currentGA.isOpen() && currentGA.getWinners().size() > 0) {
+						for(Key k : currentGA.getWinners()) {
+				%>
+						<%= ViewTools.userView(CpcUserPersistance.getCpcUserByKey(k)) %>
+						<% if(!currentGA.isOpen() && currentGA.getEntrants().size() > currentGA.getWinners().size()) { %>
+							<a	href="/admin/reroll?reqtype=reroll&gaid=<%= currentGA.getKey().getId() %>&winnerToReroll=<%= k.getId() %>"
+								class="btn btn-warning"><i class="icon-repeat icon-white"></i> Relancer le tirage</a>
+						<% } %>	
+						<hr />
+										
+				<%
+						}
+					} 
+				%>
 				</div>
 				<% if(userService.isUserLoggedIn() && userService.isUserAdmin()) { %>
 				<div class="tab-pane" id="admin">
@@ -358,16 +378,6 @@ body {
 						data-toggle="modal"> <i class="icon-pencil icon-white"></i>
 						Modifier le titre
 						</a>
-					</div>
-					<hr />
-					<div class="row offset1">
-						<% if(currentGA.isRerolled() && !currentGA.isOpen()) { %>
-							<a	href="/admin/reroll?reqtype=reroll&gaid=<%= currentGA.getKey().getId() %>"
-								class="btn btn-danger"><i class="icon-warning-sign icon-white"></i> <i class="icon-repeat icon-white"></i> Re-Relancer le tirage</a>
-						<% } else if(!currentGA.isOpen()) { %>
-							<a	href="/admin/reroll?reqtype=reroll&gaid=<%= currentGA.getKey().getId() %>"
-								class="btn btn-warning"><i class="icon-repeat icon-white"></i> Relancer le tirage</a>
-						<% } %>
 					</div>
 					<hr />
 					<div class="row offset1">

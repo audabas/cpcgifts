@@ -25,7 +25,8 @@ public class ViewTools {
 
 		CpcUser auth = CpcUserPersistance.getCpcUserByKey(ga.getAuthor());
 
-		String res = "<div class=\"row-fluid\">" + "<div class=\"span2\">"
+		StringBuilder res = new StringBuilder(); 
+				res.append("<div class=\"row-fluid\">" + "<div class=\"span2\">"
 				+ "<a href=\"/giveaway?gaID="
 				+ ga.getKey().getId()
 				+ "\" ><img class=\"img-rounded img-small-ga lazy\" src=\"img/game.png\" data-original=\""
@@ -37,8 +38,13 @@ public class ViewTools {
 				+ "<h2 class='span8'><a href=\"/giveaway?gaID="
 				+ ga.getKey().getId()
 				+ "\" >"
-				+ ga.getTitle()
-				+ "</a></h2>"
+				+ ga.getTitle());
+				
+		if(ga.getNbCopies() > 1) {
+			res.append(" <span class=\"gray \">(" + ga.getNbCopies() + " copies)</span>");
+		}
+		
+		res.append("</a></h2>"
 				+ "<div class=\"offset7\">"
 				+ "<div class=\"media\">"
 				+ "<a class=\"pull-left\""
@@ -59,23 +65,23 @@ public class ViewTools {
 				+ "</a>"
 				+ "</h4>"
 				+ "</div>"
-				+ "</div>" + "</div></div>";
+				+ "</div>" + "</div></div>");
 
-		res += "<div class=\"row\">";
+		res.append("<div class=\"row\">");
 		
-		res += "<img class=\"img-small-icon\" src=\"img/clock.png\" /> ";
+		res.append("<img class=\"img-small-icon\" src=\"img/clock.png\" /> ");
 		
 		if(ga.isOpen()) {
-			res += " Ouvert encore ";
+			res.append(" Ouvert encore ");
 		} else {
-			res += " Fermé depuis ";
+			res.append(" Fermé depuis ");
 		}
 		
-		res += DateTools.dateDifference(ga.getEndDate());
+		res.append(DateTools.dateDifference(ga.getEndDate()));
 
-		res += "</div>" + "</div>" + "</div>";
+		res.append("</div>" + "</div>" + "</div>");
 
-		return res;
+		return res.toString();
 	}
 
 	public static String gaCarouselView(Giveaway ga, boolean active) {

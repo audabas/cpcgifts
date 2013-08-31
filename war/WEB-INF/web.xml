@@ -140,6 +140,17 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>FAQ</servlet-name>
 		<url-pattern>/faq</url-pattern>
 	</servlet-mapping>
+	
+	<!-- Tasks -->
+	<servlet>
+		<servlet-name>gaupdate1</servlet-name>
+		<servlet-class>fr.cpcgifts.task.UpdateGiveawayModelDescAndWinner</servlet-class>
+	</servlet>
+	<!-- Mapping tasks -->
+	<servlet-mapping>
+		<servlet-name>gaupdate1</servlet-name>
+		<url-pattern>/task/gaupdate1</url-pattern>
+	</servlet-mapping>
 
 	<!-- Welcome files -->
 	<welcome-file-list>
@@ -166,6 +177,8 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<security-constraint>
         <web-resource-collection>
             <url-pattern>/admin/*</url-pattern>
+            <url-pattern>/adminconsole/*</url-pattern>
+            <url-pattern>/task/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>admin</role-name>

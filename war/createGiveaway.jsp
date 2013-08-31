@@ -61,7 +61,22 @@ body {
 					</div>
 					<div class="row">
 						<input class="span10" name="gameName" id="gameName" type="text" required="required">
-						<span class="help-block well">Pensez à indiquer la plateforme de distribution (Steam, Desura, GOG, etc...)</span>
+						<span class="help-block well well-small">Pensez à indiquer la plateforme de distribution (Steam, Desura, GOG, etc...)</span>
+						<span class="help-block well well-small">Rappel : Les clés séparées de jeux provenant d'un bundle sont interdites tant que le bundle est encore en vente.</span>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<div class="row control-group" id="nbCopiesCg">
+				<div class="span1">
+					<img src="/img/copy.png" />
+				</div>
+				<div class="span10 offset1">
+					<div class="row">
+						<h4>Nombre de copies*</h4>
+					</div>
+					<div class="row">
+						<input class="small-number-input" name="nbCopies" id="nbCopies" type="number" required="required" value="1" min="1" max="99">
 					</div>
 				</div>
 			</div>
@@ -76,11 +91,11 @@ body {
 					</div>
 					<div class="row">
 						<input class="span10" name="imgUrl" id="imgUrl" type="text">
-						<span class="help-block well">Les images de tailles différentes à 460x215 sont acceptées mais peuvent mal s'afficher.</span>
-						<span class="help-block well">Si le jeu est disponible sur steam, le plus simple est de récupérer le lien vers l'image depuis le hub de la communauté (<a href="/aidesteamimg.html"
+						<span class="help-block well well-small">Les images de tailles différentes à 460x215 sont acceptées mais peuvent mal s'afficher.</span>
+						<span class="help-block well well-small">Si le jeu est disponible sur steam, le plus simple est de récupérer le lien vers l'image depuis le hub de la communauté (<a href="/aidesteamimg.html"
 					role="button" data-target="#" data-toggle="modal"><i class="icon-question-sign"></i>
 					Comment faire</a>).</span>
-					<span class="help-block well">Vous pouvez héberger vos photos sur <a href="http://tof.canardpc.com/">tof.canardpc.com</a> (utilisez le <i>Lien direct de l'image</i>).</span>
+					<span class="help-block well well-small">Vous pouvez héberger vos photos sur <a href="http://tof.canardpc.com/">tof.canardpc.com</a> (utilisez le <i>Lien direct de l'image</i>).</span>
 					</div>
 				</div>
 			</div>
@@ -95,8 +110,8 @@ body {
 					</div>
 					<div class="row">
 						<textarea class="span10" name="gameDescription" id="gameDescription" rows="5" ></textarea>
-						<span id="charLimitHelp" class="help-block well" style="display: none;">5000 caractères maximum. Il vous reste <span id="descLimit">500</span> caractères. </span>
-						<span class="help-block well">Vous pouvez utiliser la syntaxe <a href="http://fr.wikipedia.org/wiki/Markdown">Markdown</a>.</span>
+						<span id="charLimitHelp" class="help-block well well-small" style="display: none;">5000 caractères maximum. Il vous reste <span id="descLimit">500</span> caractères. </span>
+						<span class="help-block well well-small">Vous pouvez utiliser la syntaxe <a href="http://fr.wikipedia.org/wiki/Markdown">Markdown</a>.</span>
 					</div>
 				</div>
 			</div>
@@ -202,7 +217,10 @@ body {
 				$("#charLimitHelp").show();
 				return false;
 			}
-			
+			if(!$.isNumeric($("#nbCopies").val()) || $("#nbCopies").val() < 1) {
+				alert("Vous devez offrir au moins une copie du jeu");
+				return false;
+			}
 			
 		}
 		

@@ -3,6 +3,7 @@ package fr.cpcgifts;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
@@ -48,7 +49,7 @@ public class CleanEmptyGAServlet extends HttpServlet {
 			
 			author.removeGiveaway(ga.getKey());
 			
-			List<Key> entrantsKeys = ga.getEntrants();
+			Set<Key> entrantsKeys = ga.getEntrants();
 			
 			for(Key k : entrantsKeys) {
 				try {

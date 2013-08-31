@@ -50,6 +50,15 @@ public class GiveawayServlet extends HttpServlet {
 			String[] endDateSplittedStr = endDateStr.split("@");
 			String[] splittedDate = endDateSplittedStr[0].split("-");
 			String[] splittedTime = endDateSplittedStr[1].split("-");
+			int nbCopies = 1;
+			try {
+				nbCopies = Integer.parseInt(params.get("nbCopies")[0]);
+			} catch (NumberFormatException e) {
+				nbCopies = 1;
+			}
+			if(nbCopies < 1) {
+				nbCopies = 1;
+			}
 			
 			Calendar c = Calendar.getInstance();
 			c.set(Calendar.YEAR, Integer.parseInt(splittedDate[0]));
@@ -60,7 +69,7 @@ public class GiveawayServlet extends HttpServlet {
 			c.set(Calendar.MINUTE, c.get(Calendar.MINUTE) + (Integer.parseInt(endDateSplittedStr[2])/10));
 			
 			
-			Giveaway ga = new Giveaway(cpcuser.getKey(), gameName, gameDescription, imgUrl, c.getTime());
+			Giveaway ga = new Giveaway(cpcuser.getKey(), gameName, gameDescription, imgUrl, c.getTime(), nbCopies);
 			
 			log.info("Created ga : " + ga.getTitle() + " by " + cpcuser.getCpcNickname());
 			

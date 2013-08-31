@@ -121,10 +121,10 @@ public class GAPersistance {
 		PersistenceManager pm = pmf.getPersistenceManager();
 		
 		Calendar c = Calendar.getInstance();
-		c.add(Calendar.MONTH, -1);
+		c.add(Calendar.WEEK_OF_YEAR, -2);
 
 		Query query = pm.newQuery(Giveaway.class);
-		query.setFilter("open == openParam && endDate < closeDate && winner == null");
+		query.setFilter("open == openParam && endDate < closeDate && nbWinners == 0");
 		query.declareParameters("boolean openParam, " + Date.class.getName() +  " closeDate");
 
 		Map<String, Object> parameters = new HashMap<String, Object>();

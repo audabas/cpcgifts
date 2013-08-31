@@ -1,8 +1,8 @@
 package fr.cpcgifts.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -36,13 +36,13 @@ public class CpcUser implements Serializable {
 	private String avatarUrl = "/img/avatar.jpg";
 
 	@Persistent
-	private List<Key> giveaways;
+	private Set<Key> giveaways;
 
 	@Persistent
-	private List<Key> entries;
+	private Set<Key> entries;
 	
 	@Persistent
-	private List<Key> won;
+	private Set<Key> won;
 
 
 	public CpcUser(User guser, String cpcProfileId) {
@@ -58,25 +58,12 @@ public class CpcUser implements Serializable {
 
 		this.cpcProfileId = splitProfileId[0];
 
-		this.giveaways = new ArrayList<Key>();	
+		this.giveaways = new HashSet<Key>();	
 
-		this.entries = new ArrayList<Key>();
+		this.entries = new HashSet<Key>();
 
 	}
 
-	public CpcUser(Key key, String id, User guser, String cpcProfileId,
-			String cpcNickname, String avatarUrl, List<Key> giveaways,
-			List<Key> entries) {
-		super();
-		this.key = key;
-		this.id = id;
-		this.guser = guser;
-		this.cpcProfileId = cpcProfileId;
-		this.cpcNickname = cpcNickname;
-		this.avatarUrl = avatarUrl;
-		this.giveaways = giveaways;
-		this.entries = entries;
-	}
 
 	public Key getKey() {
 		return key;
@@ -137,14 +124,14 @@ public class CpcUser implements Serializable {
 		this.avatarUrl = avatarUrl;
 	}
 
-	public List<Key> getGiveaways() {
+	public Set<Key> getGiveaways() {
 		if(this.giveaways == null)
-			this.giveaways = new ArrayList<Key>();
+			this.giveaways = new HashSet<Key>();
 			
 		return giveaways;
 	}
 
-	public void setGiveaways(List<Key> giveaways) {
+	public void setGiveaways(Set<Key> giveaways) {
 		this.giveaways = giveaways;
 	}
 
@@ -161,14 +148,14 @@ public class CpcUser implements Serializable {
 		this.giveaways.remove(ga);
 	}
 
-	public List<Key> getEntries() {
+	public Set<Key> getEntries() {
 		if(entries == null)
-			entries = new ArrayList<Key>();
+			entries = new HashSet<Key>();
 		
 		return entries;
 	}
 
-	public void setEntries(List<Key> entries) {
+	public void setEntries(Set<Key> entries) {
 		this.entries = entries;
 	}
 	
@@ -185,14 +172,14 @@ public class CpcUser implements Serializable {
 		return this.entries.remove(k);
 	}
 
-	public List<Key> getWon() {
+	public Set<Key> getWon() {
 		if(won == null)
-			won = new ArrayList<Key>();
+			won = new HashSet<Key>();
 			
 		return won;
 	}
 
-	public void setWon(List<Key> won) {
+	public void setWon(Set<Key> won) {
 		this.won = won;
 	}
 	

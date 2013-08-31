@@ -1,0 +1,14 @@
+<queue-entries>
+  <queue>
+    <name>default</name>
+    <rate>1/s</rate>
+  </queue>
+  <queue>
+    <name>mail-queue</name>
+    <rate>100/d</rate>
+  </queue>
+  <queue>
+    <name>datastore-update</name>
+    <rate>5/s</rate>
+  </queue>
+</queue-entries>
