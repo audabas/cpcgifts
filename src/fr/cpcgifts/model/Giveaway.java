@@ -1,9 +1,11 @@
 package fr.cpcgifts.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -48,10 +50,10 @@ public class Giveaway implements Serializable {
 	private String imgUrl = "";
 	
 	@Persistent
-	private Set<Key> entrants;
+	private List<Key> entrants;
 	
 	@Persistent
-	private Set<Key> comments;
+	private List<Key> comments;
 	
 	/* TimeZone en UTC */
 	@Persistent
@@ -86,8 +88,8 @@ public class Giveaway implements Serializable {
 		setImgUrl(imgUrl);
 		setNbCopies(nbCopies);
 		
-		this.entrants = new HashSet<Key>();
-		this.comments = new HashSet<Key>();
+		this.entrants = new ArrayList<Key>();
+		this.comments = new ArrayList<Key>();
 		this.winners = new HashSet<Key>();
 		
 		this.endDate = endDate;
@@ -119,6 +121,9 @@ public class Giveaway implements Serializable {
 	}
 
 	public String getDescription() {
+		if(longDescription == null)
+			longDescription = new Text("");
+		
 		return longDescription.getValue();
 	}
 
@@ -137,9 +142,9 @@ public class Giveaway implements Serializable {
 		this.imgUrl = imgUrl;
 	}
 
-	public Set<Key> getEntrants() {
+	public List<Key> getEntrants() {
 		if(entrants == null)
-			entrants = new HashSet<Key>();
+			entrants = new ArrayList<Key>();
 		
 		return entrants;
 	}
@@ -156,14 +161,14 @@ public class Giveaway implements Serializable {
 		return entrants.remove(cpcuser);
 	}
 
-	public Set<Key> getComments() {
+	public List<Key> getComments() {
 		if(comments == null)
-			comments = new HashSet<Key>();
+			comments = new ArrayList<Key>();
 		
 		return comments;
 	}
 
-	public void setComments(Set<Key> comments) {
+	public void setComments(List<Key> comments) {
 		this.comments = comments;
 	}
 	

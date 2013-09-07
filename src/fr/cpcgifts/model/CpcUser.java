@@ -1,7 +1,9 @@
 package fr.cpcgifts.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -36,13 +38,13 @@ public class CpcUser implements Serializable {
 	private String avatarUrl = "/img/avatar.jpg";
 
 	@Persistent
-	private Set<Key> giveaways;
+	private List<Key> giveaways;
 
 	@Persistent
-	private Set<Key> entries;
+	private List<Key> entries;
 	
 	@Persistent
-	private Set<Key> won;
+	private List<Key> won;
 
 
 	public CpcUser(User guser, String cpcProfileId) {
@@ -58,9 +60,9 @@ public class CpcUser implements Serializable {
 
 		this.cpcProfileId = splitProfileId[0];
 
-		this.giveaways = new HashSet<Key>();	
+		this.giveaways = new ArrayList<Key>();	
 
-		this.entries = new HashSet<Key>();
+		this.entries = new ArrayList<Key>();
 
 	}
 
@@ -124,14 +126,14 @@ public class CpcUser implements Serializable {
 		this.avatarUrl = avatarUrl;
 	}
 
-	public Set<Key> getGiveaways() {
+	public List<Key> getGiveaways() {
 		if(this.giveaways == null)
-			this.giveaways = new HashSet<Key>();
+			this.giveaways = new ArrayList<Key>();
 			
 		return giveaways;
 	}
 
-	public void setGiveaways(Set<Key> giveaways) {
+	public void setGiveaways(List<Key> giveaways) {
 		this.giveaways = giveaways;
 	}
 
@@ -148,14 +150,14 @@ public class CpcUser implements Serializable {
 		this.giveaways.remove(ga);
 	}
 
-	public Set<Key> getEntries() {
+	public List<Key> getEntries() {
 		if(entries == null)
-			entries = new HashSet<Key>();
+			entries = new ArrayList<Key>();
 		
 		return entries;
 	}
 
-	public void setEntries(Set<Key> entries) {
+	public void setEntries(List<Key> entries) {
 		this.entries = entries;
 	}
 	
@@ -172,14 +174,14 @@ public class CpcUser implements Serializable {
 		return this.entries.remove(k);
 	}
 
-	public Set<Key> getWon() {
+	public List<Key> getWon() {
 		if(won == null)
-			won = new HashSet<Key>();
+			won = new ArrayList<Key>();
 			
 		return won;
 	}
 
-	public void setWon(Set<Key> won) {
+	public void setWon(List<Key> won) {
 		this.won = won;
 	}
 	

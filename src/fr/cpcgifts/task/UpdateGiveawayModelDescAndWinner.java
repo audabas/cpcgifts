@@ -55,13 +55,13 @@ public class UpdateGiveawayModelDescAndWinner extends HttpServlet {
 			if(ga.getWinners().size() == 0 && ga.winner != null) {
 				ga.addWinner(ga.winner);
 				ga.winner = null;
-				log.info("Updated giveaway winner : " + ga);
+				log.info("Updated giveaway winner : " + ga.getKey().getId());
 			}
 			
-			if(ga.description != null && ga.description.length() > 0) {
+			if(ga.getDescription().length() == 0 && ga.description != null) {
 				ga.setDescription(ga.description);
 				ga.description = null;
-				log.info("Updated giveaway description : " + ga);
+				log.info("Updated giveaway description : " + ga.getKey().getId());
 			}
 		}
 		
@@ -74,6 +74,7 @@ public class UpdateGiveawayModelDescAndWinner extends HttpServlet {
 			queue.add(TaskOptions.Builder.withUrl("/task/gaupdate1").param("cursor", cursorString));
 		}
 		
+		pm.close();
 	}
 	
 }

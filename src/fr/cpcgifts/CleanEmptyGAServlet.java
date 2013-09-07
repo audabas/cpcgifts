@@ -49,7 +49,7 @@ public class CleanEmptyGAServlet extends HttpServlet {
 			
 			author.removeGiveaway(ga.getKey());
 			
-			Set<Key> entrantsKeys = ga.getEntrants();
+			List<Key> entrantsKeys = ga.getEntrants();
 			
 			for(Key k : entrantsKeys) {
 				try {
