@@ -63,6 +63,16 @@ public class UpdateGiveawayModelDescAndWinner extends HttpServlet {
 				ga.description = null;
 				log.info("Updated giveaway description : " + ga.getKey().getId());
 			}
+			
+			if(ga.nbCopies == 0) {
+				ga.nbCopies = 1;
+			}
+			
+			if(ga.nbWinners == 0) {
+				ga.nbWinners = 0;
+			}
+			
+			pm.makePersistent(ga);
 		}
 		
 		cursor = JDOCursorHelper.getCursor(giveaways);

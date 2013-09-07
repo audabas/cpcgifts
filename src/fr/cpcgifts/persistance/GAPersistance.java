@@ -18,6 +18,10 @@ import fr.cpcgifts.model.Giveaway;
 public class GAPersistance {
 
 	public static Giveaway getGA(Key key) {
+		return getGA(key, true);
+	}
+	
+	public static Giveaway getGA(Key key, boolean detached) {
 		Giveaway res = null;
 
 		PersistenceManagerFactory pmf = PMF.get();

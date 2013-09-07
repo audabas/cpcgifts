@@ -16,6 +16,7 @@ import net.sf.jsr107cache.Cache;
 import net.sf.jsr107cache.CacheException;
 import net.sf.jsr107cache.CacheManager;
 
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -23,6 +24,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
+import fr.cpcgifts.persistance.CpcUserPersistance;
 import fr.cpcgifts.persistance.PMF;
 
 @SuppressWarnings("serial")
@@ -62,6 +64,20 @@ public class AdminServlet extends HttpServlet {
 			} else if("openGa".equals(reqType)) {
 				log.info("[ADMIN] " + cpcuser + " reopened the giveaway " + ga + ".");
 				ga.setOpen(true);
+			} else if("addWinner".equals(reqType)) {
+				Long userId = Long.parseLong(params.get("user")[0]);
+				log.info("[ADMIN] " + cpcuser + " added " + userId + " to winner list of " + ga + ".");
+				Key userKey = KeyFactory.createKey(CpcUser.class.getSimpleName(), userId);
+				CpcUser winner = CpcUserPersistance.getCpcUserUndetached(userKey);
+				winner.addWon(ga.getKey());
+				ga.addWinner(userKey);
+			} else if ("removeWinner".equals(reqType)) {
+				Long userId = Long.parseLong(params.get("user")[0]);
+				Key userKey = KeyFactory.createKey(CpcUser.class.getSimpleName(), userId);
+				log.info("[ADMIN] " + cpcuser + " removed " + userId + " from winner list of " + ga + ".");
+				CpcUser winner = CpcUserPersistance.getCpcUserUndetached(userKey);
+				winner.removeWon(ga.getKey());
+				ga.removeWinner(userKey);
 			}
 			
 			resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());

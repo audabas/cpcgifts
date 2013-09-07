@@ -69,10 +69,10 @@ public class Giveaway implements Serializable {
 	private Set<Key> winners;
 	
 	@Persistent
-	private int nbWinners = 0;
+	public int nbWinners = 0;
 	
 	@Persistent
-	private int nbCopies = 1;
+	public int nbCopies = 1;
 	
 	@Persistent
 	private boolean open = true;
