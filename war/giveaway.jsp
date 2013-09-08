@@ -360,7 +360,7 @@ body {
 						for(Key k : currentGA.getWinners()) {
 				%>
 						<%= ViewTools.userView(CpcUserPersistance.getCpcUserByKey(k)) %>
-						<% if(userService.isUserAdmin() && !currentGA.isOpen() && currentGA.getEntrants().size() > currentGA.getWinners().size()) { %>
+						<% if(userService.isUserLoggedIn() && userService.isUserAdmin() && !currentGA.isOpen() && currentGA.getEntrants().size() > currentGA.getWinners().size()) { %>
 							<a	href="/admin/reroll?reqtype=reroll&gaid=<%= currentGA.getKey().getId() %>&winnerToReroll=<%= k.getId() %>"
 								class="btn btn-warning"><i class="icon-repeat icon-white"></i> Relancer le tirage</a>
 						<% } %>	
