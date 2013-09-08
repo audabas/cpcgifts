@@ -56,6 +56,9 @@ public class UpdateGiveawayModelDescAndWinner extends HttpServlet {
 				ga.addWinner(ga.winner);
 				ga.winner = null;
 				log.info("Updated giveaway winner : " + ga.getKey().getId());
+			} else if(ga.getWinners().size() == 0 && ga.winner == null) {
+				ga.nbCopies = 1;
+				ga.nbWinners = 0;
 			}
 			
 			if(ga.getDescription().length() == 0 && ga.description != null) {
