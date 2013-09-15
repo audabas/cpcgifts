@@ -61,8 +61,10 @@ body {
 					</div>
 					<div class="row">
 						<input class="span10" name="gameName" id="gameName" type="text" required="required">
+						<div class="alert alert-warning">
+						<strong>Rappel : </strong> les clés provenant de bundle sont interdites tant que celui-ci est en vente.
+						</div>
 						<span class="help-block well well-small">Pensez à indiquer la plateforme de distribution (Steam, Desura, GOG, etc...)</span>
-						<span class="help-block well well-small">Rappel : Les clés séparées de jeux provenant d'un bundle sont interdites tant que le bundle est encore en vente.</span>
 					</div>
 				</div>
 			</div>
