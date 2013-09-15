@@ -12,6 +12,19 @@
 			src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 		</script>
 	</div>
+	<div class="google-ads hidden-desktop">
+		<script type="text/javascript"><!--
+			google_ad_client = "ca-pub-5343568348617875";
+			/* cpcgifts footer mobile */
+			google_ad_slot = "7495168809";
+			google_ad_width = 320;
+			google_ad_height = 50;
+			//-->
+		</script>
+		<script type="text/javascript"
+			src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+		</script>
+	</div>
 
 	<hr />
 	<p class="xx-small">
