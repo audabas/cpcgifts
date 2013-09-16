@@ -70,7 +70,7 @@ body {
 		<hr />
 		<h4>Que peut on donner sur CPC Gifts ?</h4>
 		<p>Tout ce que vous voulez du moment que ça n'enfreint pas les règles de la plateforme sur laquelle vous avez acheté le jeu.<br />
-		Les bons de réductions sont interdits à moins d'être très intéressant (50% ou plus).<br />
+		Les bons de réductions sont interdits à moins d'être très intéressant (80% ou plus).<br />
 		Les clés séparées de jeux provenant d'un bundle sont interdites tant que le bundle est encore en vente.
 		</p>
 		
