@@ -3,7 +3,6 @@ package fr.cpcgifts;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
@@ -11,14 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.Key;
-
 import net.sf.jsr107cache.Cache;
 import net.sf.jsr107cache.CacheException;
 import net.sf.jsr107cache.CacheManager;
+
+import com.google.appengine.api.datastore.Key;
+
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
-import fr.cpcgifts.persistance.CpcUserPersistance;
 import fr.cpcgifts.persistance.GAPersistance;
 import fr.cpcgifts.persistance.PMF;
 
@@ -45,7 +44,7 @@ public class CleanEmptyGAServlet extends HttpServlet {
 		
 		for(Giveaway ga : gas) {
 			
-			CpcUser author = CpcUserPersistance.getCpcUserUndetached(ga.getAuthor());
+			CpcUser author = pm.getObjectById(CpcUser.class, ga.getAuthor());
 			
 			author.removeGiveaway(ga.getKey());
 			
@@ -53,7 +52,7 @@ public class CleanEmptyGAServlet extends HttpServlet {
 			
 			for(Key k : entrantsKeys) {
 				try {
-					CpcUser cpcuser = CpcUserPersistance.getCpcUserUndetached(k);
+					CpcUser cpcuser = pm.getObjectById(CpcUser.class, k);
 					cpcuser.removeEntry(ga.getKey());
 				} catch(javax.jdo.JDOObjectNotFoundException e) {
 					log.warning("User not found : " + e.getMessage());
@@ -66,7 +65,7 @@ public class CleanEmptyGAServlet extends HttpServlet {
 			log.info(ga + "\n by " + author.getCpcNickname() + " [" + author.getKey().getId() + "] has been cleaned up.");
 		}
 		
-		CpcUserPersistance.closePm();
+		pm.close();
 		GAPersistance.closePm();
 		
 	}

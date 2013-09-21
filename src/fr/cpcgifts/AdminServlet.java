@@ -47,8 +47,26 @@ public class AdminServlet extends HttpServlet {
 			Map<String, String[]> params = req.getParameterMap();
 			
 			String reqType = params.get("reqtype")[0];
-			String gaID = params.get("gaid")[0];
-			Giveaway ga = pm.getObjectById(Giveaway.class, KeyFactory.createKey(Giveaway.class.getSimpleName(),Long.parseLong(gaID)));
+			
+			Giveaway ga = null;
+			Key gaKey = null;
+			if (params.containsKey("gaid")) {
+				String gaID = params.get("gaid")[0];
+				gaKey = KeyFactory.createKey(Giveaway.class.getSimpleName(),Long.parseLong(gaID.trim()));
+				try {
+					ga = pm.getObjectById(Giveaway.class, gaKey);
+				} catch(Exception e) {}
+			}
+			
+			CpcUser userToUpdate = null;
+			Key userToUpdateKey = null;
+			if (params.containsKey("userid")) {
+				String userID = params.get("userid")[0];
+				userToUpdateKey = KeyFactory.createKey(CpcUser.class.getSimpleName(),Long.parseLong(userID.trim()));
+				try {
+					userToUpdate = pm.getObjectById(CpcUser.class, userToUpdateKey);
+				} catch(Exception e) {}
+			}
 			
 			if(reqType.equals("reroll")) { //reroll
 				String winnerToRerollId = params.get("winnerToReroll")[0];
@@ -65,28 +83,47 @@ public class AdminServlet extends HttpServlet {
 				log.info("[ADMIN] " + cpcuser + " reopened the giveaway " + ga + ".");
 				ga.setOpen(true);
 			} else if("addWinner".equals(reqType)) {
-				Long userId = Long.parseLong(params.get("user")[0]);
-				log.info("[ADMIN] " + cpcuser + " added " + userId + " to winner list of " + ga + ".");
-				Key userKey = KeyFactory.createKey(CpcUser.class.getSimpleName(), userId);
-				CpcUser winner = CpcUserPersistance.getCpcUserUndetached(userKey);
-				winner.addWon(ga.getKey());
-				ga.addWinner(userKey);
+				log.info("[ADMIN] " + cpcuser + " added " + userToUpdate + " to winner list of " + ga + ".");
+				if(userToUpdate != null)
+					userToUpdate.addWon(gaKey);
+				if(ga != null)
+					ga.addWinner(userToUpdateKey);
 			} else if ("removeWinner".equals(reqType)) {
-				Long userId = Long.parseLong(params.get("user")[0]);
-				Key userKey = KeyFactory.createKey(CpcUser.class.getSimpleName(), userId);
-				log.info("[ADMIN] " + cpcuser + " removed " + userId + " from winner list of " + ga + ".");
-				CpcUser winner = CpcUserPersistance.getCpcUserUndetached(userKey);
-				winner.removeWon(ga.getKey());
-				ga.removeWinner(userKey);
+				log.info("[ADMIN] " + cpcuser + " removed " + userToUpdate + " from winner list of " + ga + ".");
+				if(userToUpdate != null)
+					userToUpdate.removeWon(gaKey);
+				if(ga != null)
+					ga.removeWinner(userToUpdateKey);
+			} else if("addEntry".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " added " + userToUpdate + " in entries of " + ga + ".");
+				if(userToUpdate != null)
+					userToUpdate.addEntry(gaKey);
+				if(ga != null)
+					ga.addEntrant(userToUpdateKey);
+			} else if("removeEntry".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " removed " + userToUpdate + " from entries of " + ga + ".");
+				if(userToUpdate != null)
+					userToUpdate.removeEntry(gaKey);
+				if(ga != null)
+					ga.removeEntrant(userToUpdateKey);
 			}
 			
-			resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());
+			if(ga != null) {
+				resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());
+			} else if(userToUpdate != null) {
+				resp.sendRedirect("/user?userID=" + userToUpdate.getKey().getId());
+			}
 			
 			try {
 	            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
 	            
-	            cache.remove(cpcuser.getKey());
-	            cache.remove(ga.getKey());
+	            if(ga != null) {
+	            	cache.remove(ga.getKey());
+	            }
+	            if(userToUpdate != null) {
+	            	cache.remove(userToUpdate.getKey());
+	            }
+	            
 				
 	        } catch (CacheException e) {
 	        	//rien
