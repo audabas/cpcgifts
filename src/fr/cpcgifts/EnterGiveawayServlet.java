@@ -49,7 +49,7 @@ public class EnterGiveawayServlet extends HttpServlet {
 			Giveaway ga = pm.getObjectById(Giveaway.class, KeyFactory.createKey(Giveaway.class.getSimpleName(),Long.parseLong(gaID)));
 			
 			if(reqType.equals("enter")) {
-				if(! ga.getEntrants().contains(cpcuser.getKey())) { // si l'utilisateur est déjà inscrit.
+				if(! ga.getEntrants().contains(cpcuser.getKey()) && !cpcuser.isBanned()) { // vérifie que l'utilisateur n'est pas déjà inscrit et qu'il n'est pas banni.
 					ga.addEntrant(cpcuser.getKey());
 					cpcuser.addEntry(ga.getKey());
 				}

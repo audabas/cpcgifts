@@ -123,126 +123,161 @@ body {
 					<h1><%=profileCpcUser.getCpcNickname()%></h1>
 				</div>
 				<div class="row">
-					<a class="btn"
-						href="http://forum.canardpc.com/members/<%=profileCpcUser.getCpcProfileId()%>">
-						<i class="icon-user"></i> Voir le profil CPC
-					</a> <a class="btn"
-						href="http://forum.canardpc.com/private.php?do=newpm&u=<%=profileCpcUser.getCpcProfileId()%>">
-						<i class="icon-envelope"></i> Envoyer un message privé
-					</a>
+					<% if(profileCpcUser.isBanned()) { %>
+						<div class="alert alert-error">Utilisateur banni !</div>
+					<% } else { %>
+						<a class="btn"
+							href="http://forum.canardpc.com/members/<%=profileCpcUser.getCpcProfileId()%>">
+							<i class="icon-user"></i> Voir le profil CPC
+						</a> <a class="btn"
+							href="http://forum.canardpc.com/private.php?do=newpm&u=<%=profileCpcUser.getCpcProfileId()%>">
+							<i class="icon-envelope"></i> Envoyer un message privé
+						</a>
+					<% } %>
 				</div>
 			</div>
 		</div>
 		<hr />
 
+		<div class="tabbable">
+			<ul class="nav nav-tabs">
+				<li id="created-button" class="active"><a
+					onclick="javascript:changeSection('#created');" href="#created">Concours
+						créés <span class="gray">(<%= profileCpcUser.getGiveaways().size() %>)</span></a></li>
+				<li id="entries-button"><a
+					onclick="javascript:changeSection('#entries');" href="#entries">Participations <span class="gray">(<%= profileCpcUser.getEntries().size() %>)</span></a></li>
+				<li id="won-button"><a
+					onclick="javascript:changeSection('#won');" href="#won">Concours gagnés <span class="gray">(<%= profileCpcUser.getWon().size() %>)</span></a></li>
+				<% 
+					if(userService.isUserLoggedIn() && userService.isUserAdmin()) {
+				%>
+					<li><a 
+					onclick="javascript:changeSection('#admin');" href="#admin" data-toggle="tab">Admin</a></li>
+				<%
+					}
+				%>	
+			</ul>
 
-		<ul class="nav nav-tabs">
-			<li id="created-button" class="active"><a
-				onclick="javascript:changeSection('#created');" href="#created">Concours
-					créés <span class="gray">(<%= profileCpcUser.getGiveaways().size() %>)</span></a></li>
-			<li id="entries-button"><a
-				onclick="javascript:changeSection('#entries');" href="#entries">Participations <span class="gray">(<%= profileCpcUser.getEntries().size() %>)</span></a></li>
-			<li id="won-button"><a
-				onclick="javascript:changeSection('#won');" href="#won">Concours gagnés <span class="gray">(<%= profileCpcUser.getWon().size() %>)</span></a></li>
-		</ul>
-
-		<div id="created">
-			<%
-			Map<Key,Giveaway> gas = null;
-			
-			try {
-				cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+			<div class="tab-content">
+				<div id="created" class="tab-pane">
+					<%
+					Map<Key,Giveaway> gas = null;
+					
+					try {
+						cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+						
+						gas = cache.getAll(profileCpcUser.getGiveaways());
+						
+						Collection<Key> notCachedKeys = CollectionUtils.subtract(profileCpcUser.getGiveaways(),gas.keySet());
+						
+						for(Key k : notCachedKeys) {
+							Giveaway ga = GAPersistance.getGA(k);
+							gas.put(k, ga);
+							cache.put(k, ga);
+						}
+						
+					} catch (CacheException e) {
+						
+					}
+					
+						for(Giveaway ga : DateTools.sortGiveawaysByEndDate(gas)) {
+					%>
+		
+					<%=ViewTools.gaView(ga)%>
+					<hr>
+					<%
+						}
+					%>
+				</div>
+		
+				<div id="entries" class="tab-pane" style="display: none">
+		
+					<%
+					
+					Map<Key,Giveaway> entries = null;
+					
+					try {
+						cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+						
+						entries = cache.getAll(profileCpcUser.getEntries());
+						
+						Collection<Key> notCachedKeys = CollectionUtils.subtract(profileCpcUser.getEntries(),entries.keySet());
+						
+						for(Key k : notCachedKeys) {
+							Giveaway ga = GAPersistance.getGA(k);
+							entries.put(k, ga);
+							cache.put(k, ga);
+						}
+						
+					} catch (CacheException e) {
+						
+					}
+						
+													
+					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(entries)) {
+					%>
+					<%=ViewTools.gaView(ga)%>
+					<hr>
+					<%
+						}
+					%>
+		
+				</div>
+		
+				<div id="won" class="tab-pane" style="display: none">
+		
+					<%
+					Map<Key,Giveaway> won = null;
+					
+					try {
+						cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+						
+						won = cache.getAll(profileCpcUser.getWon());
+						
+						Collection<Key> notCachedKeys = CollectionUtils.subtract(profileCpcUser.getWon(),won.keySet());
+						
+						for(Key k : notCachedKeys) {
+							Giveaway ga = GAPersistance.getGA(k);
+							won.put(k, ga);
+							cache.put(k, ga);
+						}
+						
+					} catch (CacheException e) {
+						
+					}
+					
+													
+					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(won)) {
+					%>
+					<%=ViewTools.gaView(ga)%>
+					<hr>
+					<%
+						}
+					%>
+		
+				</div>
 				
-				gas = cache.getAll(profileCpcUser.getGiveaways());
+				<% if(userService.isUserLoggedIn() && userService.isUserAdmin()) { %>
+					<div class="tab-pane" id="admin">
+						<div class="row offset1">
+							<% if(profileCpcUser.isBanned()) { %>
+								<a	href="/admin/unbanuser?reqtype=unbanuser&userid=<%= profileCpcUser.getKey().getId() %>"
+										class="btn btn-warning"><i class="icon-repeat icon-white"></i> Lever le ban</a>
+							<% } else { %>
+								<a	href="/admin/banuser?reqtype=banuser&userid=<%= profileCpcUser.getKey().getId() %>"
+										class="btn btn-danger"><i class="icon-minus-sign icon-white"></i> Bannir l'utilisateur</a>
+							<% } %>
+						</div>
+						<hr />
+					</div>
+				<% } %>
 				
-				Collection<Key> notCachedKeys = CollectionUtils.subtract(profileCpcUser.getGiveaways(),gas.keySet());
+			</div>
 				
-				for(Key k : notCachedKeys) {
-					Giveaway ga = GAPersistance.getGA(k);
-					gas.put(k, ga);
-					cache.put(k, ga);
-				}
-				
-			} catch (CacheException e) {
-				
-			}
-			
-				for(Giveaway ga : DateTools.sortGiveawaysByEndDate(gas)) {
-			%>
-
-			<%=ViewTools.gaView(ga)%>
-			<hr>
-			<%
-				}
-			%>
 		</div>
+				
 
-		<div id="entries" style="display: none">
-
-			<%
-			
-			Map<Key,Giveaway> entries = null;
-			
-			try {
-				cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-				
-				entries = cache.getAll(profileCpcUser.getEntries());
-				
-				Collection<Key> notCachedKeys = CollectionUtils.subtract(profileCpcUser.getEntries(),entries.keySet());
-				
-				for(Key k : notCachedKeys) {
-					Giveaway ga = GAPersistance.getGA(k);
-					entries.put(k, ga);
-					cache.put(k, ga);
-				}
-				
-			} catch (CacheException e) {
-				
-			}
-				
-											
-			for(Giveaway ga : DateTools.sortGiveawaysByEndDate(entries)) {
-			%>
-			<%=ViewTools.gaView(ga)%>
-			<hr>
-			<%
-				}
-			%>
-
-		</div>
-
-		<div id="won" style="display: none">
-
-			<%
-			Map<Key,Giveaway> won = null;
-			
-			try {
-				cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-				
-				won = cache.getAll(profileCpcUser.getWon());
-				
-				Collection<Key> notCachedKeys = CollectionUtils.subtract(profileCpcUser.getWon(),won.keySet());
-				
-				for(Key k : notCachedKeys) {
-					Giveaway ga = GAPersistance.getGA(k);
-					won.put(k, ga);
-					cache.put(k, ga);
-				}
-				
-			} catch (CacheException e) {
-				
-			}
-			
-											
-			for(Giveaway ga : DateTools.sortGiveawaysByEndDate(won)) {
-			%>
-			<%=ViewTools.gaView(ga)%>
-			<hr>
-			<%
-				}
-			%>
-
-		</div>
+		
 
 		<%@ include file="footer.jspf"%>
 
@@ -285,7 +320,7 @@ body {
 		var changeSection = function(sectionName) {
 			if (sectionName != "") {
 				$('.nav > li').removeClass("active");
-				$("#created, #entries, #won").hide();
+				$("#created, #entries, #won, #admin").hide();
 
 				$(sectionName + '-button').addClass("active");
 				$(sectionName).show();

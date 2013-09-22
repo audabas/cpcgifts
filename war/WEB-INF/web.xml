@@ -146,10 +146,18 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>gaupdate1</servlet-name>
 		<servlet-class>fr.cpcgifts.task.UpdateGiveawayModelDescAndWinner</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>userupdate1</servlet-name>
+		<servlet-class>fr.cpcgifts.task.UpdateUsersBanned</servlet-class>
+	</servlet>
 	<!-- Mapping tasks -->
 	<servlet-mapping>
 		<servlet-name>gaupdate1</servlet-name>
 		<url-pattern>/task/gaupdate1</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>userupdate1</servlet-name>
+		<url-pattern>/task/userupdate1</url-pattern>
 	</servlet-mapping>
 
 	<!-- Welcome files -->

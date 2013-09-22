@@ -2,9 +2,7 @@ package fr.cpcgifts.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -36,6 +34,9 @@ public class CpcUser implements Serializable {
 
 	@Persistent
 	private String avatarUrl = "/img/avatar.jpg";
+	
+	@Persistent
+	private boolean banned;
 
 	@Persistent
 	private List<Key> giveaways;
@@ -45,8 +46,7 @@ public class CpcUser implements Serializable {
 	
 	@Persistent
 	private List<Key> won;
-
-
+	
 	public CpcUser(User guser, String cpcProfileId) {
 		super();
 		this.guser = guser;
@@ -198,6 +198,16 @@ public class CpcUser implements Serializable {
 		this.won.remove(k);
 
 	}
+
+	public boolean isBanned() {
+		return banned;
+	}
+
+
+	public void setBanned(boolean banned) {
+		this.banned = banned;
+	}
+
 
 	@Override
 	public String toString() {

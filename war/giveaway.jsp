@@ -174,7 +174,7 @@ body {
 				<%=DateTools.dateDifference(currentGA.getEndDate())%>
 				
 				<%
-									if(currentGA.isOpen() && !isAuthor && userService.isUserLoggedIn()) {
+									if(currentGA.isOpen() && !isAuthor && userService.isUserLoggedIn() && !cpcuser.isBanned()) {
 											if(currentGA.getEntrants().contains(cpcuser.getKey())) {
 								%>
 						

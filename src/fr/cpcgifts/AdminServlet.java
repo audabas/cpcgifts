@@ -24,7 +24,6 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
-import fr.cpcgifts.persistance.CpcUserPersistance;
 import fr.cpcgifts.persistance.PMF;
 
 @SuppressWarnings("serial")
@@ -106,6 +105,12 @@ public class AdminServlet extends HttpServlet {
 					userToUpdate.removeEntry(gaKey);
 				if(ga != null)
 					ga.removeEntrant(userToUpdateKey);
+			} else if("banuser".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " banned " + userToUpdate + ".");
+				userToUpdate.setBanned(true);
+			} else if("unbanuser".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " unbanned " + userToUpdate + ".");
+				userToUpdate.setBanned(false);
 			}
 			
 			if(ga != null) {
