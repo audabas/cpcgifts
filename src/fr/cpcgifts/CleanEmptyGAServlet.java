@@ -3,6 +3,7 @@ package fr.cpcgifts;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
@@ -38,31 +39,41 @@ public class CleanEmptyGAServlet extends HttpServlet {
         }
 		
 		
-		List<Giveaway> gas = GAPersistance.getClosedEmptyGAs(true);
+		List<Giveaway> gas = GAPersistance.getClosedEmptyGAs(false);
 		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
 		for(Giveaway ga : gas) {
 			
-			CpcUser author = pm.getObjectById(CpcUser.class, ga.getAuthor());
-			
-			author.removeGiveaway(ga.getKey());
-			
-			List<Key> entrantsKeys = ga.getEntrants();
-			
-			for(Key k : entrantsKeys) {
-				try {
-					CpcUser cpcuser = pm.getObjectById(CpcUser.class, k);
-					cpcuser.removeEntry(ga.getKey());
-				} catch(javax.jdo.JDOObjectNotFoundException e) {
-					log.warning("User not found : " + e.getMessage());
+			if(ga.getWinners().size() == 0) { //on vérifie que le giveaway est bien sans gagnants
+				CpcUser author = pm.getObjectById(CpcUser.class, ga.getAuthor());
+				
+				author.removeGiveaway(ga.getKey());
+				
+				List<Key> entrantsKeys = ga.getEntrants();
+				
+				for(Key k : entrantsKeys) {
+					try {
+						CpcUser cpcuser = pm.getObjectById(CpcUser.class, k);
+						cpcuser.removeEntry(ga.getKey());
+						pm.makePersistent(cpcuser);
+					} catch(javax.jdo.JDOObjectNotFoundException e) {
+						log.warning("User not found : " + e.getMessage());
+					}
+					
 				}
 				
+				pm.makePersistent(author);
+				pm.deletePersistent(ga);
+				
+				log.info(ga + "\n by " + author.getCpcNickname() + " [" + author.getKey().getId() + "] has been cleaned up.");
+			} else { // mise à jour de la variable nbWinners
+				Set<Key> winners = ga.getWinners();
+				
+				ga.setWinners(winners);
+				
+				pm.makePersistent(ga);
 			}
-			
-			pm.deletePersistent(ga);
-			
-			log.info(ga + "\n by " + author.getCpcNickname() + " [" + author.getKey().getId() + "] has been cleaned up.");
 		}
 		
 		pm.close();

@@ -193,6 +193,12 @@ public class Giveaway implements Serializable {
 		
 		return winners;
 	}
+	
+	public void setWinners(Set<Key> winners) {
+		this.winners = winners;
+		
+		this.nbWinners = winners.size();
+	}
 
 	public void addWinner(Key winner) {
 		getWinners();
