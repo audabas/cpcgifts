@@ -292,7 +292,7 @@ body {
 					}
 					%>
 
-					<% if(userService.isUserLoggedIn() && cpcuser != null) { %>
+					<% if(userService.isUserLoggedIn() && cpcuser != null && !cpcuser.isBanned()) { %>
 
 					<form action="/editga" method="post">
 						<fieldset>
