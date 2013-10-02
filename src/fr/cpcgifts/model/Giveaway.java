@@ -49,11 +49,22 @@ public class Giveaway implements Serializable {
 	@Persistent
 	private String imgUrl = "";
 	
+	/**
+	 * @deprecated
+	 */
 	@Persistent
-	private List<Key> entrants;
+	public List<Key> entrants;
 	
 	@Persistent
-	private List<Key> comments;
+	private Set<Key> entrantsSet;
+	
+	/**
+	 * @deprecated
+	 */
+	@Persistent
+	public List<Key> comments;
+	
+	private Set<Key> commentsSet;
 	
 	/* TimeZone en UTC */
 	@Persistent
@@ -88,8 +99,8 @@ public class Giveaway implements Serializable {
 		setImgUrl(imgUrl);
 		setNbCopies(nbCopies);
 		
-		this.entrants = new ArrayList<Key>();
-		this.comments = new ArrayList<Key>();
+		this.entrantsSet = new HashSet<Key>();
+		this.commentsSet = new HashSet<Key>();
 		this.winners = new HashSet<Key>();
 		
 		this.endDate = endDate;
@@ -142,40 +153,51 @@ public class Giveaway implements Serializable {
 		this.imgUrl = imgUrl;
 	}
 
-	public List<Key> getEntrants() {
-		if(entrants == null)
-			entrants = new ArrayList<Key>();
+	public Set<Key> getEntrants() {
+		if(entrantsSet == null)
+			entrantsSet = new HashSet<Key>();
 		
-		return entrants;
+		return entrantsSet;
 	}
 	
-	public void addEntrant(Key cpcuser) {
+	public boolean addEntrant(Key cpcuser) {
 		getEntrants();
 		
-		entrants.add(cpcuser);
+		return entrantsSet.add(cpcuser);
 	}
 	
 	public boolean removeEntrant(Key cpcuser) {
 		getEntrants();
 		
-		return entrants.remove(cpcuser);
-	}
-
-	public List<Key> getComments() {
-		if(comments == null)
-			comments = new ArrayList<Key>();
-		
-		return comments;
-	}
-
-	public void setComments(List<Key> comments) {
-		this.comments = comments;
+		return entrantsSet.remove(cpcuser);
 	}
 	
-	public void addComment(Key k) {
+	public void setEntrants(Set<Key> entrants) {
+		this.entrantsSet = entrants;
+	}
+
+	public Set<Key> getComments() {
+		if(commentsSet == null)
+			commentsSet = new HashSet<Key>();
+		
+		return commentsSet;
+	}
+
+	public void setComments(Set<Key> comments) {
+		this.commentsSet = comments;
+	}
+	
+	public boolean addComment(Key k) {
 		getComments();
 		
-		comments.add(k);
+		return commentsSet.add(k);
+		
+	}
+	
+	public boolean removeComment(Key k) {
+		getComments();
+		
+		return commentsSet.remove(k);
 		
 	}
 
@@ -200,20 +222,24 @@ public class Giveaway implements Serializable {
 		this.nbWinners = winners.size();
 	}
 
-	public void addWinner(Key winner) {
+	public boolean addWinner(Key winner) {
 		getWinners();
 		
-		winners.add(winner);
+		boolean res =winners.add(winner);
 		
 		nbWinners = winners.size();
+		
+		return res;
 	}
 	
-	public void removeWinner(Key winner) {
+	public boolean removeWinner(Key winner) {
 		getWinners();
 		
-		winners.remove(winner);
+		boolean res = winners.remove(winner);
 		
 		nbWinners = winners.size();
+		
+		return res;
 	}
 
 	public boolean isOpen() {
@@ -237,17 +263,17 @@ public class Giveaway implements Serializable {
 		
 		log.info("Giveaway " + getKey().getId() + ":" + title + " ended.");
 		
-		if(entrants.size() == 0)
+		if(entrantsSet.size() == 0)
 			return;
 		
 		Random rand = new Random();
 		
-		int nbWinners = Math.min(nbCopies, entrants.size());
+		int nbWinners = Math.min(nbCopies, entrantsSet.size());
 		
 		while(winners.size() < nbWinners) {
-			int winnerIndex = rand.nextInt(entrants.size());
+			int winnerIndex = rand.nextInt(entrantsSet.size());
 			
-			Key winner = (Key) entrants.toArray()[winnerIndex];
+			Key winner = (Key) entrantsSet.toArray()[winnerIndex];
 			
 			boolean newInSet = winners.add(winner);
 			
@@ -266,15 +292,15 @@ public class Giveaway implements Serializable {
 		
 		Random rand = new Random();
 		
-		if(entrants.size() > winners.size()) {
+		if(entrantsSet.size() > winners.size()) {
 			
 			Key newWinner = winnerToReroll;
 			
 			do {
 				
-				int winnerIndex = rand.nextInt(entrants.size());
+				int winnerIndex = rand.nextInt(entrantsSet.size());
 				
-				newWinner = (Key) entrants.toArray()[winnerIndex];
+				newWinner = (Key) entrantsSet.toArray()[winnerIndex];
 				
 			} while (winners.contains(newWinner));
 			

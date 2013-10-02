@@ -2,7 +2,9 @@ package fr.cpcgifts.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -38,14 +40,34 @@ public class CpcUser implements Serializable {
 	@Persistent
 	private boolean banned;
 
+	/**
+	 * @deprecated
+	 */
 	@Persistent
-	private List<Key> giveaways;
-
-	@Persistent
-	private List<Key> entries;
+	public List<Key> giveaways;
 	
 	@Persistent
-	private List<Key> won;
+	private Set<Key> giveawaySet;
+
+	/**
+	 * @deprecated
+	 */
+	@Persistent
+	public List<Key> entries;
+	
+	@Persistent
+	private Set<Key> entrySet;
+	
+	/**
+	 * @deprecated
+	 */
+	@Persistent
+	public List<Key> won;
+	
+	@Persistent
+	private Set<Key> wonSet;
+	
+	
 	
 	public CpcUser(User guser, String cpcProfileId) {
 		super();
@@ -60,9 +82,9 @@ public class CpcUser implements Serializable {
 
 		this.cpcProfileId = splitProfileId[0];
 
-		this.giveaways = new ArrayList<Key>();	
+		this.giveawaySet = new HashSet<Key>();	
 
-		this.entries = new ArrayList<Key>();
+		this.entrySet = new HashSet<Key>();
 
 	}
 
@@ -126,76 +148,76 @@ public class CpcUser implements Serializable {
 		this.avatarUrl = avatarUrl;
 	}
 
-	public List<Key> getGiveaways() {
-		if(this.giveaways == null)
-			this.giveaways = new ArrayList<Key>();
+	public Set<Key> getGiveaways() {
+		if(this.giveawaySet == null)
+			this.giveawaySet = new HashSet<Key>();
 			
-		return giveaways;
+		return giveawaySet;
 	}
 
-	public void setGiveaways(List<Key> giveaways) {
-		this.giveaways = giveaways;
+	public void setGiveaways(Set<Key> giveaways) {
+		this.giveawaySet = giveaways;
 	}
 
-	public void addGiveaway(Key ga) {
+	public boolean addGiveaway(Key ga) {
 		getGiveaways();
 		
-		this.giveaways.add(ga);
+		return this.giveawaySet.add(ga);
 
 	}
 	
-	public void removeGiveaway(Key ga) {
+	public boolean removeGiveaway(Key ga) {
 		getGiveaways();
 		
-		this.giveaways.remove(ga);
+		return this.giveawaySet.remove(ga);
 	}
 
-	public List<Key> getEntries() {
-		if(entries == null)
-			entries = new ArrayList<Key>();
+	public Set<Key> getEntries() {
+		if(entrySet == null)
+			entrySet = new HashSet<Key>();
 		
-		return entries;
+		return entrySet;
 	}
 
-	public void setEntries(List<Key> entries) {
-		this.entries = entries;
+	public void setEntries(Set<Key> entries) {
+		this.entrySet = entries;
 	}
 	
-	public void addEntry(Key k) {
+	public boolean addEntry(Key k) {
 		getEntries();
 		
-		this.entries.add(k);
+		return this.entrySet.add(k);
 
 	}
 	
 	public boolean removeEntry(Key k) {
 		getEntries();
 		
-		return this.entries.remove(k);
+		return this.entrySet.remove(k);
 	}
 
-	public List<Key> getWon() {
-		if(won == null)
-			won = new ArrayList<Key>();
+	public Set<Key> getWon() {
+		if(wonSet == null)
+			wonSet = new HashSet<Key>();
 			
-		return won;
+		return wonSet;
 	}
 
-	public void setWon(List<Key> won) {
-		this.won = won;
+	public void setWon(Set<Key> won) {
+		this.wonSet = won;
 	}
 	
-	public void addWon(Key k) {
+	public boolean addWon(Key k) {
 		getWon();
 		
-		this.won.add(k);
+		return this.wonSet.add(k);
 
 	}
 	
-	public void removeWon(Key k) {
+	public boolean removeWon(Key k) {
 		getWon();
 		
-		this.won.remove(k);
+		return this.wonSet.remove(k);
 
 	}
 

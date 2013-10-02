@@ -42,10 +42,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-class>fr.cpcgifts.AdminServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>AdminServlet</servlet-name>
-		<servlet-class>fr.cpcgifts.AdminServlet</servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>CleanEmptyGAServlet</servlet-name>
 		<servlet-class>fr.cpcgifts.CleanEmptyGAServlet</servlet-class>
 	</servlet>
@@ -150,6 +146,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>userupdate1</servlet-name>
 		<servlet-class>fr.cpcgifts.task.UpdateUsersBanned</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>userupdate2</servlet-name>
+		<servlet-class>fr.cpcgifts.task.UpdateUsersSet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>gaupdate2</servlet-name>
+		<servlet-class>fr.cpcgifts.task.UpdateGAsSet</servlet-class>
+	</servlet>
 	<!-- Mapping tasks -->
 	<servlet-mapping>
 		<servlet-name>gaupdate1</servlet-name>
@@ -158,6 +162,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet-mapping>
 		<servlet-name>userupdate1</servlet-name>
 		<url-pattern>/task/userupdate1</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>userupdate2</servlet-name>
+		<url-pattern>/task/userupdate2</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>gaupdate2</servlet-name>
+		<url-pattern>/task/gaupdate2</url-pattern>
 	</servlet-mapping>
 
 	<!-- Welcome files -->
@@ -175,7 +187,9 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<!-- Sécurité -->
 	<security-constraint>
 		<web-resource-collection>
+			<web-resource-name>Tasks</web-resource-name>
 			<url-pattern>/cron/*</url-pattern>
+			<url-pattern>/task/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>admin</role-name>
@@ -184,9 +198,9 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
 	<security-constraint>
         <web-resource-collection>
+        	<web-resource-name>Admin only</web-resource-name>
             <url-pattern>/admin/*</url-pattern>
             <url-pattern>/adminconsole/*</url-pattern>
-            <url-pattern>/task/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>admin</role-name>
