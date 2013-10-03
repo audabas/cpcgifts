@@ -286,6 +286,12 @@ body {
 					%>
 					
 					<%= ViewTools.commentView(c) %>
+					
+					<% if(c.getAuthor().equals(cpcuser.getKey()) || (userService.isUserLoggedIn() && userService.isUserAdmin())) { %>
+					
+						<a href="javascript:deleteComment(<%= c.getKey().getId() %>)" class="btn btn-danger"><i class="icon-trash icon-white"></i> Supprimer le commentaire</a>
+					
+					<% } %>
 					<hr>
 					
 					<%
@@ -523,6 +529,21 @@ body {
             });
             
 		});
+		
+		function deleteComment(commentId) {
+			var r=confirm("Êtes vous sûr de vouloir supprimer ce commentaire ?\n"
+					+ "Cette action est irréversible.");
+			if (r==true)
+			  {
+				$.post( "/editga", 
+						{ req: "deletecomment", gaid: "<%= currentGA.getKey().getId() %>", comment : commentId }
+					);
+					
+				var parent = $("#comment-" + commentId).parents(".media");
+				parent.slideUp();
+				parent.next().hide();
+			  }
+		}
 	</script>
 	
 </body>
