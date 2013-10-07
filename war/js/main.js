@@ -18,4 +18,10 @@ $(document).ready(function() {
 	//Lazy load sur les images
 	$("img.lazy").lazyload();
 	
+	$("ul").click(function(e) {
+		setTimeout(function(){ // attente de l'affichage de l'onglet
+			$("img.lazy").lazyload();
+		}, 500);
+	})
+	
 });
