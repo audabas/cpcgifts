@@ -287,9 +287,9 @@ body {
 					
 					<%= ViewTools.commentView(c) %>
 					
-					<% if(c.getAuthor().equals(cpcuser.getKey()) || (userService.isUserLoggedIn() && userService.isUserAdmin())) { %>
+					<% if(userService.isUserLoggedIn() && (c.getAuthor().equals(cpcuser.getKey()) ||  userService.isUserAdmin())) { %>
 					
-						<a href="javascript:deleteComment(<%= c.getKey().getId() %>)" class="btn btn-danger"><i class="icon-trash icon-white"></i> Supprimer le commentaire</a>
+						<a href="javascript:deleteComment(<%= c.getKey().getId() %>)" class="btn btn-mini"><i class="icon-trash"></i> Supprimer ce commentaire</a>
 					
 					<% } %>
 					<hr>
