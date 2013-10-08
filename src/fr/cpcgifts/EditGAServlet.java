@@ -87,7 +87,7 @@ public class EditGAServlet extends HttpServlet {
 				Key commentKey = KeyFactory.createKey(Comment.class.getSimpleName(), Long.parseLong(commentId));
 				Comment c = CommentPersistance.getComment(commentKey);
 				
-				if(c.getAuthor() == cpcuser.getKey() || userService.isUserAdmin()) {
+				if(c.getAuthor().equals(cpcuser.getKey()) || userService.isUserAdmin()) {
 					log.info(cpcuser + " deleted comment " + c + " from giveaway " + ga + ".");
 					
 					ga.removeComment(commentKey);
