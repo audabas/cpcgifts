@@ -25,7 +25,7 @@
 <ul>
 <!-- <li><a href="gaupdate1.jsp">Update giveaways winners (single->set) and description (short[String]->long[Text])</a></li> -->
 <!-- <li><a href="userupdate1.jsp">Update users (all unbanned)</a></li> -->
-<li><a href="setUpdate.jsp">The Set update</a></li>
+<!-- <li><a href="setUpdate.jsp">The Set update</a></li> -->
 </ul>
 </body>
 </html>

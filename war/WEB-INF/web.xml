@@ -6,10 +6,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 	<!-- Servlets classes java -->
 	<servlet>
-		<servlet-name>Cpcgifts</servlet-name>
-		<servlet-class>fr.cpcgifts.CpcgiftsServlet</servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>LoginServlet</servlet-name>
 		<servlet-class>fr.cpcgifts.LoginServlet</servlet-class>
 	</servlet>
@@ -46,10 +42,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-class>fr.cpcgifts.CleanEmptyGAServlet</servlet-class>
 	</servlet>
 	<!-- Mapping Java -->
-	<servlet-mapping>
-		<servlet-name>Cpcgifts</servlet-name>
-		<url-pattern>/cpcgifts</url-pattern>
-	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>GiveawayServlet</servlet-name>
 		<url-pattern>/giveaway-serv</url-pattern>
@@ -138,7 +130,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>
 	
 	<!-- Tasks -->
-	<servlet>
+	<!-- <servlet>
 		<servlet-name>gaupdate1</servlet-name>
 		<servlet-class>fr.cpcgifts.task.UpdateGiveawayModelDescAndWinner</servlet-class>
 	</servlet>
@@ -153,9 +145,9 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet>
 		<servlet-name>gaupdate2</servlet-name>
 		<servlet-class>fr.cpcgifts.task.UpdateGAsSet</servlet-class>
-	</servlet>
+	</servlet> -->
 	<!-- Mapping tasks -->
-	<servlet-mapping>
+	<!-- <servlet-mapping>
 		<servlet-name>gaupdate1</servlet-name>
 		<url-pattern>/task/gaupdate1</url-pattern>
 	</servlet-mapping>
@@ -170,7 +162,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet-mapping>
 		<servlet-name>gaupdate2</servlet-name>
 		<url-pattern>/task/gaupdate2</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping> -->
 
 	<!-- Welcome files -->
 	<welcome-file-list>

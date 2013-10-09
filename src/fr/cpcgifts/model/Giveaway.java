@@ -1,11 +1,9 @@
 package fr.cpcgifts.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -37,44 +35,20 @@ public class Giveaway implements Serializable {
 	@Persistent
 	private String title = "";
 	
-	/**
-	 * @deprecated
-	 */
-	@Persistent
-	public String description = "";
-	
 	@Persistent
 	private Text longDescription = new Text("");
 	
 	@Persistent
 	private String imgUrl = "";
 	
-	/**
-	 * @deprecated
-	 */
-	@Persistent
-	public List<Key> entrants;
-	
 	@Persistent
 	private Set<Key> entrantsSet;
-	
-	/**
-	 * @deprecated
-	 */
-	@Persistent
-	public List<Key> comments;
 	
 	private Set<Key> commentsSet;
 	
 	/* TimeZone en UTC */
 	@Persistent
 	private Date endDate;
-	
-	/**
-	 * @deprecated
-	 */
-	@Persistent
-	public Key winner;
 	
 	@Persistent
 	private Set<Key> winners;

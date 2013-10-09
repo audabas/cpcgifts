@@ -1,9 +1,7 @@
 package fr.cpcgifts.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -39,30 +37,12 @@ public class CpcUser implements Serializable {
 	
 	@Persistent
 	private boolean banned;
-
-	/**
-	 * @deprecated
-	 */
-	@Persistent
-	public List<Key> giveaways;
 	
 	@Persistent
 	private Set<Key> giveawaySet;
-
-	/**
-	 * @deprecated
-	 */
-	@Persistent
-	public List<Key> entries;
 	
 	@Persistent
 	private Set<Key> entrySet;
-	
-	/**
-	 * @deprecated
-	 */
-	@Persistent
-	public List<Key> won;
 	
 	@Persistent
 	private Set<Key> wonSet;
