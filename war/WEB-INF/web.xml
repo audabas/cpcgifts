@@ -22,12 +22,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-class>fr.cpcgifts.CloseGAServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>ChangeImgServlet</servlet-name>
-		<servlet-class>fr.cpcgifts.ChangeImgServlet</servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>EditGAServlet</servlet-name>
 		<servlet-class>fr.cpcgifts.EditGAServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>EditUserServlet</servlet-name>
+		<servlet-class>fr.cpcgifts.EditUserServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>EnterGAServlet</servlet-name>
@@ -63,12 +63,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<url-pattern>/cron/cleanEmptyGA</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>ChangeImgServlet</servlet-name>
-		<url-pattern>/changeimg</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
 		<servlet-name>EditGAServlet</servlet-name>
 		<url-pattern>/editga</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>EditUserServlet</servlet-name>
+		<url-pattern>/edituser</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>EnterGAServlet</servlet-name>

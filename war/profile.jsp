@@ -291,13 +291,15 @@ body {
 			<h3>Modifier l'avatar</h3>
 		</div>
 		<div class="modal-body">
-			<form id="imgform" name="imgform" action="/changeimg">
+			<form id="imgform" name="imgform" action="/edituser" method="post">
 				<fieldset>
-					<label>Url de l'avatar (184x184 pixels)</label> <input id="imgurl"
-						name="imgurl" type="text" placeholder="url" required="required">
+					<label>Url de l'avatar (184x184 pixels)</label>
+					<input id="imgurl"	name="imgurl" type="text" placeholder="url" required="required">
 					<span class="help-block">Astuce : copiez l'url de votre
 						avatar steam, elle est déjà au bon format !</span>
 				</fieldset>
+				<input type="hidden" name="req" value="changeimg" />
+				<input type="hidden" name="userid" value="<%= profileCpcUser.getKey().getId() %>" />
 			</form>
 		</div>
 		<div class="modal-footer">
