@@ -44,6 +44,7 @@ public class Giveaway implements Serializable {
 	@Persistent
 	private Set<Key> entrantsSet;
 	
+	@Persistent
 	private Set<Key> commentsSet;
 	
 	/* TimeZone en UTC */
