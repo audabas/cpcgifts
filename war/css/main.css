@@ -52,6 +52,13 @@
 	text-align: center;
 }
 
+.valign-profile-form {
+	height: 130px;
+	display: table-cell;
+	vertical-align: middle;
+	float: none;
+}
+
 /* css for timepicker */
 .ui-timepicker-div .ui-widget-header {
 	margin-bottom: 8px;

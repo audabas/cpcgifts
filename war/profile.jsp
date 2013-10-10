@@ -106,7 +106,7 @@ body {
 			<div class="span3">
 				<img src="<%=profileCpcUser.getAvatarUrl()%>" />
 				<%
-					if(isCurrentUser) {
+					if(isCurrentUser || (userService.isUserLoggedIn() && userService.isUserAdmin())) {
 				%>
 				<div class="row" style="margin-top: 10px;">
 					<a class="btn btn-success span2" href="#modif-image"
@@ -126,13 +126,57 @@ body {
 					<% if(profileCpcUser.isBanned()) { %>
 						<div class="alert alert-error">Utilisateur banni !</div>
 					<% } else { %>
-						<a class="btn"
-							href="http://forum.canardpc.com/members/<%=profileCpcUser.getCpcProfileId()%>">
-							<i class="icon-user"></i> Voir le profil CPC
-						</a> <a class="btn"
-							href="http://forum.canardpc.com/private.php?do=newpm&u=<%=profileCpcUser.getCpcProfileId()%>">
-							<i class="icon-envelope"></i> Envoyer un message privé
-						</a>
+						<div class="span">
+							<a class="btn"
+								href="http://forum.canardpc.com/members/<%=profileCpcUser.getCpcProfileId()%>">
+								<i class="icon-user"></i> Voir le profil CPC
+							</a>
+							<a class="btn"
+								href="http://forum.canardpc.com/private.php?do=newpm&u=<%=profileCpcUser.getCpcProfileId()%>">
+								<i class="icon-envelope"></i> Envoyer un message privé
+							</a>
+							
+						</div>
+						
+						<div class="span">
+						
+							<% 
+								Map<String,String> profiles = profileCpcUser.getProfiles();
+							
+								if(profiles.containsKey("steamgifts")) {
+							%>
+								<a class="btn btn-link" href="<%= profiles.get("steamgifts") %>"><img class="img-small-icon" alt="steamgifts" src="/img/sg.png"></a>
+							<% 
+								}
+								if(profiles.containsKey("steam")) {
+							%>
+								<a class="btn btn-link" href="<%= profiles.get("steam") %>"><img class="img-small-icon" alt="steam" src="/img/steam.png"></a>
+							<% 
+								}
+								if(profiles.containsKey("desura")) {
+							%>
+								<a class="btn btn-link" href="<%= profiles.get("desura") %>"><img class="img-small-icon" alt="desura" src="/img/desura.png"></a>
+							<% 
+								}
+								if(profiles.containsKey("gamersgate")) {
+							%>
+								<a class="btn btn-link" href="<%= profiles.get("gamersgate") %>"><img class="img-small-icon" alt="gamersgate" src="/img/gg.png"></a>
+							<% 
+								}
+							%>
+							
+							<%
+								if(isCurrentUser || (userService.isUserLoggedIn() && userService.isUserAdmin())) {
+							%>
+								<a class="btn btn-success" href="#add-profile" data-toggle="modal">
+								<i class="icon-plus-sign icon-white"></i> Ajouter/Modifier un profil
+								</a>
+							<%
+								}
+							%>
+							
+						</div>
+						
 					<% } %>
 				</div>
 			</div>
@@ -286,8 +330,7 @@ body {
 
 	<div id="modif-image" class="modal hide fade">
 		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"
-				aria-hidden="true">&times;</button>
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			<h3>Modifier l'avatar</h3>
 		</div>
 		<div class="modal-body">
@@ -312,6 +355,64 @@ body {
 		function submitImgForm() {
 			if ($("#imgurl").val() != "") {
 				$("#imgform").submit();
+			}
+		}
+	</script>
+	
+	<div id="add-profile" class="modal big-modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Ajouter/Modifier un profil</h3>
+		</div>
+		<div class="modal-body">
+			<form id="profileform" name="profileform" action="/edituser" method="post">
+				<div class="row">
+					<div class="control-group span2">
+						<fieldset>
+							<label class="radio">
+							  	<input type="radio" name="service" id="steamgiftsRadio" value="steamgifts" checked>
+							  	<img src="/img/sg.png" class="img-small-icon" alt="" /> Steamgifts
+							</label>
+							<label class="radio">
+							  	<input type="radio" name="service" id="steamRadio" value="steam">
+							  	<img src="/img/steam.png" class="img-small-icon" alt="" /> Steam
+							</label>
+							<label class="radio">
+							  	<input type="radio" name="service" id="desuraRadio" value="desura">
+							  	<img src="/img/desura.png" class="img-small-icon" alt="" /> Desura
+							</label>
+							<label class="radio">
+							  	<input type="radio" name="service" id="ggRadio" value="gamersgate">
+							  	<img src="/img/gg.png" class="img-small-icon" alt="" /> Gamers Gate
+							</label>
+						</fieldset>
+					</div>
+				
+					<div class="span valign-profile-form">
+						<div class="control-group form-horizontal">
+							<fieldset>
+								<label class="control-label" for="profile-link">Url du profil</label>
+								<div class="controls">
+									<input id="profile-link" class="span5" name="link" type="text" placeholder="url" required="required" />
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" name="req" value="addprofile" />
+				<input type="hidden" name="userid" value="<%= profileCpcUser.getKey().getId() %>" />
+			</form>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Annuler</a> <a
+				href="javascript:submitProfileForm()" class="btn btn-primary">Valider</a>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		function submitProfileForm() {
+			if ($("#profile-link").val() != "") {
+				$("#profileform").submit();
 			}
 		}
 	</script>

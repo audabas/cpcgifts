@@ -1,7 +1,9 @@
 package fr.cpcgifts.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -24,6 +26,7 @@ public class CpcUser implements Serializable {
 	private String id;
 
 	@Persistent
+	/** Profil d'utilisateur google. */
 	private User guser;
 
 	@Persistent
@@ -39,14 +42,20 @@ public class CpcUser implements Serializable {
 	private boolean banned;
 	
 	@Persistent
+	/** Liste des concours créés. */
 	private Set<Key> giveawaySet;
 	
 	@Persistent
+	/** Liste des participations aux concours. */
 	private Set<Key> entrySet;
 	
 	@Persistent
+	/** Liste des concours gagnés */
 	private Set<Key> wonSet;
 	
+	@Persistent
+	/**	 Liste des liens vers les profils externes (steam, etc...) */
+	private Map<String,String> profiles;
 	
 	
 	public CpcUser(User guser, String cpcProfileId) {
@@ -65,6 +74,8 @@ public class CpcUser implements Serializable {
 		this.giveawaySet = new HashSet<Key>();	
 
 		this.entrySet = new HashSet<Key>();
+		
+		this.profiles = new HashMap<String, String>();
 
 	}
 
@@ -200,7 +211,21 @@ public class CpcUser implements Serializable {
 		return this.wonSet.remove(k);
 
 	}
-
+	
+	public Map<String,String> getProfiles() {
+		if(profiles == null)
+			this.profiles = new HashMap<String, String>();
+		
+		return profiles;
+	}
+	
+	public void addProfile(String key, String link) {
+		getProfiles();
+		
+		this.profiles.put(key, link);
+	}
+	
+	
 	public boolean isBanned() {
 		return banned;
 	}
@@ -209,7 +234,6 @@ public class CpcUser implements Serializable {
 	public void setBanned(boolean banned) {
 		this.banned = banned;
 	}
-
 
 	@Override
 	public String toString() {
