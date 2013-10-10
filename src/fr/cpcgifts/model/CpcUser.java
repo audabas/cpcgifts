@@ -53,9 +53,9 @@ public class CpcUser implements Serializable {
 	/** Liste des concours gagnés */
 	private Set<Key> wonSet;
 	
-	@Persistent
+	@Persistent(serialized="true")
 	/**	 Liste des liens vers les profils externes (steam, etc...) */
-	private Map<String,String> profiles;
+	private HashMap<String,String> profilesMap;
 	
 	
 	public CpcUser(User guser, String cpcProfileId) {
@@ -75,7 +75,7 @@ public class CpcUser implements Serializable {
 
 		this.entrySet = new HashSet<Key>();
 		
-		this.profiles = new HashMap<String, String>();
+		this.profilesMap = new HashMap<String, String>();
 
 	}
 
@@ -213,16 +213,16 @@ public class CpcUser implements Serializable {
 	}
 	
 	public Map<String,String> getProfiles() {
-		if(profiles == null)
-			this.profiles = new HashMap<String, String>();
+		if(profilesMap == null)
+			this.profilesMap = new HashMap<String, String>();
 		
-		return profiles;
+		return profilesMap;
 	}
 	
 	public void addProfile(String key, String link) {
 		getProfiles();
 		
-		this.profiles.put(key, link);
+		this.profilesMap.put(key, link);
 	}
 	
 	
