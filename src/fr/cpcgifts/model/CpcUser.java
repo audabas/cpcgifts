@@ -25,8 +25,8 @@ public class CpcUser implements Serializable {
 	@Persistent
 	private String id;
 
-	@Persistent
 	/** Profil d'utilisateur google. */
+	@Persistent(defaultFetchGroup="true")
 	private User guser;
 
 	@Persistent
@@ -41,25 +41,34 @@ public class CpcUser implements Serializable {
 	@Persistent
 	private boolean banned;
 	
-	@Persistent
 	/** Liste des concours créés. */
+	@Persistent(defaultFetchGroup="true")
 	private Set<Key> giveawaySet;
 	
-	@Persistent
 	/** Liste des participations aux concours. */
+	@Persistent(defaultFetchGroup="true")
 	private Set<Key> entrySet;
 	
-	@Persistent
 	/** Liste des concours gagnés */
+	@Persistent(defaultFetchGroup="true")
 	private Set<Key> wonSet;
 	
-	@Persistent(serialized="true")
 	/**	 Liste des liens vers les profils externes (steam, etc...) */
+	@Persistent(serialized="true",defaultFetchGroup="true")
 	private HashMap<String,String> profilesMap;
 	
+	public CpcUser() {
+		super();
+		
+		this.giveawaySet = new HashSet<Key>();	
+
+		this.entrySet = new HashSet<Key>();
+		
+		this.profilesMap = new HashMap<String, String>();
+	}
 	
 	public CpcUser(User guser, String cpcProfileId) {
-		super();
+		this();
 		this.guser = guser;
 
 		// paramètres générés
@@ -70,12 +79,6 @@ public class CpcUser implements Serializable {
 		this.cpcNickname = splitProfileId[1];
 
 		this.cpcProfileId = splitProfileId[0];
-
-		this.giveawaySet = new HashSet<Key>();	
-
-		this.entrySet = new HashSet<Key>();
-		
-		this.profilesMap = new HashMap<String, String>();
 
 	}
 
