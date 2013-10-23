@@ -15,16 +15,12 @@ import net.sf.jsr107cache.Cache;
 import net.sf.jsr107cache.CacheException;
 import net.sf.jsr107cache.CacheManager;
 
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
-import fr.cpcgifts.model.Comment;
 import fr.cpcgifts.model.CpcUser;
-import fr.cpcgifts.model.Giveaway;
-import fr.cpcgifts.persistance.CommentPersistance;
 import fr.cpcgifts.persistance.PMF;
 import fr.cpcgifts.utils.TextTools;
 
