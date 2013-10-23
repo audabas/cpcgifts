@@ -41,20 +41,20 @@ public class Giveaway implements Serializable {
 	@Persistent
 	private String imgUrl = "";
 	
-	@Persistent
+	@Persistent(defaultFetchGroup="true")
 	private Set<Key> entrantsSet;
 	
-	@Persistent
+	@Persistent(defaultFetchGroup="true")
 	private Set<Key> commentsSet;
 	
 	/* TimeZone en UTC */
 	@Persistent
 	private Date endDate;
 	
-	@Persistent
+	@Persistent(defaultFetchGroup="true")
 	private Set<Key> winners;
 	
-	@Persistent
+	@Persistent(defaultFetchGroup="true")
 	public int nbWinners = 0;
 	
 	@Persistent
@@ -66,17 +66,22 @@ public class Giveaway implements Serializable {
 	@Persistent
 	private boolean rerolled = false;
 	
+	public Giveaway() {
+		super();
+		
+		this.entrantsSet = new HashSet<Key>();
+		this.commentsSet = new HashSet<Key>();
+		this.winners = new HashSet<Key>();
+	}
 	
 	public Giveaway(Key author, String title, String description, String imgUrl, Date endDate, int nbCopies) {
+		this();
+		
 		this.author = author;		
 		setTitle(title);
 		setDescription(description);
 		setImgUrl(imgUrl);
 		setNbCopies(nbCopies);
-		
-		this.entrantsSet = new HashSet<Key>();
-		this.commentsSet = new HashSet<Key>();
-		this.winners = new HashSet<Key>();
 		
 		this.endDate = endDate;
 		

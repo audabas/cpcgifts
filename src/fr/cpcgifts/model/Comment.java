@@ -34,7 +34,13 @@ public class Comment implements Serializable {
 	@Persistent
 	private Date commentDate;
 	
+	public Comment() {
+		super();
+	}
+	
 	public Comment(Key author, Key giveaway, String commentText) {
+		this();
+		
 		this.author = author;
 		this.giveaway = giveaway;
 		this.commentText = new Text(TextTools.escapeHtml(commentText));
