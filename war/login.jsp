@@ -1,3 +1,4 @@
+<%@page import="fr.cpcgifts.utils.Constants"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
@@ -81,21 +82,24 @@ body {
 			<p class="offset1">
 				Salut à toi ami canard ! <br /> En t'inscrivant sur ce site tu
 				acceptes les <a
-					href="http://forum.canardpc.com/threads/63940-Le-topic-des-canards-g%C3%A9n%C3%A9reux-R%C3%A8gle-de-bonne-conduite-dans-le-1er-post-%21%21?p=5015733&viewfull=1#post5015733">règles
-					présentes sur le premier post du topic des canards généreux</a>. <br />
-				Tout manquement à ces règles peut entraîner un ban et une lapidation publique sur le topic (On rigole pas avec la générosité ici, non mais !).
+					href="<%= Constants.TOPIC_CANARDS_GENEREUX_FIRST_POST %>">règles
+					présentes sur le premier post du topic des canards généreux</a> et t'engage à les respecter. <br />
 			</p>
 
 			<p class="offset1">
 				Afin de s'assurer que tu es bien inscrit sur le forum Canard PC, tu
-				dois indiquer ton identifiant CPC.<br /> Tu le trouvera en allant
+				dois indiquer ton identifiant CPC.<br /> Tu le trouveras en allant
 				sur la page de ton profil, il s'agit en fait de la dernière partie
 				de l'url indiquée dans la barre d'adresse (<a href="/aidecpcid.html" data-target="#"
 					data-toggle="modal"><i class="icon-question-sign"></i>
 					Comment faire</a>).
 			</p>
 			<br />
+			<div class="alert alert-warning offset1 span9">
+				Les inscriptions sont réservées aux personnes membre du forum depuis au moins trois mois et ayant posté au moins 25 messages.
+			</div>
 		</div>
+
 
 		<div class="row-fluid">
 
@@ -117,17 +121,7 @@ body {
 	</div>
 	<!-- /container -->
 
-	<script
-		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script>
-		window.jQuery
-				|| document
-						.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')
-	</script>
-
-	<script src="js/vendor/bootstrap.min.js"></script>
-
-	<script src="js/main.js"></script>
+	<%@ include file="jscripts.jspf" %>
 
 	<script type="text/javascript">
 		function validateForm() {
@@ -157,7 +151,6 @@ body {
 			});
 		}, 1000);
 	</script>
-
-
+	
 </body>
 </html>

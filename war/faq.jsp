@@ -1,3 +1,4 @@
+<%@page import="fr.cpcgifts.utils.Constants"%>
 <%@page import="com.google.appengine.api.memcache.jsr107cache.GCacheFactory"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
@@ -60,7 +61,7 @@ body {
 		<hr />
 		<h4>Quelles sont les conditions pour s'inscrire à un concours ?</h4>
 		<p>Si rien n'est précisé dans la description du concours ce sont les règles indiquées dans
-		<a href="http://forum.canardpc.com/threads/63940-Le-topic-des-canards-g%C3%A9n%C3%A9reux-R%C3%A8gle-de-bonne-conduite-dans-le-1er-post-%21%21?p=5015733&viewfull=1#post5015733">le premier post du topic des canards généreux</a>
+		<a href="<%= Constants.TOPIC_CANARDS_GENEREUX_FIRST_POST %>">le premier post du topic des canards généreux</a>
 		qui s'appliquent.<br />
 		Les inscriptions ne sont pas filtrées mais si le gagnant enfreint une de ces règles, un nouveau gagnant sera désigné.
 		</p>
@@ -79,27 +80,27 @@ body {
 		Vous pouvez cependant indiquer vos propres règles dans la description.
 		Si le gagnant enfreint ces règles, un nouveau gagnant sera désigné.<br />
 		Si rien n'est indiqué dans la description ce sont les règles indiquées dans
-		<a href="http://forum.canardpc.com/threads/63940-Le-topic-des-canards-g%C3%A9n%C3%A9reux-R%C3%A8gle-de-bonne-conduite-dans-le-1er-post-%21%21?p=5015733&viewfull=1#post5015733">le premier post du topic des canards généreux</a>
+		<a href="<%= Constants.TOPIC_CANARDS_GENEREUX_FIRST_POST %>">le premier post du topic des canards généreux</a>
 		qui s'appliquent.</p>
 		
 		<h4>Le gagnant enfreint les règles de mon concours.</h4>
 		<p>
 		Vous pouvez demander la désignation d'un nouveau gagnant aux admins sur
-		<a href="http://forum.canardpc.com/threads/63940-Le-topic-des-canards-généreux">le topic des canards généreux</a>
+		<a href="<%= Constants.TOPIC_CANARDS_GENEREUX %>">le topic des canards généreux</a>
 		en indiquant dans le post le lien du giveaway et la règle que le gagnant enfreint.
 		</p>
 		
 		<h4>Je n'ai pas de nouvelles du gagnant.</h4>
 		<p>Si le concours est terminé depuis plus d'une semaine, vous pouvez demander la désignation d'un
 		nouveau gagnant sur
-		<a href="http://forum.canardpc.com/threads/63940-Le-topic-des-canards-généreux">le topic des canards généreux</a>.
+		<a href="<%= Constants.TOPIC_CANARDS_GENEREUX %>">le topic des canards généreux</a>.
 		</p>
 		
 		<hr />
 		<h3>Le site CPC Gifts</h3>
 		<hr />
 		<h4>J'ai trouvé un bug, une faute d'orthographe, etc...</h4>
-		<p>Merci de me le signaler dans le <a href="http://forum.canardpc.com/threads/79082-CPC-Gifts-Le-topic-des-d%C3%A9veloppeurs-g%C3%A9n%C3%A9reux-%28ou-pas%29">topic dédié à CPC Gifts</a>.
+		<p>Merci de me le signaler dans le <a href="<%= Constants.TOPIC_DEV %>">topic dédié à CPC Gifts</a>.
 		</p>
 
 		<hr />
@@ -110,17 +111,7 @@ body {
 	</div>
 	<!-- /container -->
 
-	<script
-		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script>
-		window.jQuery
-				|| document
-						.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')
-	</script>
-
-	<script src="js/vendor/bootstrap.min.js"></script>
-
-	<script src="js/main.js"></script>
+	<%@ include file="jscripts.jspf" %>
 	
 
 </body>
