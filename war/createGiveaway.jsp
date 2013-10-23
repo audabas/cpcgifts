@@ -27,15 +27,8 @@
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width">
 
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<style>
-body {
-	padding-top: 60px;
-	padding-bottom: 40px;
-}
-</style>
-<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
-<link rel="stylesheet" href="css/main.css">
+<%@ include file="css.jspf" %>
+
 <link rel="stylesheet" href="css/smoothness/jquery-ui-1.10.2.custom.min.css">
 <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
@@ -111,7 +104,7 @@ body {
 						<h4>Description</h4>
 					</div>
 					<div class="row">
-						<textarea class="span10" name="gameDescription" id="gameDescription" rows="5" ></textarea>
+						<textarea class="span10" name="gameDescription" id="gameDescription" rows="15" data-provide="markdown" ></textarea>
 						<span id="charLimitHelp" class="help-block well well-small" style="display: none;">5000 caractères maximum. Il vous reste <span id="descLimit">500</span> caractères. </span>
 						<span class="help-block well well-small">Vous pouvez utiliser la syntaxe <a href="http://fr.wikipedia.org/wiki/Markdown">Markdown</a>.</span>
 					</div>

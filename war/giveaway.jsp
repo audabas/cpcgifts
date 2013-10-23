@@ -86,15 +86,7 @@
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width">
 
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<style>
-body {
-	padding-top: 60px;
-	padding-bottom: 40px;
-}
-</style>
-<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
-<link rel="stylesheet" href="css/main.css">
+<%@ include file="css.jspf" %>
 
 <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
@@ -303,7 +295,7 @@ body {
 					<form action="/editga" method="post">
 						<fieldset>
 							<label>Laisser un commentaire :</label>
-							<textarea class="span12" rows="3" id="comment" name="comment" required="required"></textarea>
+							<textarea class="span12" rows="5" id="comment" name="comment" required="required" data-provide="markdown"></textarea>
 							<input type="hidden" name="req" value="comment" />
 							<input type="hidden" name="gaid" value="<%= currentGA.getKey().getId() %>">
 							
@@ -451,11 +443,7 @@ body {
 			<form id="descform" name="descform" action="/editga" method="post">
 				<fieldset>
 					<label>Description du jeu :</label><br />
-					<div class="wmd-panel">
-	            		<div id="wmd-button-bar"></div>
-						<textarea class="span9 wmd-input" name="desc" id="desc" rows="5" ><%= currentGA.getDescription() %></textarea>
-						<div id="wmd-preview" class="wmd-panel wmd-preview"></div>
-					</div>
+						<textarea class="span9 wmd-input" name="desc" id="desc" rows="15" data-provide="markdown" ><%= currentGA.getDescription() %></textarea>
 				</fieldset>
 				<input type="hidden" name="req" value="changedescription" />
 				<input type="hidden" name="gaid" value="<%= currentGA.getKey().getId() %>">
@@ -510,22 +498,13 @@ body {
 
 	<%@ include file="jscripts.jspf" %>
 	
-	<script type="text/javascript" src="js/vendor/markdown/Markdown.Converter.js"></script>
-    <script type="text/javascript" src="js/vendor/markdown/Markdown.Sanitizer.js"></script>
-    <script type="text/javascript" src="js/vendor/markdown/Markdown.Editor.js"></script>
-
 	<script type="text/javascript">
 		$(document).ready(function() {
-			var converter = new Markdown.getSanitizingConverter();
 
-		    $("#description").html(converter.makeHtml($("#desc").html()));
-		    
-		    //var converter2 = Markdown.getSanitizingConverter();
-            //var editor = new Markdown.Editor(converter2);
-            //editor.run();
+		    $("#description").html(markdown.toHTML($("#desc").html()));
 		    
             $("textarea[id^='comment-']").each(function(i) {
-            	$("#" + $(this).attr("id") + "-display").html(converter.makeHtml($(this).html()));
+            	$("#" + $(this).attr("id") + "-display").html(markdown.toHTML($(this).html()));
             });
             
 		});
