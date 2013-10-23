@@ -46,6 +46,8 @@ public class CleanEmptyGAServlet extends HttpServlet {
 		for(Giveaway ga : gas) {
 			
 			if(ga.getWinners().size() == 0) { //on vérifie que le giveaway est bien sans gagnants
+				ga = pm.getObjectById(Giveaway.class, ga.getKey());
+				
 				CpcUser author = pm.getObjectById(CpcUser.class, ga.getAuthor());
 				
 				author.removeGiveaway(ga.getKey());
