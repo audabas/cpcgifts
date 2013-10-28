@@ -64,11 +64,12 @@ public class CleanEmptyGAServlet extends HttpServlet {
 					}
 					
 				}
+
+				log.info(ga + "\n by " + author.getCpcNickname() + " [" + author.getKey().getId() + "] has been cleaned up.");
 				
 				pm.makePersistent(author);
 				pm.deletePersistent(ga);
 				
-				log.info(ga + "\n by " + author.getCpcNickname() + " [" + author.getKey().getId() + "] has been cleaned up.");
 			} else { // mise à jour de la variable nbWinners
 				Set<Key> winners = ga.getWinners();
 				
