@@ -501,10 +501,10 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 
-		    $("#description").html(markdown.toHTML($("#desc").html()));
+		    $("#description").html(markdown.toHTML($("#desc").val()));
 		    
             $("textarea[id^='comment-']").each(function(i) {
-            	$("#" + $(this).attr("id") + "-display").html(markdown.toHTML($(this).html()));
+            	$("#" + $(this).attr("id") + "-display").html(markdown.toHTML($(this).val()));
             });
             
 		});
