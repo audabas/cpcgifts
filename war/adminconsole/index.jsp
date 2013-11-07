@@ -6,18 +6,26 @@
 <h1>Admin console</h1>
 
 <form action="/admin/gaWinner" method="get">
-	<input type="radio" name="reqtype" value="addWinner" > Ajouter un gagnant
-	<input type="radio" name="reqtype" value="removeWinner" > Supprimer un gagnant
-	Giveaway : <input type="text" name="gaid">
-	Gagnant : <input type="text" name="userid">
+	<input type="radio" name="reqtype" id="addWinner" value="addWinner" > <label for="addWinner">Ajouter un gagnant</label>
+	<input type="radio" name="reqtype" id="removeWinner" value="removeWinner" checked="checked" > <label for="removeWinner">Supprimer un gagnant</label>
+	<label>Giveaway :</label> <input type="text" name="gaid">
+	<label>Gagnant :</label> <input type="text" name="userid">
 	<input type="submit" value="Valider">
 </form>
 
 <form action="/admin/gaEntry" method="get">
-	<input type="radio" name="reqtype" value="addEntry" > Ajouter une entrée
-	<input type="radio" name="reqtype" value="removeEntry" > Supprimer une entrée
-	Giveaway : <input type="text" name="gaid">
-	Utilisateur : <input type="text" name="userid">
+	<input type="radio" name="reqtype" id="addEntry" value="addEntry" > <label for="addEntry">Ajouter une entrée</label>
+	<input type="radio" name="reqtype" id="removeEntry" value="removeEntry" checked="checked" > <label for="removeEntry">Supprimer une entrée</label>
+	<label>Giveaway :</label> <input type="text" name="gaid">
+	<label>Utilisateur :</label> <input type="text" name="userid">
+	<input type="submit" value="Valider">
+</form>
+
+<form action="/admin/gaComment" method="get">
+	<!-- <input type="radio" name="reqtype" id="addComment" value="addComment" > <label for="addComment">Ajouter un commentaire</label> -->
+	<input type="radio" name="reqtype" id="removeComment" value="removeComment" checked="checked" > <label for="removeComment">Supprimer un commentaire</label>
+	<label>Giveaway :</label> <input type="text" name="gaid">
+	<label>Commentaire :</label> <input type="text" name="commentid">
 	<input type="submit" value="Valider">
 </form>
 

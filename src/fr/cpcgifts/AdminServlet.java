@@ -22,6 +22,7 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
+import fr.cpcgifts.model.Comment;
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
 import fr.cpcgifts.persistance.PMF;
@@ -67,6 +68,12 @@ public class AdminServlet extends HttpServlet {
 				} catch(Exception e) {}
 			}
 			
+			Key commentToUpdateKey = null;
+			if (params.containsKey("commentid")) {
+				String commentID = params.get("commentid")[0];
+				commentToUpdateKey = KeyFactory.createKey(Comment.class.getSimpleName(),Long.parseLong(commentID.trim()));
+			}
+			
 			if(reqType.equals("reroll")) { //reroll
 				String winnerToRerollId = params.get("winnerToReroll")[0];
 				
@@ -105,6 +112,9 @@ public class AdminServlet extends HttpServlet {
 					userToUpdate.removeEntry(gaKey);
 				if(ga != null)
 					ga.removeEntrant(userToUpdateKey);
+			} else if("removeComment".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " removed " + commentToUpdateKey + " from comments of " + ga + ".");
+				ga.removeComment(commentToUpdateKey);
 			} else if("banuser".equals(reqType)) {
 				log.info("[ADMIN] " + cpcuser + " banned " + userToUpdate + ".");
 				userToUpdate.setBanned(true);
