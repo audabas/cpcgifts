@@ -71,6 +71,8 @@ public class CleanEmptyGAServlet extends HttpServlet {
 				pm.deletePersistent(ga);
 				
 			} else { // mise à jour de la variable nbWinners
+				ga = pm.getObjectById(Giveaway.class, ga.getKey());
+
 				Set<Key> winners = ga.getWinners();
 				
 				ga.setWinners(winners);
