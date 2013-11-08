@@ -37,6 +37,8 @@ public class EnterGiveawayServlet extends HttpServlet {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		HttpSession session = req.getSession();
 		CpcUser cpcuser = (CpcUser) session.getAttribute("cpcuser");
+		if(cpcuser == null)
+			resp.sendRedirect(userService.createLoginURL("/"));
 		cpcuser = pm.getObjectById(CpcUser.class, cpcuser.getKey());
 
 		if (user != null && cpcuser != null) {
