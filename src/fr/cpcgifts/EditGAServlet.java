@@ -41,7 +41,7 @@ public class EditGAServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		CpcUser cpcuser = (CpcUser) session.getAttribute("cpcuser");
 		if(cpcuser == null)
-			resp.sendRedirect(userService.createLoginURL("/"));
+			resp.sendRedirect(userService.createLogoutURL("/logout.jsp"));
 		cpcuser = pm.getObjectById(CpcUser.class, cpcuser.getKey());
 
 		if (user != null && cpcuser != null) {
