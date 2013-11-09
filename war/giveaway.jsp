@@ -1,3 +1,4 @@
+<%@page import="javax.jdo.JDOObjectNotFoundException"%>
 <%@page import="java.util.Comparator"%>
 <%@page import="java.util.Arrays"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
@@ -33,20 +34,25 @@
 
 		if (gid != null) {
 			Key k = KeyFactory.createKey("Giveaway", gid);
-			
+
 			try {
-			            cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-			            
-			            currentGA = (Giveaway) cache.get(k);
-			            
-			            if(currentGA == null) {
-					currentGA = GAPersistance.getGA(k);
-			            	cache.put(k, currentGA);
-			            }
+				cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+
+				currentGA = (Giveaway) cache.get(k);
+
+				if (currentGA == null) {
+					try {
+						currentGA = GAPersistance.getGA(k);
+					} catch (JDOObjectNotFoundException e) {
+						response.sendRedirect("/404.html");
+						return;
+					}
+					cache.put(k, currentGA);
+				}
 			} catch (CacheException e) {
 				currentGA = GAPersistance.getGA(k);
 			}
-	
+
 		}
 	}
 
@@ -56,17 +62,18 @@
 	}
 
 	CpcUser gaAuthor = null;
-	
+
 	try {
-        cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+		cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
 
 		gaAuthor = (CpcUser) cache.get(currentGA.getAuthor());
-		
-		if(gaAuthor == null) {
-	gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA.getAuthor());
-	cache.put(currentGA.getAuthor(), gaAuthor);
+
+		if (gaAuthor == null) {
+			gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA
+					.getAuthor());
+			cache.put(currentGA.getAuthor(), gaAuthor);
 		}
-		
+
 	} catch (CacheException e) {
 		gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA.getAuthor());
 	}
@@ -101,7 +108,8 @@
 	<%@ include file="getuser.jspf"%>
 	
 	<%
-			boolean isAuthor = cpcuser != null && cpcuser.getKey().equals(gaAuthor.getKey());
+			boolean isAuthor = cpcuser != null
+					&& cpcuser.getKey().equals(gaAuthor.getKey());
 		%>
 
 	<div class="container">
@@ -111,7 +119,7 @@
 			<div class="span5">
 				<img class="img-steam-game" src="<%=currentGA.getImgUrl()%>" />
 				<%
-					if(isAuthor) {
+					if (isAuthor) {
 				%>
 					<div class="row" style="margin-top: 10px;">
 					<a class="btn btn-success span2" href="#modif-image"
@@ -125,9 +133,13 @@
 			</div>
 			<div class="span7">
 				<h1><%=currentGA.getTitle()%>
-				<% if(currentGA.getNbCopies() > 1) { %>
-				<span class="gray">(<%= currentGA.getNbCopies() %> copies)</span>
-				<% } %>
+				<%
+					if (currentGA.getNbCopies() > 1) {
+				%>
+				<span class="gray">(<%=currentGA.getNbCopies()%> copies)</span>
+				<%
+					}
+				%>
 				</h1>
 				<hr>
 				<div class="span2">
@@ -166,8 +178,9 @@
 				<%=DateTools.dateDifference(currentGA.getEndDate())%>
 				
 				<%
-									if(currentGA.isOpen() && !isAuthor && userService.isUserLoggedIn() && !cpcuser.isBanned()) {
-											if(currentGA.getEntrants().contains(cpcuser.getKey())) {
+									if (currentGA.isOpen() && !isAuthor && userService.isUserLoggedIn()
+											&& !cpcuser.isBanned()) {
+										if (currentGA.getEntrants().contains(cpcuser.getKey())) {
 								%>
 						
 						<a
@@ -175,14 +188,14 @@
 						 style="margin-left: 250px" class="btn btn-danger">Ne plus participer</a>
 						
 						<%
-											} else {
+													} else {
 												%>
 				<a
 					href="/enterga?reqtype=enter&gaid=<%=currentGA.getKey().getId()%>"
 					style="margin-left: 250px" class="btn btn-success">Participer</a>
 				<%
-											}
-									}
+					}
+					}
 				%>
 
 			</div>
@@ -199,7 +212,7 @@
 		
 		
 		<%
-			if(isAuthor) {
+							if (isAuthor) {
 						%>
 				<div class="row" style="margin-top: 10px;">
 				<a class="btn btn-success span2" href="#modif-desc"
@@ -215,28 +228,30 @@
 		<div class="tabbable">
 			<!-- Only required for left/right tabs -->
 			<ul class="nav nav-tabs">
-				<li class="active"><a href="#commentaires" data-toggle="tab">Commentaires <span class="gray">(<%= currentGA.getComments().size() %>)</span></a></li>
-				<li><a href="#entrants" data-toggle="tab">Participants <span class="gray">(<%= currentGA.getEntrants().size() %>)</span></a></li>
+				<li class="active"><a href="#commentaires" data-toggle="tab">Commentaires <span class="gray">(<%=currentGA.getComments().size()%>)</span></a></li>
+				<li><a href="#entrants" data-toggle="tab">Participants <span class="gray">(<%=currentGA.getEntrants().size()%>)</span></a></li>
 				<%
-					if(isAuthor || (userService.isUserLoggedIn() && userService.isUserAdmin())) {
+					if (isAuthor
+							|| (userService.isUserLoggedIn() && userService
+									.isUserAdmin())) {
 				%>
 				<li><a href="#signature" data-toggle="tab">Signature</a></li>
 				<%
 					}
 				%>
 				<%
-					if(!currentGA.isOpen() && currentGA.getWinners().size() == 1) {
+					if (!currentGA.isOpen() && currentGA.getWinners().size() == 1) {
 				%>
 				<li><a href="#winner" data-toggle="tab">Gagnant</a></li>
 				<%
-					} else if(!currentGA.isOpen() && currentGA.getWinners().size() > 1) {
+					} else if (!currentGA.isOpen() && currentGA.getWinners().size() > 1) {
 				%>
-				<li><a href="#winner" data-toggle="tab">Gagnants <span class="gray">(<%= currentGA.getWinners().size() %>)</span></a></li>
-				<% 
+				<li><a href="#winner" data-toggle="tab">Gagnants <span class="gray">(<%=currentGA.getWinners().size()%>)</span></a></li>
+				<%
 					}
 				%>
-				<% 
-					if(userService.isUserLoggedIn() && userService.isUserAdmin()) {
+				<%
+					if (userService.isUserLoggedIn() && userService.isUserAdmin()) {
 				%>
 				<li><a href="#admin" data-toggle="tab">Admin</a></li>
 				<%
@@ -246,130 +261,156 @@
 			<div class="tab-content">
 				<div class="tab-pane active" id="commentaires">
 					<%
-					
-					Map<Key,Comment> comments = null;
-					
-					try {
-						cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-						
-						comments = cache.getAll(currentGA.getComments());
-						
-						Collection<Key> notCachedKeys = CollectionUtils.subtract(currentGA.getComments(),comments.keySet());
-						
-						for(Key k : notCachedKeys) {
-							Comment c = CommentPersistance.getComment(k);
-							comments.put(k, c);
-							cache.put(k, c);
+						Map<Key, Comment> comments = null;
+
+						try {
+							cache = CacheManager.getInstance().getCacheFactory()
+									.createCache(Collections.emptyMap());
+
+							comments = cache.getAll(currentGA.getComments());
+
+							Collection<Key> notCachedKeys = CollectionUtils.subtract(
+									currentGA.getComments(), comments.keySet());
+
+							for (Key k : notCachedKeys) {
+								Comment c = CommentPersistance.getComment(k);
+								comments.put(k, c);
+								cache.put(k, c);
+							}
+
+						} catch (CacheException e) {
+
 						}
-						
-					} catch (CacheException e) {
-						
-					}
-					
-					Comment[] commentsArray = comments.values().toArray(new Comment[0]);
-					
-					Arrays.sort(commentsArray, new Comparator<Comment>() {
-						public int compare(Comment c1, Comment c2) {
-							return c1.getCommentDate().compareTo(c2.getCommentDate());
-						}
-					});
-					
-						for(Comment c : commentsArray) {
+
+						Comment[] commentsArray = comments.values().toArray(new Comment[0]);
+
+						Arrays.sort(commentsArray, new Comparator<Comment>() {
+							public int compare(Comment c1, Comment c2) {
+								return c1.getCommentDate().compareTo(c2.getCommentDate());
+							}
+						});
+
+						for (Comment c : commentsArray) {
 					%>
 					
-					<%= ViewTools.commentView(c) %>
+					<%=ViewTools.commentView(c)%>
 					
-					<% if(userService.isUserLoggedIn() && (c.getAuthor().equals(cpcuser.getKey()) ||  userService.isUserAdmin())) { %>
+					<%
+											if (userService.isUserLoggedIn()
+														&& (c.getAuthor().equals(cpcuser.getKey()) || userService
+																.isUserAdmin())) {
+										%>
 					
-						<a href="javascript:deleteComment(<%= c.getKey().getId() %>)" class="btn btn-mini"><i class="icon-trash"></i> Supprimer ce commentaire</a>
+						<a href="javascript:deleteComment(<%=c.getKey().getId()%>)" class="btn btn-mini"><i class="icon-trash"></i> Supprimer ce commentaire</a>
 					
-					<% } %>
+					<%
+											}
+										%>
 					<hr>
 					
 					<%
-					}
-					%>
+											}
+										%>
 
-					<% if(userService.isUserLoggedIn() && cpcuser != null && !cpcuser.isBanned()) { %>
+					<%
+						if (userService.isUserLoggedIn() && cpcuser != null
+								&& !cpcuser.isBanned()) {
+					%>
 
 					<form action="/editga" method="post">
 						<fieldset>
 							<label>Laisser un commentaire :</label>
 							<textarea class="span12" rows="5" id="comment" name="comment" required="required" data-provide="markdown"></textarea>
 							<input type="hidden" name="req" value="comment" />
-							<input type="hidden" name="gaid" value="<%= currentGA.getKey().getId() %>">
+							<input type="hidden" name="gaid" value="<%=currentGA.getKey().getId()%>">
 							
 							<button type="submit" class="btn">Commenter</button>
 						</fieldset>
 					</form>
-					<% } %>
+					<%
+						}
+					%>
 
 				</div>
 				<div class="tab-pane" id="entrants">
 					
 					<%
-					
-					Map<Key,CpcUser> entrants = null;
-					
-					try {
-						cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+											Map<Key, CpcUser> entrants = null;
+
+											try {
+												cache = CacheManager.getInstance().getCacheFactory()
+														.createCache(Collections.emptyMap());
+
+												entrants = cache.getAll(currentGA.getEntrants());
+
+												Collection<Key> notCachedKeys = CollectionUtils.subtract(
+														currentGA.getEntrants(), entrants.keySet());
+
+												for (Key k : notCachedKeys) {
+													CpcUser u = CpcUserPersistance.getCpcUserByKey(k);
+													entrants.put(k, u);
+													cache.put(k, u);
+												}
+
+											} catch (CacheException e) {
+
+											}
+
+											for (CpcUser entrant : entrants.values()) {
+										%>
 						
-						entrants = cache.getAll(currentGA.getEntrants());
-						
-						Collection<Key> notCachedKeys = CollectionUtils.subtract(currentGA.getEntrants(),entrants.keySet());
-						
-						for(Key k : notCachedKeys) {
-							CpcUser u = CpcUserPersistance.getCpcUserByKey(k);
-							entrants.put(k, u);
-							cache.put(k, u);
-						}
-						
-					} catch (CacheException e) {
-						
-					}
-					
-					
-					for(CpcUser entrant : entrants.values()) {
-						
-						%>
-						
-						<%= ViewTools.userView(entrant) %>
+						<%=ViewTools.userView(entrant)%>
 						<hr>
 						<%
-						
-					}
-					
-					%>
+							}
+						%>
 					
 					
 				</div>
 				<div class="tab-pane" id="signature">
 				<h4>Signature texte :</h4>
-				<p class="well">[url=<%= request.getRequestURL().toString() + '?' + request.getQueryString() %>]<%= currentGA.getTitle() %>[/url]</p>
-				<% if(!currentGA.getImgUrl().equals("img/game.png")) { %>
+				<p class="well">[url=<%=request.getRequestURL().toString() + '?'
+					+ request.getQueryString()%>]<%=currentGA.getTitle()%>[/url]</p>
+				<%
+					if (!currentGA.getImgUrl().equals("img/game.png")) {
+				%>
 				<h4>Signature image :</h4>
-				<p class="well">[url=<%= request.getRequestURL().toString() + '?' + request.getQueryString() %>][IMG]<%= currentGA.getImgUrl() %>[/IMG][/url]</p>
-				<% } %>
+				<p class="well">[url=<%=request.getRequestURL().toString() + '?'
+						+ request.getQueryString()%>][IMG]<%=currentGA.getImgUrl()%>[/IMG][/url]</p>
+				<%
+					}
+				%>
 				</div>
 				<div class="tab-pane" id="winner">
 				
-				<% 
-				if(!currentGA.isOpen() && currentGA.getWinners().size() > 0) {
-						for(Key k : currentGA.getWinners()) {
-				%>
-						<%= ViewTools.userView(CpcUserPersistance.getCpcUserByKey(k)) %>
-						<% if(userService.isUserLoggedIn() && userService.isUserAdmin() && !currentGA.isOpen() && currentGA.getEntrants().size() > currentGA.getWinners().size()) { %>
-							<a	href="/admin/reroll?reqtype=reroll&gaid=<%= currentGA.getKey().getId() %>&winnerToReroll=<%= k.getId() %>"
+				<%
+									if (!currentGA.isOpen() && currentGA.getWinners().size() > 0) {
+										for (Key k : currentGA.getWinners()) {
+								%>
+						<%=ViewTools.userView(CpcUserPersistance
+							.getCpcUserByKey(k))%>
+						<%
+							if (userService.isUserLoggedIn()
+											&& userService.isUserAdmin()
+											&& !currentGA.isOpen()
+											&& currentGA.getEntrants().size() > currentGA
+													.getWinners().size()) {
+						%>
+							<a	href="/admin/reroll?reqtype=reroll&gaid=<%=currentGA.getKey().getId()%>&winnerToReroll=<%=k.getId()%>"
 								class="btn btn-warning"><i class="icon-repeat icon-white"></i> Relancer le tirage</a>
-						<% } %>	
+						<%
+							}
+						%>	
 						<hr />
 										
 				<%
-						}
-					} 
-				%>
+															}
+															}
+														%>
 				</div>
-				<% if(userService.isUserLoggedIn() && userService.isUserAdmin()) { %>
+				<%
+					if (userService.isUserLoggedIn() && userService.isUserAdmin()) {
+				%>
 				<div class="tab-pane" id="admin">
 					<div class="row offset1">
 						<a class="btn btn-success" href="#modif-title"
@@ -379,16 +420,18 @@
 					</div>
 					<hr />
 					<div class="row offset1">
-						<a	href="/admin/closega?reqtype=closeGa&gaid=<%= currentGA.getKey().getId() %>"
+						<a	href="/admin/closega?reqtype=closeGa&gaid=<%=currentGA.getKey().getId()%>"
 									class="btn btn-warning"><i class="icon-trash icon-white"></i> Fermer le concours</a>
 					</div>
 					<hr />
 					<div class="row offset1">
-						<a	href="/admin/openga?reqtype=openGa&gaid=<%= currentGA.getKey().getId() %>"
+						<a	href="/admin/openga?reqtype=openGa&gaid=<%=currentGA.getKey().getId()%>"
 									class="btn btn-warning"><i class="icon-repeat icon-white"></i> Rouvrir le concours</a> (ne modifie pas la date de fin du concours)
 					</div>
 				</div>
-				<% } %>
+				<%
+					}
+				%>
 			</div>			
 		</div>
 
@@ -415,7 +458,7 @@
 					<span class="help-block">Si le jeu est disponible sur steam, le plus simple est de récupérer le lien vers l'image depuis le hub de la communauté.</span>
 				</fieldset>
 				<input type="hidden" name="req" value="changeimg" />
-				<input type="hidden" name="gaid" value="<%= currentGA.getKey().getId() %>">
+				<input type="hidden" name="gaid" value="<%=currentGA.getKey().getId()%>">
 			</form>
 		</div>
 		<div class="modal-footer">
@@ -443,10 +486,10 @@
 			<form id="descform" name="descform" action="/editga" method="post">
 				<fieldset>
 					<label>Description du jeu :</label><br />
-						<textarea class="span9 wmd-input" name="desc" id="desc" rows="15" data-provide="markdown" ><%= currentGA.getDescription() %></textarea>
+						<textarea class="span9 wmd-input" name="desc" id="desc" rows="15" data-provide="markdown" ><%=currentGA.getDescription()%></textarea>
 				</fieldset>
 				<input type="hidden" name="req" value="changedescription" />
-				<input type="hidden" name="gaid" value="<%= currentGA.getKey().getId() %>">
+				<input type="hidden" name="gaid" value="<%=currentGA.getKey().getId()%>">
 			</form>
 		</div>
 		<div class="modal-footer">
@@ -473,11 +516,11 @@
 				<fieldset>
 					<label>Titre du concours</label>
 					<input id="title" class="span4"
-						name="title" type="text" required="required" value="<%= currentGA.getTitle() %>">
+						name="title" type="text" required="required" value="<%=currentGA.getTitle()%>">
 					<span class="help-block">Admin uniquement.</span>
 				</fieldset>
 				<input type="hidden" name="req" value="changetitle" />
-				<input type="hidden" name="gaid" value="<%= currentGA.getKey().getId() %>">
+				<input type="hidden" name="gaid" value="<%=currentGA.getKey().getId()%>">
 			</form>
 		</div>
 		<div class="modal-footer">
@@ -515,7 +558,7 @@
 			if (r==true)
 			  {
 				$.post( "/editga", 
-						{ req: "deletecomment", gaid: "<%= currentGA.getKey().getId() %>", comment : commentId }
+						{ req: "deletecomment", gaid: "<%=currentGA.getKey().getId()%>", comment : commentId }
 					);
 					
 				var parent = $("#comment-" + commentId).parents(".media");

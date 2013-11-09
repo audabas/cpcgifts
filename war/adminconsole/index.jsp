@@ -29,6 +29,13 @@
 	<input type="submit" value="Valider">
 </form>
 
+<form action="/admin/deleteGA" method="get">
+	<!-- <input type="radio" name="reqtype" id="addComment" value="addComment" > <label for="addComment">Ajouter un commentaire</label> -->
+	<input type="radio" name="reqtype" id="deleteGiveaway" value="deleteGiveaway" checked="checked" > <label for="deleteGiveaway">Supprimer un giveaway</label>
+	<label>Giveaway :</label> <input type="text" name="gaid">
+	<input type="submit" value="Valider">
+</form>
+
 <h2>Update datastore model</h2>
 <ul>
 <!-- <li><a href="gaupdate1.jsp">Update giveaways winners (single->set) and description (short[String]->long[Text])</a></li> -->

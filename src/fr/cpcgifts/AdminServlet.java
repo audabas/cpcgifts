@@ -25,6 +25,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import fr.cpcgifts.model.Comment;
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
+import fr.cpcgifts.persistance.GAPersistance;
 import fr.cpcgifts.persistance.PMF;
 
 @SuppressWarnings("serial")
@@ -90,6 +91,9 @@ public class AdminServlet extends HttpServlet {
 			} else if("openGa".equals(reqType)) {
 				log.info("[ADMIN] " + cpcuser + " reopened the giveaway " + ga + ".");
 				ga.setOpen(true);
+			} else if("deleteGiveaway".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " deleted " + ga + ".");
+				GAPersistance.deleteGa(gaKey);
 			} else if("addWinner".equals(reqType)) {
 				log.info("[ADMIN] " + cpcuser + " added " + userToUpdate + " to winner list of " + ga + ".");
 				if(userToUpdate != null)

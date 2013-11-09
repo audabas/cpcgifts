@@ -17,7 +17,6 @@ import net.sf.jsr107cache.CacheManager;
 
 import com.google.appengine.api.datastore.Key;
 
-import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
 import fr.cpcgifts.persistance.GAPersistance;
 import fr.cpcgifts.persistance.PMF;
@@ -46,29 +45,9 @@ public class CleanEmptyGAServlet extends HttpServlet {
 		for(Giveaway ga : gas) {
 			
 			if(ga.getWinners().size() == 0) { //on vérifie que le giveaway est bien sans gagnants
-				ga = pm.getObjectById(Giveaway.class, ga.getKey());
+				log.info(ga + " has been cleaned up.");
 				
-				CpcUser author = pm.getObjectById(CpcUser.class, ga.getAuthor());
-				
-				author.removeGiveaway(ga.getKey());
-				
-				Set<Key> entrantsKeys = ga.getEntrants();
-				
-				for(Key k : entrantsKeys) {
-					try {
-						CpcUser cpcuser = pm.getObjectById(CpcUser.class, k);
-						cpcuser.removeEntry(ga.getKey());
-						pm.makePersistent(cpcuser);
-					} catch(javax.jdo.JDOObjectNotFoundException e) {
-						log.warning("User not found : " + e.getMessage());
-					}
-					
-				}
-
-				log.info(ga + "\n by " + author.getCpcNickname() + " [" + author.getKey().getId() + "] has been cleaned up.");
-				
-				pm.makePersistent(author);
-				pm.deletePersistent(ga);
+				GAPersistance.deleteGa(ga.getKey());
 				
 			} else { // mise à jour de la variable nbWinners
 				ga = pm.getObjectById(Giveaway.class, ga.getKey());

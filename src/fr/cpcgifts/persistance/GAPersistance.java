@@ -2,26 +2,35 @@ package fr.cpcgifts.persistance;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 
+import net.sf.jsr107cache.Cache;
+import net.sf.jsr107cache.CacheException;
+import net.sf.jsr107cache.CacheManager;
+
 import com.google.appengine.api.datastore.Key;
 
+import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
 
 public class GAPersistance {
 
-	public static Giveaway getGA(Key key) {
-		return getGA(key, true);
+	public static Giveaway getGA(Key key) throws JDOObjectNotFoundException {
+		Giveaway res = getGA(key, true);
+		return res;
 	}
 	
-	public static Giveaway getGA(Key key, boolean detached) {
+	public static Giveaway getGA(Key key, boolean detached) throws JDOObjectNotFoundException {
 		Giveaway res = null;
 
 		PersistenceManagerFactory pmf = PMF.get();
@@ -29,9 +38,13 @@ public class GAPersistance {
 
 		try {
 			res = pm.getObjectById(Giveaway.class, key);
-			res = pm.detachCopy(res);
+			if(detached)
+				res = pm.detachCopy(res);
+		} catch(JDOObjectNotFoundException e) {
+			throw e;
 		} finally {
-			pm.close();
+			if(detached)
+				pm.close();
 		}
 
 		return res;
@@ -177,6 +190,60 @@ public class GAPersistance {
 		}
 
 		return res;
+	}
+	
+	public static void deleteGa(Key key) {
+		Cache cache;
+
+		try {
+			cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+		} catch (CacheException e1) {
+			return;
+		}
+
+
+		PersistenceManagerFactory pmf = PMF.get();
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		Giveaway ga = pm.getObjectById(Giveaway.class, key);
+
+		CpcUser author = pm.getObjectById(CpcUser.class, ga.getAuthor());
+
+		author.removeGiveaway(ga.getKey());
+
+		Set<Key> entrantsKeys = ga.getEntrants();
+
+		for(Key k : entrantsKeys) {
+			try {
+				CpcUser cpcuser = pm.getObjectById(CpcUser.class, k);
+				cpcuser.removeEntry(ga.getKey());
+				pm.makePersistent(cpcuser);
+				cache.remove(k);
+			} catch(javax.jdo.JDOObjectNotFoundException e) {
+				// rien à faire, l'utilisateur à déjà été supprimé
+			}
+
+		}
+		
+		Set<Key> winnersKeys = ga.getWinners();
+		
+		for(Key k : winnersKeys) {
+			try {
+				CpcUser cpcuser = pm.getObjectById(CpcUser.class, k);
+				cpcuser.removeWon(ga.getKey());
+				pm.makePersistent(cpcuser);
+				cache.remove(k);
+			} catch(javax.jdo.JDOObjectNotFoundException e) {
+				// rien à faire, l'utilisateur à déjà été supprimé
+			}
+			
+		}
+
+		pm.makePersistent(author);
+		pm.deletePersistent(ga);
+		
+		cache.remove(author.getKey());
+		cache.remove(ga.getKey());
 	}
 
 	public static void closePm() {

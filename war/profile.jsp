@@ -1,3 +1,4 @@
+<%@page import="javax.jdo.JDOObjectNotFoundException"%>
 <%@page import="fr.cpcgifts.utils.DateTools"%>
 <%@page import="java.util.Collection"%>
 <%@page import="org.apache.commons.collections.CollectionUtils"%>
@@ -41,7 +42,12 @@
 	            
 				
 				if(profileCpcUser == null) {
-					profileCpcUser = CpcUserPersistance.getCpcUserUndetached(k);
+					try {
+						profileCpcUser = CpcUserPersistance.getCpcUserUndetached(k);
+					} catch(JDOObjectNotFoundException e) {
+						response.sendRedirect("/404.html");
+						return;
+					}
 					cache.put(k, profileCpcUser);
 				}
 				

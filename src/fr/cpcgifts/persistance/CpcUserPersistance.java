@@ -3,6 +3,7 @@ package fr.cpcgifts.persistance;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
@@ -115,7 +116,7 @@ public class CpcUserPersistance {
 		return res;
 	}
 	
-	public static CpcUser getCpcUserUndetached(Key key) {
+	public static CpcUser getCpcUserUndetached(Key key) throws JDOObjectNotFoundException {
 		CpcUser res = null;
 		
 		PersistenceManagerFactory pmf = PMF.get();
@@ -123,6 +124,8 @@ public class CpcUserPersistance {
 
 		try {
 			res = pm.getObjectById(CpcUser.class, key);
+		} catch(JDOObjectNotFoundException e) {
+			throw e;
 		} finally {
 		}
 
