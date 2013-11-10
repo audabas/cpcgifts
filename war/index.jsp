@@ -118,7 +118,27 @@
 				GAPersistance.closePm();
 		%>
 
-
+		<div class="row">
+			<div class="span4"><h4>Rechercher un concours terminé : </h4></div>
+			<div class="span8">
+				<script>
+					(function() {
+						var cx = '007220030929328207636:wx1r0szfjry';
+						var gcse = document.createElement('script');
+						gcse.type = 'text/javascript';
+						gcse.async = true;
+						gcse.src = (document.location.protocol == 'https:' ? 'https:'
+								: 'http:')
+								+ '//www.google.com/cse/cse.js?cx=' + cx;
+						var s = document.getElementsByTagName('script')[0];
+						s.parentNode.insertBefore(gcse, s);
+					})();
+				</script>
+				<gcse:search></gcse:search>
+			</div>
+		</div>
+		<hr />
+		
 		<%@ include file="footer.jspf"%>
 
 	</div>
