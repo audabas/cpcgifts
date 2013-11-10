@@ -77,7 +77,7 @@ public class AdminServlet extends HttpServlet {
 				commentToUpdateKey = KeyFactory.createKey(Comment.class.getSimpleName(),Long.parseLong(commentID.trim()));
 			}
 			
-			if(reqType.equals("reroll")) { //reroll
+			if("reroll".equals(reqType)) { //reroll
 				String winnerToRerollId = params.get("winnerToReroll")[0];
 				
 				ga.reroll(KeyFactory.createKey(CpcUser.class.getSimpleName(), Long.parseLong(winnerToRerollId)));
@@ -118,6 +118,15 @@ public class AdminServlet extends HttpServlet {
 					userToUpdate.removeEntry(gaKey);
 				if(ga != null)
 					ga.removeEntrant(userToUpdateKey);
+			} else if("removeCreated".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " removed giveaway " + gaKey + " from user " + userToUpdateKey);
+				userToUpdate.removeGiveaway(gaKey);
+			} else if("addCreated".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " added giveaway " + gaKey + " to user " + userToUpdateKey);
+				if(userToUpdate != null)
+					userToUpdate.addGiveaway(gaKey);
+				if(ga != null)
+					ga.setAuthor(userToUpdateKey);
 			} else if("removeComment".equals(reqType)) {
 				log.info("[ADMIN] " + cpcuser + " removed " + commentToUpdateKey + " from comments of " + ga + ".");
 				ga.removeComment(commentToUpdateKey);

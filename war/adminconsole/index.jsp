@@ -21,6 +21,14 @@
 	<input type="submit" value="Valider">
 </form>
 
+<form action="/admin/gaAuthor" method="get">
+	<input type="radio" name="reqtype" id="addCreated" value="addCreated" > <label for="addCreated">Ajouter un giveaway</label>
+	<input type="radio" name="reqtype" id="removeCreated" value="removeCreated" checked="checked" > <label for="removeCreated">Supprimer un giveaway</label>
+	<label>Giveaway :</label> <input type="text" name="gaid">
+	<label>Utilisateur :</label> <input type="text" name="userid">
+	<input type="submit" value="Valider">
+</form>
+
 <form action="/admin/gaComment" method="get">
 	<!-- <input type="radio" name="reqtype" id="addComment" value="addComment" > <label for="addComment">Ajouter un commentaire</label> -->
 	<input type="radio" name="reqtype" id="removeComment" value="removeComment" checked="checked" > <label for="removeComment">Supprimer un commentaire</label>
