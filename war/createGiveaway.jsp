@@ -121,7 +121,7 @@
 					</div>
 					<div class="row">
 						<input class="span2" name="endDate" id="endDate" type="text" required="required">
-						<input name="endDateParsed" id="endDateParsed" type="text" style="display: none;">
+						<input name="endDateParsed" id="endDateParsed" type="text" class="hidden" >
 					</div>
 				</div>
 			</div>
@@ -163,7 +163,7 @@
 		});
 	
 		$("#endDate").datetimepicker({
-			minDateTime: mindate,
+			minDate: mindate,
 			maxDate: 33,
 			dateFormat: "dd/mm/yy",
 			timeFormat: "HH:mm",
@@ -172,7 +172,7 @@
 			altFormat: "yy-mm-dd",
 			altTimeFormat: "HH-mm@z",
 			altSeparator: "@",
-			defaultTimezone : mindate.getTimezoneOffset()
+			showTimezone : false
 		});
 	
 		function validateForm()

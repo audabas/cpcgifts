@@ -66,9 +66,8 @@ public class GiveawayServlet extends HttpServlet {
 			c.set(Calendar.YEAR, Integer.parseInt(splittedDate[0]));
 			c.set(Calendar.MONTH, Integer.parseInt(splittedDate[1])-1);
 			c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(splittedDate[2]));
-			c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(splittedTime[0]));
+			c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(splittedTime[0]) - (Integer.parseInt(endDateSplittedStr[2])/100));
 			c.set(Calendar.MINUTE, Integer.parseInt(splittedTime[1]));
-			c.set(Calendar.MINUTE, c.get(Calendar.MINUTE) + (Integer.parseInt(endDateSplittedStr[2])/10));
 			
 			
 			Giveaway ga = new Giveaway(cpcuser.getKey(), gameName, gameDescription, imgUrl, c.getTime(), nbCopies);
