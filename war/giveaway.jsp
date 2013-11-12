@@ -117,7 +117,7 @@
 
 		<div class="row">
 			<div class="span5">
-				<img class="img-steam-game" src="<%=currentGA.getImgUrl()%>" />
+				<img alt="Steam game Image" class="img-steam-game" src="<%=currentGA.getImgUrl()%>" />
 				<%
 					if (isAuthor) {
 				%>
@@ -147,8 +147,8 @@
 				</div>
 				<div class="media">
 					<a class="pull-left"
-						href="/user?userID=<%=gaAuthor.getKey().getId()%>"> <img
-						class="media-object img-small-avatar"
+						href="/user?userID=<%=gaAuthor.getKey().getId()%>">
+						<img alt="Author avatar" class="media-object img-small-avatar"
 						src="<%=gaAuthor.getAvatarUrl()%>">
 					</a>
 					<div class="media-body">
@@ -159,7 +159,7 @@
 				</div>
 				<hr>
 
-				<img class="img-small-icon" src="img/clock.png" />
+				<img alt="Clock" class="img-small-icon" src="img/clock.png" />
 				<%
 					if (currentGA.isOpen()) {
 				%>

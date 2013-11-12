@@ -12,7 +12,7 @@ public class ViewTools {
 		String res = "<div class=\"row\">"
 				+ "<div class=\"span1\"><a href=\"/user?userID="
 				+ u.getKey().getId()
-				+ "\"><img class=\"img-rounded img-small-avatar lazy\" src=\"img/avatar.jpg\" data-original=\""
+				+ "\"><img alt=\"Avatar\" class=\"img-rounded img-small-avatar lazy\" src=\"img/avatar.jpg\" data-original=\""
 				+ u.getAvatarUrl() + "\" /></a></div>"
 				+ "<div class=\"span3\"><a  href=\"/user?userID="
 				+ u.getKey().getId() + "\">" + u.getCpcNickname()
@@ -29,7 +29,7 @@ public class ViewTools {
 				res.append("<div class=\"row-fluid\">" + "<div class=\"span2\">"
 				+ "<a href=\"/giveaway?gaID="
 				+ ga.getKey().getId()
-				+ "\" ><img class=\"img-rounded img-small-ga lazy\" src=\"img/game.png\" data-original=\""
+				+ "\" ><img alt=\"Game Image\" class=\"img-rounded img-small-ga lazy\" src=\"img/game.png\" data-original=\""
 				+ ga.getImgUrl()
 				+ "\"></a>"
 				+ "</div>"
@@ -45,31 +45,31 @@ public class ViewTools {
 		}
 		
 		res.append("</a></h2>"
-				+ "<div class=\"offset7\">"
-				+ "<div class=\"media\">"
-				+ "<a class=\"pull-left\""
+				+ "<div class=\"offset7\">\n"
+				+ "<div class=\"media\">\n"
+				+ "<a class=\"pull-left\" "
 				+ "href=\"/user?userID="
 				+ auth.getKey().getId()
-				+ "\"> <img "
-				+ "class=\"media-object img-small-avatar lazy\" src=\"img/avatar.jpg\""
+				+ "\"> <img alt=\"Avatar Image\" "
+				+ "class=\"media-object img-small-avatar lazy\" src=\"img/avatar.jpg\" "
 				+ "data-original=\""
 				+ auth.getAvatarUrl()
 				+ "\">"
-				+ "</a>"
-				+ "<div class=\"media-body\">"
+				+ "</a>\n"
+				+ "<div class=\"media-body\">\n"
 				+ "<h4 class=\"media-heading\">"
 				+ "<a href=\"/user?userID="
 				+ auth.getKey().getId()
 				+ "\">"
 				+ auth.getCpcNickname()
 				+ "</a>"
-				+ "</h4>"
-				+ "</div>"
-				+ "</div>" + "</div></div>");
+				+ "</h4>\n"
+				+ "</div>\n"
+				+ "</div>\n </div>\n </div>\n");
 
-		res.append("<div class=\"row\">");
+		res.append("<div class=\"row\">\n");
 		
-		res.append("<img class=\"img-small-icon\" src=\"img/clock.png\" /> ");
+		res.append("<img alt=\"Clock\" class=\"img-small-icon\" src=\"img/clock.png\" /> \n");
 		
 		if(ga.isOpen()) {
 			res.append(" Ouvert encore ");
@@ -79,7 +79,7 @@ public class ViewTools {
 		
 		res.append(DateTools.dateDifference(ga.getEndDate()));
 
-		res.append("</div>" + "</div>" + "</div>");
+		res.append("</div>\n" + "</div>\n" + "</div>\n");
 
 		return res.toString();
 	}
@@ -95,7 +95,7 @@ public class ViewTools {
 		res += "\">";
 
 		res += "<a href=\"/giveaway?gaID=" + ga.getKey().getId() + "\" >"
-				+ "<img class=\"img-steam-game\" src=\"" + ga.getImgUrl()
+				+ "<img alt=\"Steam game image\" class=\"img-steam-game\" src=\"" + ga.getImgUrl()
 				+ "\" alt=\"\">" + "</a>" + "<div class=\"carousel-caption\">"
 				+ "<h4>" + ga.getTitle() + "</h4>" + "<p>";
 		if(ga.getDescription().length() < 150) {
@@ -113,7 +113,7 @@ public class ViewTools {
 
 		String res = "<div class='media'>";
 		res += "<a class='pull-left' href='/user?userID=" + u.getKey().getId()
-				+ "'>" + "<img class='media-object img-small-avatar' src='"
+				+ "'>" + "<img alt=\"Avatar\" class='media-object img-small-avatar' src='"
 				+ u.getAvatarUrl() + "'>" + "</a>";
 		res += "<div class='media-body'>";
 		res += "<h6 class='media-heading'>" + "<a href='/user?userID="

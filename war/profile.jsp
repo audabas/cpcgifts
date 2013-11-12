@@ -102,7 +102,7 @@
 
 		<div class="row">
 			<div class="span3">
-				<img src="<%=profileCpcUser.getAvatarUrl()%>" />
+				<img alt="Avatar" src="<%=profileCpcUser.getAvatarUrl()%>" />
 				<%
 					if(isCurrentUser || (userService.isUserLoggedIn() && userService.isUserAdmin())) {
 				%>
