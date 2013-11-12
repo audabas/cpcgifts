@@ -29,6 +29,13 @@
 	<input type="submit" value="Valider">
 </form>
 
+<form action="/admin/userFusion" method="get">
+	<input type="radio" name="reqtype" id="userfusion" value="userfusion" checked="checked" > <label for="userfusion">Fusionner deux profils</label>
+	<label>Profil à conserver :</label> <input type="text" name="userid">
+	<label>Profil à supprimer :</label> <input type="text" name="user2id">
+	<input type="submit" value="Valider">
+</form>
+
 <form action="/admin/gaComment" method="get">
 	<!-- <input type="radio" name="reqtype" id="addComment" value="addComment" > <label for="addComment">Ajouter un commentaire</label> -->
 	<input type="radio" name="reqtype" id="removeComment" value="removeComment" checked="checked" > <label for="removeComment">Supprimer un commentaire</label>

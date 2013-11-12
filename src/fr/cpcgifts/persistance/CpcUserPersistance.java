@@ -11,6 +11,7 @@ import javax.jdo.Query;
 import com.google.appengine.api.datastore.Key;
 
 import fr.cpcgifts.model.CpcUser;
+import fr.cpcgifts.model.Giveaway;
 
 public class CpcUserPersistance {
 
@@ -151,6 +152,42 @@ public class CpcUserPersistance {
 		}
 		
 		return res;
+	}
+	
+	/**
+	 * Fusionne les giveaways de deux profils en un seul. 
+	 */
+	public static void cpcusersFusion(Key profileToKeep, Key profileToDelete) {
+		PersistenceManagerFactory pmf = PMF.get();
+		PersistenceManager pm = pmf.getPersistenceManager();
+		
+		CpcUser userToKeep = pm.getObjectById(CpcUser.class,profileToKeep);
+		CpcUser userToDelete = pm.getObjectById(CpcUser.class, profileToDelete);
+		
+		userToKeep.addGiveaways(userToDelete.getGiveaways());
+		for(Key k : userToDelete.getGiveaways()) {
+			Giveaway ga = pm.getObjectById(Giveaway.class, k);
+			ga.setAuthor(profileToKeep);
+		}
+		
+		userToKeep.addEntries(userToDelete.getEntries());
+		for(Key k : userToDelete.getEntries()) {
+			Giveaway ga = pm.getObjectById(Giveaway.class, k);
+			ga.removeEntrant(profileToDelete);
+			ga.addEntrant(profileToKeep);
+		}
+		
+		userToKeep.addWon(userToDelete.getWon());
+		for(Key k : userToDelete.getWon()) {
+			Giveaway ga = pm.getObjectById(Giveaway.class, k);
+			ga.removeWinner(profileToDelete);
+			ga.addWinner(profileToKeep);
+		}
+		
+		pm.makePersistent(userToKeep);
+		pm.deletePersistent(userToDelete);
+		
+		pm.close();
 	}
 
 	public static void closePm() {

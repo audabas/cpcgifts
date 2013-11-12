@@ -25,6 +25,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import fr.cpcgifts.model.Comment;
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
+import fr.cpcgifts.persistance.CpcUserPersistance;
 import fr.cpcgifts.persistance.GAPersistance;
 import fr.cpcgifts.persistance.PMF;
 
@@ -50,6 +51,7 @@ public class AdminServlet extends HttpServlet {
 			Map<String, String[]> params = req.getParameterMap();
 			
 			String reqType = params.get("reqtype")[0];
+			boolean needCacheClear = false;
 			
 			Giveaway ga = null;
 			Key gaKey = null;
@@ -136,6 +138,12 @@ public class AdminServlet extends HttpServlet {
 			} else if("unbanuser".equals(reqType)) {
 				log.info("[ADMIN] " + cpcuser + " unbanned " + userToUpdate + ".");
 				userToUpdate.setBanned(false);
+			} else if("userfusion".equals(reqType)) {
+				String userToDeleteID = params.get("user2id")[0];
+				Key userToDeleteKey = KeyFactory.createKey(CpcUser.class.getSimpleName(),Long.parseLong(userToDeleteID.trim()));
+				log.info("[ADMIN] " + cpcuser + " fusionned " + userToUpdate + " with " + userToDeleteKey + ".");
+				CpcUserPersistance.cpcusersFusion(userToUpdateKey, userToDeleteKey);
+				needCacheClear = true;
 			}
 			
 			if(ga != null) {
@@ -153,7 +161,9 @@ public class AdminServlet extends HttpServlet {
 	            if(userToUpdate != null) {
 	            	cache.remove(userToUpdate.getKey());
 	            }
-	            
+	            if(needCacheClear) {
+	            	cache.clear();
+	            }
 				
 	        } catch (CacheException e) {
 	        	//rien

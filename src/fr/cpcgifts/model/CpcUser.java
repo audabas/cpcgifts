@@ -1,6 +1,7 @@
 package fr.cpcgifts.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -160,6 +161,13 @@ public class CpcUser implements Serializable {
 
 	}
 	
+	public boolean addGiveaways(Collection<Key> gas) {
+		getGiveaways();
+		
+		return this.giveawaySet.addAll(gas);
+
+	}
+	
 	public boolean removeGiveaway(Key ga) {
 		getGiveaways();
 		
@@ -184,6 +192,13 @@ public class CpcUser implements Serializable {
 
 	}
 	
+	public boolean addEntries(Collection<Key> keys) {
+		getEntries();
+		
+		return this.entrySet.addAll(keys);
+
+	}
+	
 	public boolean removeEntry(Key k) {
 		getEntries();
 		
@@ -205,6 +220,13 @@ public class CpcUser implements Serializable {
 		getWon();
 		
 		return this.wonSet.add(k);
+
+	}
+	
+	public boolean addWon(Collection<Key> keys) {
+		getWon();
+		
+		return this.wonSet.addAll(keys);
 
 	}
 	
