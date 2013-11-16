@@ -1,5 +1,9 @@
 package fr.cpcgifts.utils;
 
+import java.util.logging.Logger;
+
+import javax.jdo.JDOObjectNotFoundException;
+
 import fr.cpcgifts.model.Comment;
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
@@ -7,6 +11,8 @@ import fr.cpcgifts.persistance.CpcUserPersistance;
 
 public class ViewTools {
 
+	private static final Logger log = Logger.getLogger(ViewTools.class.getName());
+	
 	public static String userView(CpcUser u) {
 
 		String res = "<div class=\"row\">"
@@ -22,8 +28,14 @@ public class ViewTools {
 	}
 
 	public static String gaView(Giveaway ga) {
-
-		CpcUser auth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
+		CpcUser auth = null;
+		
+		try {
+			auth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
+		} catch (JDOObjectNotFoundException e) {
+			log.severe("ViewTools : author not found : " + ga.getAuthor().getId() + " on giveaway " + ga.getKey().getId());
+			throw e;
+		}
 
 		StringBuilder res = new StringBuilder(); 
 				res.append("<div class=\"row-fluid\">" + "<div class=\"span2\">"
@@ -109,7 +121,15 @@ public class ViewTools {
 	}
 
 	public static String commentView(Comment c) {
-		CpcUser u = CpcUserPersistance.getUserFromCache(c.getAuthor());
+		CpcUser u = null;
+		
+		try {
+			u = CpcUserPersistance.getUserFromCache(c.getAuthor());
+		} catch (JDOObjectNotFoundException e) {
+			log.severe("ViewTools : author not found : " + c.getAuthor().getId() + " on comment " + c.getKey().getId() + " from giveaway " + c.getGiveaway().getId());
+			throw e;
+		}
+		
 
 		String res = "<div class='media'>";
 		res += "<a class='pull-left' href='/user?userID=" + u.getKey().getId()
