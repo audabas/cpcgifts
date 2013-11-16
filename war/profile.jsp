@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="javax.jdo.JDOObjectNotFoundException"%>
 <%@page import="fr.cpcgifts.utils.DateTools"%>
 <%@page import="java.util.Collection"%>
@@ -5,15 +6,12 @@
 <%@page import="java.util.Map"%>
 <%@page import="net.sf.jsr107cache.CacheException"%>
 <%@page import="java.util.Collections"%>
-<%@page import="net.sf.jsr107cache.CacheManager"%>
-<%@page import="net.sf.jsr107cache.Cache"%>
 <%@page import="java.util.List"%>
 <%@page import="fr.cpcgifts.persistance.GAPersistance"%>
 <%@page import="fr.cpcgifts.utils.ViewTools"%>
 <%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@page import="com.google.appengine.api.datastore.KeyFactory"%>
 <%@page import="com.google.appengine.api.datastore.Key"%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
@@ -24,7 +22,6 @@
 %>
 
 <%
-	Cache cache;
 	CpcUser profileCpcUser = null;
 
 	String suid = request.getParameter("userID");
@@ -36,25 +33,11 @@
 			Key k = KeyFactory.createKey("CpcUser", uid);
 			
 			try {
-	            cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-	                        
-	            profileCpcUser = (CpcUser) cache.get(k);
-	            
-				
-				if(profileCpcUser == null) {
-					try {
-						profileCpcUser = CpcUserPersistance.getCpcUserUndetached(k);
-					} catch(JDOObjectNotFoundException e) {
-						response.sendRedirect("/404.html");
-						return;
-					}
-					cache.put(k, profileCpcUser);
-				}
-				
-	        } catch (CacheException e) {
-	        	profileCpcUser = CpcUserPersistance.getCpcUserUndetached(k);
-	        }
-			
+				profileCpcUser = CpcUserPersistance.getUserFromCache(k);
+			} catch(JDOObjectNotFoundException e) {
+				response.sendRedirect("/404.html");
+				return;
+			}
 		}
 	}
 
@@ -203,26 +186,9 @@
 			<div class="tab-content">
 				<div id="created" class="tab-pane">
 					<%
-					Map<Key,Giveaway> gas = null;
+					Map<Key,Giveaway> gas = GAPersistance.getAllFromCache(profileCpcUser.getGiveaways());
 					
-					try {
-						cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-						
-						gas = cache.getAll(profileCpcUser.getGiveaways());
-						
-						Collection<Key> notCachedKeys = CollectionUtils.subtract(profileCpcUser.getGiveaways(),gas.keySet());
-						
-						for(Key k : notCachedKeys) {
-							Giveaway ga = GAPersistance.getGA(k);
-							gas.put(k, ga);
-							cache.put(k, ga);
-						}
-						
-					} catch (CacheException e) {
-						
-					}
-					
-						for(Giveaway ga : DateTools.sortGiveawaysByEndDate(gas)) {
+					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(gas)) {
 					%>
 		
 					<%=ViewTools.gaView(ga)%>
@@ -236,25 +202,7 @@
 		
 					<%
 					
-					Map<Key,Giveaway> entries = null;
-					
-					try {
-						cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-						
-						entries = cache.getAll(profileCpcUser.getEntries());
-						
-						Collection<Key> notCachedKeys = CollectionUtils.subtract(profileCpcUser.getEntries(),entries.keySet());
-						
-						for(Key k : notCachedKeys) {
-							Giveaway ga = GAPersistance.getGA(k);
-							entries.put(k, ga);
-							cache.put(k, ga);
-						}
-						
-					} catch (CacheException e) {
-						
-					}
-						
+					Map<Key,Giveaway> entries = GAPersistance.getAllFromCache(profileCpcUser.getEntries());						
 													
 					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(entries)) {
 					%>
@@ -269,25 +217,7 @@
 				<div id="won" class="tab-pane" style="display: none">
 		
 					<%
-					Map<Key,Giveaway> won = null;
-					
-					try {
-						cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-						
-						won = cache.getAll(profileCpcUser.getWon());
-						
-						Collection<Key> notCachedKeys = CollectionUtils.subtract(profileCpcUser.getWon(),won.keySet());
-						
-						for(Key k : notCachedKeys) {
-							Giveaway ga = GAPersistance.getGA(k);
-							won.put(k, ga);
-							cache.put(k, ga);
-						}
-						
-					} catch (CacheException e) {
-						
-					}
-					
+					Map<Key,Giveaway> won = GAPersistance.getAllFromCache(profileCpcUser.getWon());					
 													
 					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(won)) {
 					%>

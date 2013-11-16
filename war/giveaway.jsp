@@ -1,9 +1,8 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="javax.jdo.JDOObjectNotFoundException"%>
 <%@page import="java.util.Comparator"%>
 <%@page import="java.util.Arrays"%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="java.util.Collection"%>
-<%@page import="org.apache.commons.collections.CollectionUtils"%>
 <%@page import="java.util.Map"%>
 <%@page import="fr.cpcgifts.model.Comment"%>
 <%@page import="fr.cpcgifts.persistance.CommentPersistance"%>
@@ -24,7 +23,6 @@
 
 
 <%
-	Cache cache;
 	Giveaway currentGA = null;
 
 	String gaid = request.getParameter("gaID");
@@ -36,47 +34,22 @@
 			Key k = KeyFactory.createKey("Giveaway", gid);
 
 			try {
-				cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-
-				currentGA = (Giveaway) cache.get(k);
-
-				if (currentGA == null) {
-					try {
-						currentGA = GAPersistance.getGA(k);
-					} catch (JDOObjectNotFoundException e) {
-						response.sendRedirect("/404.html");
-						return;
-					}
-					cache.put(k, currentGA);
-				}
-			} catch (CacheException e) {
-				currentGA = GAPersistance.getGA(k);
+				currentGA = GAPersistance.getGAFromCache(k);
+			} catch (JDOObjectNotFoundException e) {
+				response.sendRedirect("/404.html");
+				return;
 			}
 
 		}
 	}
-
-	if (currentGA == null) {
+	if(currentGA == null) {
 		response.sendRedirect("/404.html");
 		return;
 	}
 
-	CpcUser gaAuthor = null;
+	CpcUser gaAuthor = CpcUserPersistance.getUserFromCache(currentGA.getAuthor());
 
-	try {
-		cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-
-		gaAuthor = (CpcUser) cache.get(currentGA.getAuthor());
-
-		if (gaAuthor == null) {
-			gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA
-					.getAuthor());
-			cache.put(currentGA.getAuthor(), gaAuthor);
-		}
-
-	} catch (CacheException e) {
-		gaAuthor = CpcUserPersistance.getCpcUserByKey(currentGA.getAuthor());
-	}
+	
 %>
 
 <!DOCTYPE html>
@@ -261,26 +234,7 @@
 			<div class="tab-content">
 				<div class="tab-pane active" id="commentaires">
 					<%
-						Map<Key, Comment> comments = null;
-
-						try {
-							cache = CacheManager.getInstance().getCacheFactory()
-									.createCache(Collections.emptyMap());
-
-							comments = cache.getAll(currentGA.getComments());
-
-							Collection<Key> notCachedKeys = CollectionUtils.subtract(
-									currentGA.getComments(), comments.keySet());
-
-							for (Key k : notCachedKeys) {
-								Comment c = CommentPersistance.getComment(k);
-								comments.put(k, c);
-								cache.put(k, c);
-							}
-
-						} catch (CacheException e) {
-
-						}
+						Map<Key, Comment> comments = CommentPersistance.getAllFromCache(currentGA.getComments());
 
 						Comment[] commentsArray = comments.values().toArray(new Comment[0]);
 
@@ -296,25 +250,22 @@
 					<%=ViewTools.commentView(c)%>
 					
 					<%
-											if (userService.isUserLoggedIn()
-														&& (c.getAuthor().equals(cpcuser.getKey()) || userService
-																.isUserAdmin())) {
-										%>
+							if (userService.isUserLoggedIn() && (c.getAuthor().equals(cpcuser.getKey()) || userService.isUserAdmin())) {
+					%>
 					
 						<a href="javascript:deleteComment(<%=c.getKey().getId()%>)" class="btn btn-mini"><i class="icon-trash"></i> Supprimer ce commentaire</a>
 					
 					<%
-											}
-										%>
+						}
+					%>
 					<hr>
 					
 					<%
-											}
-										%>
+						}
+					%>
 
 					<%
-						if (userService.isUserLoggedIn() && cpcuser != null
-								&& !cpcuser.isBanned()) {
+						if (userService.isUserLoggedIn() && cpcuser != null && !cpcuser.isBanned()) {
 					%>
 
 					<form action="/editga" method="post">
@@ -335,29 +286,10 @@
 				<div class="tab-pane" id="entrants">
 					
 					<%
-											Map<Key, CpcUser> entrants = null;
-
-											try {
-												cache = CacheManager.getInstance().getCacheFactory()
-														.createCache(Collections.emptyMap());
-
-												entrants = cache.getAll(currentGA.getEntrants());
-
-												Collection<Key> notCachedKeys = CollectionUtils.subtract(
-														currentGA.getEntrants(), entrants.keySet());
-
-												for (Key k : notCachedKeys) {
-													CpcUser u = CpcUserPersistance.getCpcUserByKey(k);
-													entrants.put(k, u);
-													cache.put(k, u);
-												}
-
-											} catch (CacheException e) {
-
-											}
-
-											for (CpcUser entrant : entrants.values()) {
-										%>
+							Map<Key, CpcUser> entrants = CpcUserPersistance.getAllFromCache(currentGA.getEntrants()); 
+							
+							for (CpcUser entrant : entrants.values()) {
+						%>
 						
 						<%=ViewTools.userView(entrant)%>
 						<hr>
@@ -387,8 +319,7 @@
 									if (!currentGA.isOpen() && currentGA.getWinners().size() > 0) {
 										for (Key k : currentGA.getWinners()) {
 								%>
-						<%=ViewTools.userView(CpcUserPersistance
-							.getCpcUserByKey(k))%>
+						<%=ViewTools.userView(CpcUserPersistance.getUserFromCache(k))%>
 						<%
 							if (userService.isUserLoggedIn()
 											&& userService.isUserAdmin()

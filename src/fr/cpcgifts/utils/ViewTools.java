@@ -23,7 +23,7 @@ public class ViewTools {
 
 	public static String gaView(Giveaway ga) {
 
-		CpcUser auth = CpcUserPersistance.getCpcUserByKey(ga.getAuthor());
+		CpcUser auth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
 
 		StringBuilder res = new StringBuilder(); 
 				res.append("<div class=\"row-fluid\">" + "<div class=\"span2\">"
@@ -109,7 +109,7 @@ public class ViewTools {
 	}
 
 	public static String commentView(Comment c) {
-		CpcUser u = CpcUserPersistance.getCpcUserByKey(c.getAuthor());
+		CpcUser u = CpcUserPersistance.getUserFromCache(c.getAuthor());
 
 		String res = "<div class='media'>";
 		res += "<a class='pull-left' href='/user?userID=" + u.getKey().getId()

@@ -2,6 +2,7 @@ package fr.cpcgifts.persistance;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,18 +19,39 @@ import net.sf.jsr107cache.Cache;
 import net.sf.jsr107cache.CacheException;
 import net.sf.jsr107cache.CacheManager;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.map.HashedMap;
+
 import com.google.appengine.api.datastore.Key;
 
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
 
+/**
+ * Utilitaire permettant de récupérer des entités de type giveaway depuis le datastore.
+ * @author bastien
+ *
+ */
 public class GAPersistance {
 
+	/**
+	 * Récupère un giveaway à partir de sa clé.
+	 * @param key La clé du giveaway demandé.
+	 * @return	Le giveaway correspondant.
+	 * @throws JDOObjectNotFoundException si la clé ne correspond à aucune entité dans le datastore.
+	 */
 	public static Giveaway getGA(Key key) throws JDOObjectNotFoundException {
 		Giveaway res = getGA(key, true);
 		return res;
 	}
 	
+	/**
+	 * Récupère un giveaway à partir de sa clé.
+	 * @param key La clé du giveaway demandé.
+	 * @param detached Indique si l'objet doit être détachée du persistance manager ou non.
+	 * @return	Le giveaway correspondant.
+	 * @throws JDOObjectNotFoundException si la clé ne correspond à aucune entité dans le datastore.
+	 */
 	public static Giveaway getGA(Key key, boolean detached) throws JDOObjectNotFoundException {
 		Giveaway res = null;
 
@@ -49,7 +71,70 @@ public class GAPersistance {
 
 		return res;
 	}
+	
+	/**
+	 * Récupère un giveaway depuis le cache s'il y est, le place dans le cache sinon.
+	 * @param key La clé du giveaway à récupérer.
+	 * @return Le giveaway demandé.
+	 * @throws JDOObjectNotFoundException si la clé ne correspond à aucune entité dans le datastore.
+	 */
+	public static Giveaway getGAFromCache(Key key) throws JDOObjectNotFoundException {
+		Giveaway res = null;
+		
+		try {
+			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
 
+			res = (Giveaway) cache.get(key);
+
+			if (res == null) { // s'il n'est pas dans le cache, on le met en cache
+				res = getGA(key);
+				cache.put(key, res);
+			}
+		} catch (CacheException e) {
+			res = getGA(key);
+		}
+		
+		return res;
+	}
+	
+	/**
+	 * Récupère un ensemble de giveaways depuis le cache. Les place dans le cache s'ils n'y sont pas déjà.
+	 * @param keys
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<Key, Giveaway> getAllFromCache(Collection<Key> keys) {
+		Map<Key, Giveaway> res = null;
+		
+		try {
+			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+
+			res = cache.getAll(keys);
+
+			Collection<Key> notCachedKeys = CollectionUtils.subtract(keys, res.keySet());
+
+			for (Key k : notCachedKeys) {
+				Giveaway ga = getGAFromCache(k);
+				res.put(k, ga);
+			}
+
+		} catch (CacheException e) {
+			List<Giveaway> gas = getGAs(new ArrayList<>(keys));
+			res = new HashedMap();
+			
+			for(Giveaway ga : gas) {
+				res.put(ga.getKey(), ga);
+			}
+		}
+		
+		return res;
+	}
+
+	/**
+	 * Récupère une liste de giveaways depuis le datastore.
+	 * @param keys
+	 * @return 
+	 */
 	public static List<Giveaway> getGAs(List<Key> keys) {
 		List<Giveaway> res = new ArrayList<Giveaway>();
 
@@ -75,6 +160,10 @@ public class GAPersistance {
 		return res;
 	}
 
+	/**
+	 * Récupère tout les giveaways du datastore.
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static List<Giveaway> getAllGA() {
 		List<Giveaway> res;
@@ -100,6 +189,11 @@ public class GAPersistance {
 		return getOpenGAs(true);
 	}
 
+	/**
+	 * Récupère la liste des giveaways encore ouverts.
+	 * @param detached
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static List<Giveaway> getOpenGAs(boolean detached) {
 		List<Giveaway> res;
@@ -162,6 +256,11 @@ public class GAPersistance {
 	}
 	
 
+	/**
+	 * Récupère la liste des giveaways ouverts dont la date de fermeture est passée.
+	 * @param detached
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static List<Giveaway> getOpenGAsToClose(boolean detached) {
 		List<Giveaway> res;
@@ -192,6 +291,10 @@ public class GAPersistance {
 		return res;
 	}
 	
+	/**
+	 * Supprime un giveaway du datastore en retirant les liens vers celui-ci dans les profils de l'auteur et des participants.
+	 * @param key
+	 */
 	public static void deleteGa(Key key) {
 		Cache cache;
 
@@ -246,6 +349,9 @@ public class GAPersistance {
 		cache.remove(ga.getKey());
 	}
 
+	/**
+	 * Ferme le persistanceManager utilisé par cette classe.
+	 */
 	public static void closePm() {
 		PersistenceManagerFactory pmf = PMF.get();
 		PersistenceManager pm = pmf.getPersistenceManager();

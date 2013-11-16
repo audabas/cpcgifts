@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="com.google.appengine.api.memcache.jsr107cache.GCacheFactory"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
@@ -9,7 +10,6 @@
 <%@page import="fr.cpcgifts.utils.ViewTools"%>
 <%@page import="fr.cpcgifts.persistance.GAPersistance"%>
 <%@page import="fr.cpcgifts.model.Giveaway"%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
@@ -55,7 +55,7 @@
 	List<Giveaway> opengas;
 	
 	Map props = new HashMap();
-    props.put(GCacheFactory.EXPIRATION_DELTA, 120); // on garde la liste en cache 2 minutes
+    props.put(GCacheFactory.EXPIRATION_DELTA, 300); // on garde la liste en cache 5 minutes
 	
 	try {
         cache = CacheManager.getInstance().getCacheFactory().createCache(props);

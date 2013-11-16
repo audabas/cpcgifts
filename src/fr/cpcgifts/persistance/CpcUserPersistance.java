@@ -1,20 +1,40 @@
 package fr.cpcgifts.persistance;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 
+import net.sf.jsr107cache.Cache;
+import net.sf.jsr107cache.CacheException;
+import net.sf.jsr107cache.CacheManager;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.map.HashedMap;
+
 import com.google.appengine.api.datastore.Key;
 
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
 
+/**
+ * Utilitaire permettant de récupérer des entités de type CpcUser depuis le datastore.
+ * @author bastien
+ *
+ */
 public class CpcUserPersistance {
 
+	/**
+	 * Récupère un utilisateur dans le datastore grâce à son id google.
+	 * @param id L'identifiant google de l'utilisateur à récupérer.
+	 * @return
+	 */
 	public static CpcUser getCpcUser(String id) {
 		CpcUser res = null;
 		
@@ -43,6 +63,11 @@ public class CpcUserPersistance {
 		return res;
 	}
 	
+	/**
+	 * Récupère un utilisateur grâce à sa clé.
+	 * @param key
+	 * @return
+	 */
 	public static CpcUser getCpcUserByKey(Key key) {
 		CpcUser res = null;
 		
@@ -59,6 +84,59 @@ public class CpcUserPersistance {
 		return res;
 	}
 	
+	/**
+	 * @see getCpcUserByKey
+	 * @param key
+	 * @return
+	 * @throws JDOObjectNotFoundException
+	 */
+	public static CpcUser getCpcUserUndetached(Key key) throws JDOObjectNotFoundException {
+		CpcUser res = null;
+		
+		PersistenceManagerFactory pmf = PMF.get();
+		PersistenceManager pm = pmf.getPersistenceManager();
+	
+		try {
+			res = pm.getObjectById(CpcUser.class, key);
+		} catch(JDOObjectNotFoundException e) {
+			throw e;
+		} finally {
+		}
+	
+		return res;
+	}
+	
+	/**
+	 * Récupère un utilisateur depuis le cache s'il y est, le place dans le cache sinon.
+	 * @param key La clé de l'utilisateur à récupérer.
+	 * @return Le giveaway demandé.
+	 * @throws JDOObjectNotFoundException si la clé ne correspond à aucune entité dans le datastore.
+	 */
+	public static CpcUser getUserFromCache(Key key) throws JDOObjectNotFoundException {
+		CpcUser res = null;
+		
+		try {
+			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+
+			res = (CpcUser) cache.get(key);
+
+			if (res == null) { // s'il n'est pas dans le cache, on le met en cache
+				res = getCpcUserByKey(key);
+				cache.put(key, res);
+			}
+		} catch (CacheException e) {
+			res = getCpcUserByKey(key);
+		}
+		
+		return res;
+	}
+
+	/**
+	 * Récupère un utilisateur à l'aide de son id sur le forum canard pc.
+	 * @param cpcProfileId L'identifiant de l'utilisateur sur le forum canard pc.
+	 * @param detached
+	 * @return
+	 */
 	public static CpcUser getCpcUserByCpcProfileId(String cpcProfileId, boolean detached) {
 		CpcUser res = null;
 		
@@ -87,6 +165,45 @@ public class CpcUserPersistance {
 		return res;
 	}
 	
+	/**
+	 * Récupère un ensemble d'utilisateurs depuis le cache. Les place dans le cache s'ils n'y sont pas déjà.
+	 * @param keys
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<Key, CpcUser> getAllFromCache(Collection<Key> keys) {
+		Map<Key, CpcUser> res = null;
+		
+		try {
+			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+
+			res = cache.getAll(keys);
+
+			Collection<Key> notCachedKeys = CollectionUtils.subtract(keys, res.keySet());
+
+			for (Key k : notCachedKeys) {
+				CpcUser u = getUserFromCache(k);
+				res.put(k, u);
+			}
+
+		} catch (CacheException e) {
+			List<CpcUser> cpcUsers = getCpcUsers(new ArrayList<>(keys), true);
+			res = new HashedMap();
+			
+			for(CpcUser u : cpcUsers) {
+				res.put(u.getKey(), u);
+			}
+		}
+		
+		return res;
+	}
+	
+	/**
+	 * Récupère une liste d'utilisateurs à partir de leur clés.
+	 * @param keys
+	 * @param detached
+	 * @return
+	 */
 	public static List<CpcUser> getCpcUsers(List<Key> keys, boolean detached) {
 		List<CpcUser> res = new ArrayList<CpcUser>();
 
@@ -117,22 +234,10 @@ public class CpcUserPersistance {
 		return res;
 	}
 	
-	public static CpcUser getCpcUserUndetached(Key key) throws JDOObjectNotFoundException {
-		CpcUser res = null;
-		
-		PersistenceManagerFactory pmf = PMF.get();
-		PersistenceManager pm = pmf.getPersistenceManager();
-
-		try {
-			res = pm.getObjectById(CpcUser.class, key);
-		} catch(JDOObjectNotFoundException e) {
-			throw e;
-		} finally {
-		}
-
-		return res;
-	}
-	
+	/**
+	 * Récupère tout les utilisateurs enregistrés dans le datastore.
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static List<CpcUser> getAllUsers() {
 		List<CpcUser> res;
@@ -190,6 +295,9 @@ public class CpcUserPersistance {
 		pm.close();
 	}
 
+	/**
+	 * Ferme le persistance manager utilisé par cette instance.
+	 */
 	public static void closePm() {
 		PersistenceManagerFactory pmf = PMF.get();
 		PersistenceManager pm = pmf.getPersistenceManager();
