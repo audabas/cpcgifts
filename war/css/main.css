@@ -22,6 +22,12 @@
 	max-height: 25px;
 }
 
+.search-button > img {
+	max-height: 35px;
+	position: relative;
+	top : -5px;
+}
+
 .xx-small {
 	font-size: xx-small;
 }

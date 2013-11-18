@@ -85,7 +85,8 @@
 						<h4>Url de l'image (460x215 pixels)</h4>
 					</div>
 					<div class="row">
-						<input class="span10" name="imgUrl" id="imgUrl" type="text">
+						<input class="span9" name="imgUrl" id="imgUrl" type="text">
+						<a href="javascript:imgSearch()" class="search-button" ><img alt="Rechercher sur google" title="Rechercher sur google" src="/img/search.png" /></a>
 						<span class="help-block well well-small">Les images de tailles différentes à 460x215 sont acceptées mais peuvent mal s'afficher.</span>
 						<span class="help-block well well-small">Si le jeu est disponible sur steam, le plus simple est de récupérer le lien vers l'image depuis le hub de la communauté (<a href="/aidesteamimg.html"
 					role="button" data-target="#" data-toggle="modal"><i class="icon-question-sign"></i>
@@ -207,6 +208,25 @@
 				alert("Vous devez offrir au moins une copie du jeu");
 				return false;
 			}
+			
+		}
+		
+		function imgSearch() {
+			var gameName = $("#gameName").val();
+			gameName = gameName.replace(/-+/g, '');
+			gameName = gameName.replace(/\(.+\)/g, '');
+			gameName = gameName.replace(/\[.+\]/g, '');
+			gameName = gameName.trim();
+			gameName = gameName.replace(/ +/g, '+');
+			
+			if(readCookie("firstImageSearch") != "false") {
+				alert('Une recherche d\'image google va être lancée dans un nouvel onglet.\nCopiez l\'adresse de l\'image choisie et collez le dans le champ "Url de l\'image".');
+				console.log(readCookie("firstImageSearch"));
+			}
+			
+			createCookie("firstImageSearch","false",15);
+			
+			window.open('http://www.google.com/search?q='+ gameName +'&tbs=isz:ex,iszw:460,iszh:215&tbm=isch');
 			
 		}
 		
