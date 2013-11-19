@@ -1,4 +1,3 @@
-<%@page import="fr.cpcgifts.utils.Constants"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="javax.jdo.JDOObjectNotFoundException"%>
 <%@page import="java.util.Comparator"%>
@@ -178,7 +177,7 @@
 		<hr>
 
 		<div class="row">
-			<textarea class='hidden' id='custom-rules-text'><%= currentGA.getRules().length() > 0 ? currentGA.getRules() : Constants.DEFAULT_RULES %></textarea>
+			<textarea class='hidden' id='custom-rules-text'><%= currentGA.getRules() %></textarea>
 			<div class="offset1 span9 alert alert-warning" id="custom-rules">
 			</div>
 		</div>
