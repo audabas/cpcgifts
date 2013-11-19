@@ -1,3 +1,4 @@
+<%@page import="fr.cpcgifts.utils.Constants"%>
 <%@page import="com.google.appengine.api.datastore.KeyFactory"%>
 <%@page import="com.google.appengine.api.datastore.Key"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
@@ -108,6 +109,13 @@
 						<textarea class="span10" name="gameDescription" id="gameDescription" rows="15" data-provide="markdown" ></textarea>
 						<span id="charLimitHelp" class="help-block well well-small" style="display: none;">5000 caractères maximum. Il vous reste <span id="descLimit">500</span> caractères. </span>
 						<span class="help-block well well-small">Vous pouvez utiliser la syntaxe <a href="http://fr.wikipedia.org/wiki/Markdown">Markdown</a>.</span>
+					</div>
+					<div class="row">
+						<h4><input type="checkbox" id="custom-rules-checkbox">&nbsp;&nbsp; Règles personnalisées</h4>
+					</div>
+					<div class="row hidden" id="custom-rules-row">
+						<textarea class="span10" name="customRules" id="customRules" rows="10" data-provide="markdown" ><%= Constants.DEFAULT_RULES %></textarea>
+						<span class="help-block well well-small">Les règles ne peuvent plus être modifiées une fois le concours crée.</span>
 					</div>
 				</div>
 			</div>
@@ -227,8 +235,15 @@
 			createCookie("firstImageSearch","false",15);
 			
 			window.open('http://www.google.com/search?q='+ gameName +'&tbs=isz:ex,iszw:460,iszh:215&tbm=isch');
-			
 		}
+
+		$("#custom-rules-checkbox").click(function () {
+			if($(this).prop('checked')) {
+				$("#custom-rules-row").removeClass("hidden");
+			} else {
+				$("#custom-rules-row").addClass("hidden");
+			}
+		});
 		
 	</script>
 	

@@ -1,3 +1,4 @@
+<%@page import="fr.cpcgifts.utils.Constants"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="javax.jdo.JDOObjectNotFoundException"%>
 <%@page import="java.util.Comparator"%>
@@ -83,7 +84,7 @@
 	<%
 			boolean isAuthor = cpcuser != null
 					&& cpcuser.getKey().equals(gaAuthor.getKey());
-		%>
+	%>
 
 	<div class="container">
 
@@ -151,23 +152,23 @@
 				<%=DateTools.dateDifference(currentGA.getEndDate())%>
 				
 				<%
-									if (currentGA.isOpen() && !isAuthor && userService.isUserLoggedIn()
-											&& !cpcuser.isBanned()) {
-										if (currentGA.getEntrants().contains(cpcuser.getKey())) {
-								%>
+					if (currentGA.isOpen() && !isAuthor && userService.isUserLoggedIn()
+							&& !cpcuser.isBanned()) {
+						if (currentGA.getEntrants().contains(cpcuser.getKey())) {
+				%>
 						
 						<a
 						href="/enterga?reqtype=exit&gaid=<%=currentGA.getKey().getId()%>"
 						 style="margin-left: 250px" class="btn btn-danger">Ne plus participer</a>
 						
 						<%
-													} else {
-												%>
+							} else {
+						%>
 				<a
 					href="/enterga?reqtype=enter&gaid=<%=currentGA.getKey().getId()%>"
 					style="margin-left: 250px" class="btn btn-success">Participer</a>
 				<%
-					}
+						}
 					}
 				%>
 
@@ -175,6 +176,12 @@
 		</div>
 
 		<hr>
+
+		<div class="row">
+			<textarea class='hidden' id='custom-rules-text'><%= currentGA.getRules().length() > 0 ? currentGA.getRules() : Constants.DEFAULT_RULES %></textarea>
+			<div class="offset1 span9 alert alert-warning" id="custom-rules">
+			</div>
+		</div>
 
 		<div class="row">
 			<div class="span10 offset1" id="description">
@@ -185,8 +192,8 @@
 		
 		
 		<%
-							if (isAuthor) {
-						%>
+			if (isAuthor) {
+		%>
 				<div class="row" style="margin-top: 10px;">
 				<a class="btn btn-success span2" href="#modif-desc"
 					data-toggle="modal"> <i class="icon-pencil icon-white"></i>
@@ -475,6 +482,8 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 
+			$("#custom-rules").html(markdown.toHTML($("#custom-rules-text").val()));
+			
 		    $("#description").html(markdown.toHTML($("#desc").val()));
 		    
             $("textarea[id^='comment-']").each(function(i) {

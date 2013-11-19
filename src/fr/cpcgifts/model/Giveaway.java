@@ -38,6 +38,10 @@ public class Giveaway implements Serializable {
 	@Persistent
 	private Text longDescription = new Text("");
 	
+	/** Règles personnalisées */
+	@Persistent
+	private Text rules = new Text("");
+	
 	@Persistent
 	private String imgUrl = "";
 	
@@ -74,7 +78,7 @@ public class Giveaway implements Serializable {
 		this.winners = new HashSet<Key>();
 	}
 	
-	public Giveaway(Key author, String title, String description, String imgUrl, Date endDate, int nbCopies) {
+	public Giveaway(Key author, String title, String description, String customRules, String imgUrl, Date endDate, int nbCopies) {
 		this();
 		
 		this.author = author;		
@@ -82,6 +86,7 @@ public class Giveaway implements Serializable {
 		setDescription(description);
 		setImgUrl(imgUrl);
 		setNbCopies(nbCopies);
+		setRules(customRules);
 		
 		this.endDate = endDate;
 		
@@ -120,6 +125,17 @@ public class Giveaway implements Serializable {
 
 	public void setDescription(String description) {
 		this.longDescription = new Text(TextTools.escapeHtml(description));
+	}
+	
+	public String getRules() {
+		if(rules == null)
+			rules = new Text("");
+		
+		return rules.getValue();
+	}
+	
+	public void setRules(String rules) {
+		this.rules = new Text(TextTools.escapeHtml(rules));
 	}
 
 	public String getImgUrl() {

@@ -48,6 +48,7 @@ public class GiveawayServlet extends HttpServlet {
 			String imgUrl = params.get("imgUrl")[0];
 			String gameName = params.get("gameName")[0];
 			String gameDescription = params.get("gameDescription")[0];
+			String customRules = params.get("customRules")[0];
 			String endDateStr = params.get("endDateParsed")[0];
 			String[] endDateSplittedStr = endDateStr.split("@");
 			String[] splittedDate = endDateSplittedStr[0].split("-");
@@ -70,7 +71,7 @@ public class GiveawayServlet extends HttpServlet {
 			c.set(Calendar.MINUTE, Integer.parseInt(splittedTime[1]));
 			
 			
-			Giveaway ga = new Giveaway(cpcuser.getKey(), gameName, gameDescription, imgUrl, c.getTime(), nbCopies);
+			Giveaway ga = new Giveaway(cpcuser.getKey(), gameName, gameDescription, customRules, imgUrl, c.getTime(), nbCopies);
 			
 			log.info("Created ga : " + ga.getTitle() + " by " + cpcuser.getCpcNickname());
 			
