@@ -181,7 +181,8 @@
 			altFormat: "yy-mm-dd",
 			altTimeFormat: "HH-mm@z",
 			altSeparator: "@",
-			showTimezone : false
+			showTimezone : false,
+			firstDay: 1
 		});
 	
 		function validateForm()
