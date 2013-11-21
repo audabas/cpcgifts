@@ -52,9 +52,7 @@
 		<h3>F.A.Q. Participants</h3>
 		<hr />
 		<h4>Quelles sont les conditions pour s'inscrire à un concours ?</h4>
-		<p>Si rien n'est précisé dans la description du concours ce sont les règles indiquées dans
-		<a href="<%= Constants.TOPIC_CANARDS_GENEREUX_FIRST_POST %>">le premier post du topic des canards généreux</a>
-		qui s'appliquent.<br />
+		<p>Vous devez vérifier que vous respectez les conditions indiquées sur la page du concours avant de vous inscrire.<br /> 
 		Les inscriptions ne sont pas filtrées mais si le gagnant enfreint une de ces règles, un nouveau gagnant sera désigné.
 		</p>
 		
