@@ -81,8 +81,8 @@
 	<%@ include file="getuser.jspf"%>
 	
 	<%
-			boolean isAuthor = cpcuser != null
-					&& cpcuser.getKey().equals(gaAuthor.getKey());
+			boolean isAuthor = cpcuser != null && cpcuser.getKey().equals(gaAuthor.getKey());
+			boolean isAdmin = (userService.isUserLoggedIn() && userService.isUserAdmin());
 	%>
 
 	<div class="container">
@@ -92,7 +92,7 @@
 			<div class="span5">
 				<img alt="Steam game Image" class="img-steam-game" src="<%=currentGA.getImgUrl()%>" />
 				<%
-					if (isAuthor) {
+					if (isAuthor || isAdmin) {
 				%>
 					<div class="row" style="margin-top: 10px;">
 					<a class="btn btn-success span2" href="#modif-image"
@@ -191,7 +191,7 @@
 		
 		
 		<%
-			if (isAuthor) {
+			if (isAuthor || isAdmin) {
 		%>
 				<div class="row" style="margin-top: 10px;">
 				<a class="btn btn-success span2" href="#modif-desc"
@@ -210,9 +210,7 @@
 				<li class="active"><a href="#commentaires" data-toggle="tab">Commentaires <span class="gray">(<%=currentGA.getComments().size()%>)</span></a></li>
 				<li><a href="#entrants" data-toggle="tab">Participants <span class="gray">(<%=currentGA.getEntrants().size()%>)</span></a></li>
 				<%
-					if (isAuthor
-							|| (userService.isUserLoggedIn() && userService
-									.isUserAdmin())) {
+					if (isAuthor|| isAdmin) {
 				%>
 				<li><a href="#signature" data-toggle="tab">Signature</a></li>
 				<%
@@ -230,7 +228,7 @@
 					}
 				%>
 				<%
-					if (userService.isUserLoggedIn() && userService.isUserAdmin()) {
+					if (isAdmin) {
 				%>
 				<li><a href="#admin" data-toggle="tab">Admin</a></li>
 				<%
@@ -256,7 +254,7 @@
 					<%=ViewTools.commentView(c)%>
 					
 					<%
-							if (userService.isUserLoggedIn() && (c.getAuthor().equals(cpcuser.getKey()) || userService.isUserAdmin())) {
+							if (userService.isUserLoggedIn() && (c.getAuthor().equals(cpcuser.getKey()) || isAdmin)) {
 					%>
 					
 						<a href="javascript:deleteComment(<%=c.getKey().getId()%>)" class="btn btn-mini"><i class="icon-trash"></i> Supprimer ce commentaire</a>
@@ -327,8 +325,7 @@
 								%>
 						<%=ViewTools.userView(CpcUserPersistance.getUserFromCache(k))%>
 						<%
-							if (userService.isUserLoggedIn()
-											&& userService.isUserAdmin()
+							if (isAdmin
 											&& !currentGA.isOpen()
 											&& currentGA.getEntrants().size() > currentGA
 													.getWinners().size()) {
@@ -346,7 +343,7 @@
 														%>
 				</div>
 				<%
-					if (userService.isUserLoggedIn() && userService.isUserAdmin()) {
+					if (isAdmin) {
 				%>
 				<div class="tab-pane" id="admin">
 					<div class="row offset1">

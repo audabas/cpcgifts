@@ -57,7 +57,7 @@ public class EditGAServlet extends HttpServlet {
 			if("changeimg".equals(reqType)) {
 				String imgUrl = params.get("imgurl")[0];
 
-				if(cpcuser.getKey().equals(ga.getAuthor())) {
+				if(cpcuser.getKey().equals(ga.getAuthor()) || userService.isUserAdmin()) {
 					ga.setImgUrl(imgUrl);
 					log.info(cpcuser.getCpcNickname() + ":" + cpcuser.getKey().getId() + " changed giveaway " + ga.getTitle() + "[" + ga.getKey().getId() +  "] image by " + imgUrl);
 				}
@@ -65,7 +65,7 @@ public class EditGAServlet extends HttpServlet {
 			} else if("changedescription".equals(reqType)) {
 				String newDesc = params.get("desc")[0];
 
-				if(cpcuser.getKey().equals(ga.getAuthor())) {
+				if(cpcuser.getKey().equals(ga.getAuthor()) || userService.isUserAdmin()) {
 					ga.setDescription(newDesc);
 					log.info(cpcuser.getCpcNickname() + ":" + cpcuser.getKey().getId() + " changed giveaway " + ga.getTitle() + "[" + ga.getKey().getId() +  "] description by " + newDesc);
 				}
