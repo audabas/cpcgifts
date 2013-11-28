@@ -130,6 +130,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>
 	
 	<!-- Tasks -->
+	<servlet>
+		<servlet-name>sendmail</servlet-name>
+		<servlet-class>fr.cpcgifts.task.SendMail</servlet-class>
+	</servlet>
 	<!-- <servlet>
 		<servlet-name>gaupdate1</servlet-name>
 		<servlet-class>fr.cpcgifts.task.UpdateGiveawayModelDescAndWinner</servlet-class>
@@ -147,6 +151,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-class>fr.cpcgifts.task.UpdateGAsSet</servlet-class>
 	</servlet> -->
 	<!-- Mapping tasks -->
+	<servlet-mapping>
+		<servlet-name>sendmail</servlet-name>
+		<url-pattern>/task/sendmail</url-pattern>
+	</servlet-mapping>
 	<!-- <servlet-mapping>
 		<servlet-name>gaupdate1</servlet-name>
 		<url-pattern>/task/gaupdate1</url-pattern>

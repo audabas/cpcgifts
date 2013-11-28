@@ -96,6 +96,13 @@ public class EditGAServlet extends HttpServlet {
 					pm.deletePersistent(c);
 				}
 				
+			} else if(reqType.equals("changerules")) {
+				String newRules = params.get("rules")[0];
+				
+				if(userService.isUserAdmin()) {
+					log.info(cpcuser + " changed giveway rules " + ga + " by " + newRules);
+					ga.setRules(newRules);
+				}
 			}
 			
 			resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());

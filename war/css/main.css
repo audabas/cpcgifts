@@ -58,6 +58,10 @@
 	text-align: center;
 }
 
+.row-top-margin {
+	margin-top: 50px;
+}
+
 .valign-profile-form {
 	height: 130px;
 	display: table-cell;

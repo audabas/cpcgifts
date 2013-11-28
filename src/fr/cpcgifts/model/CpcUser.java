@@ -42,6 +42,10 @@ public class CpcUser implements Serializable {
 	@Persistent
 	private boolean banned;
 	
+	/** Indique si l'utilisateur accepte l'envoi d'emails. */
+	@Persistent
+	private boolean acceptEmails = false;
+	
 	/** Liste des concours créés. */
 	@Persistent(defaultFetchGroup="true")
 	private Set<Key> giveawaySet;
@@ -258,6 +262,14 @@ public class CpcUser implements Serializable {
 
 	public void setBanned(boolean banned) {
 		this.banned = banned;
+	}
+
+	public boolean isAcceptEmails() {
+		return acceptEmails;
+	}
+
+	public void setAcceptEmails(boolean acceptEmails) {
+		this.acceptEmails = acceptEmails;
 	}
 
 	@Override

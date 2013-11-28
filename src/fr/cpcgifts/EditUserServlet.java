@@ -62,6 +62,14 @@ public class EditUserServlet extends HttpServlet {
 					
 					userToUpdate.addProfile(service, link);
 					log.info(cpcuser + " added " + service + " link to profile " + link);					
+				} else if("email".equals(reqType)) {
+					String acceptEmails = null;
+					try {
+						acceptEmails = params.get("acceptemails")[0];
+					} catch(Exception e) {}
+					userToUpdate.setAcceptEmails("on".equals(acceptEmails));
+					
+					log.info(cpcuser + " set acceptEmails to " + acceptEmails);
 				}
 
 			} 

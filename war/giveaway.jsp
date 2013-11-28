@@ -1,3 +1,4 @@
+<%@page import="fr.cpcgifts.utils.TextTools"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="javax.jdo.JDOObjectNotFoundException"%>
 <%@page import="java.util.Comparator"%>
@@ -177,9 +178,23 @@
 		<hr>
 
 		<div class="row">
-			<textarea class='hidden' id='custom-rules-text'><%= currentGA.getRules() %></textarea>
 			<div class="offset1 span9 alert alert-warning" id="custom-rules">
 			</div>
+			<% if(isAuthor) { %>
+			<div class="offset1 span9 well well-small">
+				Si vous souhaitez rendre ces conditions moins restrictives vous pouvez demander une modification à un admin par
+				<a href="http://forum.canardpc.com/private.php?do=newpm&u=27519">MP</a> ou <a href="
+				<%= "mailto:cpcgifts.appspot@gmail.com?Subject=" + TextTools.urlEncode("Modification des conditions du giveway « " +
+				currentGA.getTitle() + " »") +
+				"&body=" + TextTools.urlEncode("Bonjour Bastien,\n" +
+				"pourrais tu remplacer les conditions de mon concours : \n" + request.getRequestURL()+ "?" + request.getQueryString() + "\n" +
+				"par les conditions suivantes : \n" +
+				"**nouvelles conditions**\n\n" + 
+				"Merci\n" + 
+				cpcuser.getCpcNickname()) %>
+				">email</a>.
+			</div>
+			<% } %>
 		</div>
 
 		<div class="row">
@@ -353,6 +368,15 @@
 						</a>
 					</div>
 					<hr />
+					
+					<div class="row offset1">
+						<a class="btn btn-success" href="#modif-rules"
+						data-toggle="modal"> <i class="icon-pencil icon-white"></i>
+						Modifier les règles
+						</a>
+					</div>
+					<hr />
+					
 					<div class="row offset1">
 						<a	href="/admin/closega?reqtype=closeGa&gaid=<%=currentGA.getKey().getId()%>"
 									class="btn btn-warning"><i class="icon-trash icon-white"></i> Fermer le concours</a>
@@ -462,7 +486,7 @@
 				href="javascript:submitTitleForm()" class="btn btn-primary">Modifier</a>
 		</div>
 	</div>
-
+	
 	<script type="text/javascript">
 		function submitTitleForm() {
 			if ($("#title").val() != "") {
@@ -470,6 +494,36 @@
 			}
 		}
 	</script>
+
+	<!-- Modal modification des règles -->
+	<div id="modif-rules" class="modal big-modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"
+				aria-hidden="true">&times;</button>
+			<h3>Modifier les règles</h3>
+		</div>
+		<div class="modal-body">
+			<form id="rulesform" name="rulesform" action="/editga" method="post">
+				<fieldset>
+					<label>Conditions d'inscription :</label><br />
+						<textarea class="span9 wmd-input" name="rules" id="rules" rows="15" data-provide="markdown" ><%=currentGA.getRules()%></textarea>
+				</fieldset>
+				<input type="hidden" name="req" value="changerules" />
+				<input type="hidden" name="gaid" value="<%=currentGA.getKey().getId()%>">
+			</form>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Annuler</a> <a
+				href="javascript:submitRulesForm()" class="btn btn-primary">Modifier</a>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		function submitRulesForm() {
+			$("#rulesform").submit();
+		}
+	</script>
+
 	
 	<!-- /container -->
 
@@ -478,7 +532,7 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 
-			$("#custom-rules").html(markdown.toHTML($("#custom-rules-text").val()));
+			$("#custom-rules").html(markdown.toHTML($("#rules").val()));
 			
 		    $("#description").html(markdown.toHTML($("#desc").val()));
 		    

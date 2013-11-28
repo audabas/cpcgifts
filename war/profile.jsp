@@ -160,6 +160,20 @@
 						
 					<% } %>
 				</div>
+				<% if(isCurrentUser || (userService.isUserLoggedIn() && userService.isUserAdmin())) { %>
+					<div class="row row-top-margin">
+						<form id="emailform" name="emailform" action="/edituser" method="post" class="">
+						    <label class="checkbox">
+						    	<input name="acceptemails" type="checkbox" <% if(profileCpcUser.isAcceptEmails()) { %> checked="checked" <% } %>> J'accepte de recevoir des emails de la part de CPC Gifts
+						    </label>
+						    
+						    <input type="hidden" name="req" value="email" />
+							<input type="hidden" name="userid" value="<%= profileCpcUser.getKey().getId() %>" />
+						    
+						    <button type="submit" class="btn">Valider</button>
+					    </form>
+					</div>
+				<% } %>
 			</div>
 		</div>
 		<hr />

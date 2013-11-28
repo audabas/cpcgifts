@@ -16,6 +16,7 @@ import net.sf.jsr107cache.CacheException;
 import net.sf.jsr107cache.CacheManager;
 import fr.cpcgifts.model.Giveaway;
 import fr.cpcgifts.persistance.GAPersistance;
+import fr.cpcgifts.utils.SendEmailUtils;
 
 @SuppressWarnings("serial")
 public class CloseGAServlet extends HttpServlet {
@@ -30,6 +31,8 @@ public class CloseGAServlet extends HttpServlet {
 		
 		for(Giveaway ga : gas) {
 			ga.drawWinner();
+			
+			SendEmailUtils.sendGiveawayFinishedEmail(ga);
 			
 			try {
 	            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
