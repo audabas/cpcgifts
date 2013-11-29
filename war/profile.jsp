@@ -144,6 +144,11 @@
 								<a class="btn btn-link" href="<%= profiles.get("gamersgate") %>"><img class="img-small-icon" alt="gamersgate" src="/img/gg.png"></a>
 							<% 
 								}
+								if(profiles.containsKey("jeuxonline")) {
+							%>
+								<a class="btn btn-link" href="<%= profiles.get("jeuxonline") %>"><img class="img-small-icon" alt="jeuxonline" src="/img/jol.png"></a>
+							<% 
+								}
 							%>
 							
 							<%
@@ -326,6 +331,10 @@
 							<label class="radio">
 							  	<input type="radio" name="service" id="ggRadio" value="gamersgate">
 							  	<img src="/img/gg.png" class="img-small-icon" alt="" /> Gamers Gate
+							</label>
+							<label class="radio">
+							  	<input type="radio" name="service" id="jolRadio" value="jeuxonline">
+							  	<img src="/img/jol.png" class="img-small-icon" alt="" /> JeuxOnLine
 							</label>
 						</fieldset>
 					</div>
