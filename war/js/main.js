@@ -46,3 +46,10 @@ function readCookie(name) {
 	}
 	return null;
 }
+
+function mel(dest,at) {
+    window.location = "mailto:" + dest + "@" + at
+}
+function melgmail(dest) {
+    window.location = "mailto:" + dest + "@" + "gmail.com"
+}

@@ -119,22 +119,21 @@
 		%>
 
 		<div class="row">
-			<div class="span4"><h4>Rechercher un concours terminé : </h4></div>
-			<div class="span8">
+			<div class="span3"><h4>Rechercher un concours : </h4></div>
+			<div class="span9">
 				<script>
-					(function() {
-						var cx = '007220030929328207636:wx1r0szfjry';
-						var gcse = document.createElement('script');
-						gcse.type = 'text/javascript';
-						gcse.async = true;
-						gcse.src = (document.location.protocol == 'https:' ? 'https:'
-								: 'http:')
-								+ '//www.google.com/cse/cse.js?cx=' + cx;
-						var s = document.getElementsByTagName('script')[0];
-						s.parentNode.insertBefore(gcse, s);
-					})();
+				  (function() {
+				    var cx = '007220030929328207636:wx1r0szfjry';
+				    var gcse = document.createElement('script');
+				    gcse.type = 'text/javascript';
+				    gcse.async = true;
+				    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+				        '//www.google.com/cse/cse.js?cx=' + cx;
+				    var s = document.getElementsByTagName('script')[0];
+				    s.parentNode.insertBefore(gcse, s);
+				  })();
 				</script>
-				<gcse:search></gcse:search>
+				<gcse:searchbox-only></gcse:searchbox-only>
 			</div>
 		</div>
 		<hr />

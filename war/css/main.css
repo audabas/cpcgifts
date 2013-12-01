@@ -58,6 +58,10 @@
 	text-align: center;
 }
 
+.gsc-input { /*google custom search input*/
+	height : 20px !important;
+}
+
 .row-top-margin {
 	margin-top: 50px;
 }
