@@ -3,7 +3,6 @@ package fr.cpcgifts.utils;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -11,7 +10,6 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
 import fr.cpcgifts.persistance.CpcUserPersistance;
-import fr.cpcgifts.persistance.GAPersistance;
 
 public class SendEmailUtils {
 	
