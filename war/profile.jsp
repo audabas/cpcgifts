@@ -27,7 +27,15 @@
 	String suid = request.getParameter("userID");
 
 	if (suid != null) {
-		Long uid = Long.parseLong(suid);
+		
+		Long uid = null;
+		
+		try {
+			uid = Long.parseLong(suid);
+		} catch(NumberFormatException e) {
+			response.sendRedirect("/404.html");
+			return;
+		}
 
 		if (uid != null) {
 			Key k = KeyFactory.createKey("CpcUser", uid);

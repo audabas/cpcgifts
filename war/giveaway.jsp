@@ -29,7 +29,15 @@
 	String gaid = request.getParameter("gaID");
 
 	if (gaid != null) {
-		Long gid = Long.parseLong(gaid);
+		
+		Long gid = null;
+		
+		try {
+			gid = Long.parseLong(gaid);
+		} catch (NumberFormatException e) {
+			response.sendRedirect("/404.html");
+			return;
+		}
 
 		if (gid != null) {
 			Key k = KeyFactory.createKey("Giveaway", gid);
