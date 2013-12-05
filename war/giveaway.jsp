@@ -216,11 +216,14 @@
 		<%
 			if (isAuthor || isAdmin) {
 		%>
-				<div class="row" style="margin-top: 10px;">
-				<a class="btn btn-success span2" href="#modif-desc"
-					data-toggle="modal"> <i class="icon-pencil icon-white"></i>
-					Modifier la description
-				</a>
+				<div class="row btn-toolbar" style="margin-top: 10px;">
+					<a class="btn btn-success span2" href="#modif-desc"
+						data-toggle="modal"> <i class="icon-pencil icon-white"></i>
+						Modifier la description
+					</a>
+					<a	href="javascript:closeGA()"
+						class="btn btn-danger"><i class="icon-trash icon-white"></i> Annuler le concours
+					</a>
 				</div>
 				<hr />
 		<%
@@ -361,9 +364,9 @@
 						<hr />
 										
 				<%
-															}
-															}
-														%>
+						}
+					}
+				%>
 				</div>
 				<%
 					if (isAdmin) {
@@ -551,7 +554,7 @@
 		});
 		
 		function deleteComment(commentId) {
-			var r=confirm("Êtes vous sûr de vouloir supprimer ce commentaire ?\n"
+			var r=confirm("Êtes-vous sûr de vouloir supprimer ce commentaire ?\n"
 					+ "Cette action est irréversible.");
 			if (r==true)
 			  {
@@ -564,6 +567,24 @@
 				parent.next().hide();
 			  }
 		}
+		
+		<% if(isAuthor || isAdmin) { %>
+		
+		function closeGA() {
+			var r=confirm("Êtes-vous sûr de vouloir supprimer ce concours ?\n"
+					+ "Cette action est irréversible.\n\n"
+					+ "Les inscriptions seront fermées, aucun gagnant tiré au sort et le concours et ses commentaires seront supprimés au bout de quelques jours.");
+			if (r==true)
+			  {
+				$.post( "/editga", 
+						{ req: "closeGa", gaid: "<%=currentGA.getKey().getId()%>" }
+					);
+				
+				window.location.href = "/user?userID=<%= cpcuser.getKey().getId() %>";
+			  }
+		}
+		
+		<% } %>
 	</script>
 	
 </body>

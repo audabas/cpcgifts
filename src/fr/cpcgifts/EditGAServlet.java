@@ -77,7 +77,7 @@ public class EditGAServlet extends HttpServlet {
 				pm.makePersistent(comment);
 				
 				ga.addComment(comment.getKey());
-			} else if(reqType.equals("changetitle")) {
+			} else if("changetitle".equals(reqType)) {
 				String newTitle = params.get("title")[0];
 				
 				if(userService.isUserAdmin()) {
@@ -96,12 +96,19 @@ public class EditGAServlet extends HttpServlet {
 					pm.deletePersistent(c);
 				}
 				
-			} else if(reqType.equals("changerules")) {
+			} else if("changerules".equals(reqType)) {
 				String newRules = params.get("rules")[0];
 				
 				if(userService.isUserAdmin()) {
 					log.info(cpcuser + " changed giveway rules " + ga + " by " + newRules);
 					ga.setRules(newRules);
+				}
+			} else if("closeGa".equals(reqType)) {				
+				if(ga.getAuthor().equals(cpcuser.getKey()) || userService.isUserAdmin()) {
+					log.info(cpcuser + " closed giveaway " + ga);
+					
+					ga.setTitle(ga.getTitle() + " (Fermé par " + cpcuser.getCpcNickname() + ")");
+					ga.setOpen(false);
 				}
 			}
 			
