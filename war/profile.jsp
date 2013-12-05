@@ -173,8 +173,13 @@
 						
 					<% } %>
 				</div>
+				<hr />
+				<div class="row">
+					Cadeaux envoyés : <%= CpcUserPersistance.getContributionValue(profileCpcUser.getKey()) %>
+				</div>
 				<% if(isCurrentUser || (userService.isUserLoggedIn() && userService.isUserAdmin())) { %>
-					<div class="row row-top-margin">
+					<hr />
+					<div class="row">
 						<form id="emailform" name="emailform" action="/edituser" method="post" class="">
 						    <label class="checkbox">
 						    	<input name="acceptemails" type="checkbox" <% if(profileCpcUser.isAcceptEmails()) { %> checked="checked" <% } %>> J'accepte de recevoir des emails de la part de CPC Gifts

@@ -235,6 +235,43 @@ public class CpcUserPersistance {
 	}
 	
 	/**
+	 * Récupère le nombre de gifts envoyés par l'utilisateur donné
+	 */
+	public static int getContributionValue(Key user) {
+		Integer res = null;
+		
+		try {
+			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+
+			res = (Integer) cache.get("contribution-" + user.getId());
+
+			if (res == null) { // s'il n'est pas dans le cache, on le met en cache
+				res = 0;
+				
+				CpcUser u = getUserFromCache(user);
+				Map<Key, Giveaway> gas = GAPersistance.getAllFromCache(u.getGiveaways());
+				
+				for(Giveaway ga : gas.values()) {
+					res += ga.getWinners().size();
+				}
+				
+				cache.put("contribution-" + user.getId(), res);
+			}
+		} catch (CacheException e) {
+			res = 0;
+			
+			CpcUser u = getUserFromCache(user);
+			Map<Key, Giveaway> gas = GAPersistance.getAllFromCache(u.getGiveaways());
+			
+			for(Giveaway ga : gas.values()) {
+				res += ga.getWinners().size();
+			}
+		}
+		
+		return res;
+	}
+
+	/**
 	 * Récupère tout les utilisateurs enregistrés dans le datastore.
 	 * @return
 	 */
