@@ -221,9 +221,11 @@
 						data-toggle="modal"> <i class="icon-pencil icon-white"></i>
 						Modifier la description
 					</a>
+					<% if(currentGA.isOpen()) { %>
 					<a	href="javascript:closeGA()"
 						class="btn btn-danger"><i class="icon-trash icon-white"></i> Annuler le concours
 					</a>
+					<% } %>
 				</div>
 				<hr />
 		<%
