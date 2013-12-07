@@ -117,6 +117,18 @@
 				
 				GAPersistance.closePm();
 		%>
+		
+		<div class="row">
+			<div class="span3">
+				<h4>Statistiques : </h4>
+				<ul>
+					<li><strong><%= CpcUserPersistance.getAllUsersFromCache().size() %></strong> membres</li>
+					<li><strong><%= opengas.size() %></strong> concours en cours</li>
+					<li><strong><%= GAPersistance.getAllGASize() %></strong> concours créés</li>
+				</ul>
+			</div>
+		</div>
+		<hr />
 
 		<div class="row">
 			<div class="span3"><h4>Rechercher un concours : </h4></div>
@@ -138,7 +150,10 @@
 		</div>
 		<hr />
 		
+		
 		<%@ include file="footer.jspf"%>
+		
+		
 
 	</div>
 	<!-- /container -->

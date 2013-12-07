@@ -1,7 +1,5 @@
 <%@page import="net.sf.jsr107cache.CacheException"%>
 <%@page import="java.util.Collections"%>
-<%@page import="net.sf.jsr107cache.CacheManager"%>
-<%@page import="net.sf.jsr107cache.Cache"%>
 <%@page import="fr.cpcgifts.utils.ViewTools"%>
 <%@page import="java.util.List"%>
 <%@page import="com.google.appengine.api.datastore.KeyFactory"%>
@@ -51,31 +49,17 @@
 
 		<%
 		
-		Cache cache;
-		List<CpcUser> users;
+		List<CpcUser> users = CpcUserPersistance.getAllUsersFromCache();
 		
-		try {
-            cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-                        
-            users = (List<CpcUser>) cache.get("usersList");
-			
-			if(users == null) {
-				users = CpcUserPersistance.getAllUsers();
-				cache.put("usersList", users);
-			}
-			
-        } catch (CacheException e) {
-        	users = CpcUserPersistance.getAllUsers();
-        }
 				
-			for(CpcUser u : users) {
+		for(CpcUser u : users) {
 		%>
 
 		<%= ViewTools.userView(u) %>
 		<hr>
 
 		<%
-			}
+		}
 		%>
 
 

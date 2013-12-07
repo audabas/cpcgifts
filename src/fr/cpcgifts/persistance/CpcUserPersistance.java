@@ -296,6 +296,27 @@ public class CpcUserPersistance {
 		return res;
 	}
 	
+	
+	@SuppressWarnings("unchecked")
+	public static List<CpcUser> getAllUsersFromCache() {
+		List<CpcUser> res;
+		
+		try {
+			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+
+			res = (List<CpcUser>) cache.get("alluserslist");
+
+			if (res == null) { // s'il n'est pas dans le cache, on le met en cache
+				res = getAllUsers();
+				cache.put("alluserslist", res);
+			}
+		} catch (CacheException e) {
+			res = getAllUsers();
+		}
+		
+		return res;
+	}
+	
 	/**
 	 * Fusionne les giveaways de deux profils en un seul. 
 	 */

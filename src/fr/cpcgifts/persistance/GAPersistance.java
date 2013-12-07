@@ -185,6 +185,40 @@ public class GAPersistance {
 		return res;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static int getAllGASize() {
+		Integer res = null;
+		
+		try {
+			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+
+			res = (Integer) cache.get("giveaway-total");
+
+			if (res == null) { // s'il n'est pas dans le cache, on le met en cache
+				
+				PersistenceManagerFactory pmf = PMF.get();
+				PersistenceManager pm = pmf.getPersistenceManager();
+
+				Query query = pm.newQuery("select open from " + Giveaway.class.getName());
+				List<Boolean> ids = (List<Boolean>) query.execute();
+				
+				res = ids.size();
+				
+				cache.put("giveaway-total", res);
+			}
+		} catch (CacheException e) {
+			PersistenceManagerFactory pmf = PMF.get();
+			PersistenceManager pm = pmf.getPersistenceManager();
+
+			Query query = pm.newQuery("select open from " + Giveaway.class.getName());
+			List<Boolean> ids = (List<Boolean>) query.execute();
+			
+			res = ids.size();
+		}
+		
+		return res;
+	}
+	
 	public static List<Giveaway> getOpenGAs() {
 		return getOpenGAs(true);
 	}
