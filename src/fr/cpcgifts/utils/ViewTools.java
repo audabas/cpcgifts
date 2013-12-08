@@ -15,7 +15,7 @@ public class ViewTools {
 	
 	public static String userView(CpcUser u) {
 
-		String res = "<div class=\"row\">"
+		String res = "<div class=\"row\" data-type='user' data-id='" + u.getKey().getId() + "' data-nickname='" + u.getCpcNickname() + "' >"
 				+ "<div class=\"span1\"><a href=\"/user?userID="
 				+ u.getKey().getId()
 				+ "\"><img alt=\"Avatar\" class=\"img-rounded img-small-avatar lazy\" src=\"img/avatar.jpg\" data-original=\""
@@ -38,7 +38,9 @@ public class ViewTools {
 		}
 
 		StringBuilder res = new StringBuilder(); 
-				res.append("<div class=\"row-fluid\">" + "<div class=\"span2\">"
+				res.append("<div class=\"row-fluid\" data-type='giveaway'"
+				+ " data-id='" + ga.getKey().getId() + "' data-title='" + ga.getTitle() + "' data-author='" + auth.getCpcNickname() + "'>\n" 
+				+ "<div class=\"span2\">"
 				+ "<a href=\"/giveaway?gaID="
 				+ ga.getKey().getId()
 				+ "\" ><img alt=\"Game Image\" class=\"img-rounded img-small-ga lazy\" src=\"img/game.png\" data-original=\""

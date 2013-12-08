@@ -44,7 +44,11 @@
 					
 					<li><a href="/faq">F.A.Q.</a></li>
 				</ul>
+				
+				
 				<div class="pull-right">
+					<input id="search" type="text" class="input-medium search-query hidden searchbox hidden-phone hidden-tablet" placeholder="Rechercher...">
+				
 					<%
 						if (userService.isUserLoggedIn()) {
 					%>

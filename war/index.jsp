@@ -108,10 +108,12 @@
 		<%
 			for(Giveaway ga : opengas) {
 		%>
-
-		<%=ViewTools.gaView(ga)%>
-		<hr>
-
+		
+		<div>
+			<%=ViewTools.gaView(ga)%>
+			<hr>
+		</div>
+		
 		<%
 			}
 				
@@ -160,6 +162,48 @@
 
 	<%@ include file="jscripts.jspf" %>
 	
+	<script src="js/vendor/fuse.min.js"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			
+			var giveaways = [];
+			
+			$("div[data-type='giveaway']").each( function(i,e) {
+			    var ga = Object(); 
+			    ga.id = $(e).data("id");
+			    ga.title = "" + $(e).data("title");
+			    ga.author = "" + $(e).data("author");
+			    giveaways.push(ga);
+			});
+			
+			var options = {
+				keys: ['title', 'author'],
+				threshold : 0.20
+			}
+			
+			var f = new Fuse(giveaways, options);
+			
+			$("#search").removeClass("hidden");
+			
+			$("#search").keyup(function () {
+				if($(this).val() != "") {
+					$("div[data-type='giveaway']").parent().addClass("hidden");
+					
+					var results = f.search($(this).val());
+					
+					$(results).each(function(i, e) {
+						$("div[data-type='giveaway'][data-id='"+ e.id +"']").parent().removeClass("hidden");
+						console.log($("div[data-type='giveaway'][id='"+ e.id +"']"));
+					});
+					
+				} else {
+					$("div[data-type='giveaway']").parent().removeClass("hidden");
+				}
+				
+			});
+		});
+	</script>
 
 </body>
 </html>

@@ -73,6 +73,10 @@
 	float: none;
 }
 
+.searchbox {
+	margin-right: 50px;
+}
+
 /* css for timepicker */
 .ui-timepicker-div .ui-widget-header {
 	margin-bottom: 8px;

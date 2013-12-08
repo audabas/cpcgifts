@@ -54,9 +54,11 @@
 				
 		for(CpcUser u : users) {
 		%>
-
+		
+		<div>
 		<%= ViewTools.userView(u) %>
 		<hr>
+		</div>
 
 		<%
 		}
@@ -67,6 +69,49 @@
 	<!-- /container -->
 
 	<%@ include file="jscripts.jspf" %>
+	
+	<script src="js/vendor/fuse.min.js"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			
+			var users = [];
+			
+			$("div[data-type='user']").each( function(i,e) {
+			    var u = Object(); 
+			    u.id = $(e).data("id");
+			    u.nickname = "" + $(e).data("nickname");
+			    users.push(u);
+			});
+			
+			var options = {
+				keys: ['nickname'],
+				threshold : 0.15
+			}
+			
+			var f = new Fuse(users, options);
+			
+			$("#search").removeClass("hidden");
+			
+			$("#search").keyup(function () {
+				if($(this).val() != "") {
+					$("div[data-type='user']").parent().addClass("hidden");
+					
+					var results = f.search($(this).val());
+					
+					$(results).each(function(i, e) {
+						$("div[data-type='user'][data-id='"+ e.id +"']").parent().removeClass("hidden");
+						console.log($("div[data-type='user'][id='"+ e.id +"']"));
+					});
+					
+				} else {
+					$("div[data-type='user']").parent().removeClass("hidden");
+				}
+				
+			});
+			
+		});
+	</script>
 
 </body>
 </html>
