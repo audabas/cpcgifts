@@ -72,19 +72,22 @@
 
 		<div class="row">
 			<p class="offset1">
-				Salut à toi ami canard ! <br /> En t'inscrivant sur ce site tu
-				acceptes les <a
-					href="<%= Constants.TOPIC_CANARDS_GENEREUX_FIRST_POST %>">règles
-					présentes sur le premier post du topic des canards généreux</a> et t'engage à les respecter. <br />
+				Bonjour ami canard ! <br />
+				En vous inscrivant sur ce site vous	acceptez les
+				<a	href="<%= Constants.TOPIC_CANARDS_GENEREUX_FIRST_POST %>">
+				règles présentes sur le premier post du topic des canards généreux</a> ainsi que
+				<a href="<%= Constants.TOPIC_CHARTE_FORUMS %>">la charte des forums Canard PC</a> 
+				et vous engagez à les respecter. <br />
+				
 			</p>
 
 			<p class="offset1">
-				Afin de s'assurer que tu es bien inscrit sur le forum Canard PC, tu
-				dois indiquer ton identifiant CPC.<br /> Tu le trouveras en allant
-				sur la page de ton profil, il s'agit en fait de la dernière partie
-				de l'url indiquée dans la barre d'adresse (<a href="/aidecpcid.html" data-target="#"
-					data-toggle="modal"><i class="icon-question-sign"></i>
-					Comment faire</a>).
+				Afin de s'assurer que vous êtes bien inscrit sur le forum Canard PC,
+				vous devez indiquer votre identifiant CPC.<br />
+				Vous le trouverez en allant	sur la page de votre profil, il s'agit en fait de la dernière partie
+				de l'url indiquée dans la barre d'adresse 
+				(<a href="/aidecpcid.html" data-target="#"
+					data-toggle="modal"><i class="icon-question-sign"></i> Comment faire</a>).
 			</p>
 			<br />
 			<div class="alert alert-warning offset1 span9">
