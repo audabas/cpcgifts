@@ -1,0 +1,11 @@
+# Compiled source #
+*.class
+
+# AppEngine files #
+war/WEB-INF/appengine-generated
+war/WEB-INF/classes
+
+# Eclipse Files #
+.classpath
+.project
+.settings
