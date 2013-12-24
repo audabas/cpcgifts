@@ -4,10 +4,12 @@ import java.util.logging.Logger;
 
 import javax.jdo.JDOObjectNotFoundException;
 
+import fr.cpcgifts.model.AdminRequest;
 import fr.cpcgifts.model.Comment;
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
 import fr.cpcgifts.persistance.CpcUserPersistance;
+import fr.cpcgifts.persistance.GAPersistance;
 
 public class ViewTools {
 
@@ -146,6 +148,56 @@ public class ViewTools {
 		res += "</div>"; // /media-body
 		res += "</div>"; // /media
 		return res;
+	}
+	
+	public static String adminRequestView(AdminRequest ar) {
+		StringBuilder res = new StringBuilder();
+		
+		CpcUser author = CpcUserPersistance.getUserFromCache(ar.getAuthor());
+		Long arId = ar.getKey().getId();
+		
+		res.append("<div class='row offset1' data-type='admin-request' data-arstate='" + ar.getState().name() + "' data-artype='" + ar.getType() + "' data-arid='" + arId + "'>\n");
+		res.append("<div class='row'><h4 class='span3'>Demande #" + arId + "</h4>\n");
+		res.append("<div class='span9 btn-toolbar' >\n");
+		if(ar.getState() == AdminRequest.State.Open) {
+			res.append("<button class='btn btn-success btn-small' id='proceed-" + arId + "'>Traitée</button>\n");
+			res.append("<button class='btn btn-danger btn-small' id='deny-" + arId + "'>Refusée</button>\n");
+		}
+		res.append("</div></div>\n");
+		res.append("<h5>Statut : <span class='label' id='statedisplay-" + arId + "'></span></h5>\n");
+		res.append("<h5>Type de demande : <span class='label label-info' id='typedisplay-" + arId + "'></span></h5>\n");
+		res.append("<h6>Date : " + ar.getRequestDate() + "</h6>\n");
+		res.append("<h5>Envoyée par :</h5>\n");
+		res.append(userView(author));
+		if(ar.getState() != AdminRequest.State.Open && ar.getConsideredBy() != null ) {
+			CpcUser admin = CpcUserPersistance.getUserFromCache(ar.getConsideredBy());
+			res.append("<h5>Traitée par :</h5>\n");
+			res.append(userView(admin));
+		}
+		res.append("<br />\n");
+		res.append("<h5>Message : </h5>\n");
+		res.append("<textarea id='reqtext-" + arId + "' class='hidden'>" + ar.getText() + "</textarea>\n");
+		res.append("<p id='reqtextdisplay-" + arId + "'></p>\n");
+		
+		try {
+			res.append("<h5>Pièce jointe :</h5>\n");
+			switch (ar.getType()) {
+			case ReportUser:
+				CpcUser user = CpcUserPersistance.getUserFromCache(ar.getAttachment());
+				res.append(userView(user));
+				break;
+			default:
+				Giveaway ga = GAPersistance.getGAFromCache(ar.getAttachment());
+				res.append(gaView(ga));
+				break;
+			}
+		} catch(JDOObjectNotFoundException e) { 
+			res.append("<h5>Aucune pièce jointe.</h5>\n");
+		}
+		
+		res.append("</div>\n");
+		
+		return res.toString();
 	}
 
 }

@@ -8,7 +8,11 @@ public final class Constants {
 	
 	public static final String TOPIC_DEV = "http://forum.canardpc.com/threads/79082-CPC-Gifts-Le-topic-des-d%C3%A9veloppeurs-g%C3%A9n%C3%A9reux-%28ou-pas%29";
 	
+	public static final String GITHUB = "https://github.com/bastien09/cpcgifts";
+	
 	public static final String TOPIC_CHARTE_FORUMS = "http://forum.canardpc.com/threads/55834-Charte-des-forums-Canard-PC?p=4185988&viewfull=1#post4185988";
+	
+	public static final String USERS_ADMIN_GOOGLEDOC = "https://docs.google.com/spreadsheet/ccc?key=0AkHXljIa6xRBdE00LTRZN21xLUF2Rm8xZ0ZzRUcwbEE&usp=sharing";
 	
 	public static final String DEFAULT_RULES = "####Conditions d'inscription :  \n\n" +
 			"* Au moins un cadeau pour les canards sur Steamgifts ou CPC Gifts  \n" +

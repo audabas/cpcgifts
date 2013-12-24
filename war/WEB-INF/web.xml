@@ -38,8 +38,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-class>fr.cpcgifts.AdminServlet</servlet-class>
 	</servlet>
 	<servlet>
+		<servlet-name>AdminRequestServlet</servlet-name>
+		<servlet-class>fr.cpcgifts.AdminRequestServlet</servlet-class>
+	</servlet>
+	<servlet>
 		<servlet-name>CleanEmptyGAServlet</servlet-name>
 		<servlet-class>fr.cpcgifts.CleanEmptyGAServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>CleanOldRequestsServlet</servlet-name>
+		<servlet-class>fr.cpcgifts.CleanOldRequestsServlet</servlet-class>
 	</servlet>
 	<!-- Mapping Java -->
 	<servlet-mapping>
@@ -63,6 +71,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<url-pattern>/cron/cleanEmptyGA</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
+		<servlet-name>CleanOldRequestsServlet</servlet-name>
+		<url-pattern>/cron/cleanOldRequests</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>EditGAServlet</servlet-name>
 		<url-pattern>/editga</url-pattern>
 	</servlet-mapping>
@@ -73,6 +85,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet-mapping>
 		<servlet-name>EnterGAServlet</servlet-name>
 		<url-pattern>/enterga</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AdminRequestServlet</servlet-name>
+		<url-pattern>/adminrequest</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>AdminServlet</servlet-name>
@@ -103,6 +119,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>FAQ</servlet-name>
 		<jsp-file>/faq.jsp</jsp-file>
 	</servlet>
+	<servlet>
+		<servlet-name>AdminRequests</servlet-name>
+		<jsp-file>/adminrequests.jsp</jsp-file>
+	</servlet>
 	<!-- Mapping jsp -->
 	<servlet-mapping>
 		<servlet-name>SignIn</servlet-name>
@@ -127,6 +147,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet-mapping>
 		<servlet-name>FAQ</servlet-name>
 		<url-pattern>/faq</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AdminRequests</servlet-name>
+		<url-pattern>/adminrequests</url-pattern>
 	</servlet-mapping>
 	
 	<!-- Tasks -->
@@ -201,6 +225,8 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         	<web-resource-name>Admin only</web-resource-name>
             <url-pattern>/admin/*</url-pattern>
             <url-pattern>/adminconsole/*</url-pattern>
+            <url-pattern>/adminrequests</url-pattern>
+            <url-pattern>/adminrequests.jsp</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>admin</role-name>

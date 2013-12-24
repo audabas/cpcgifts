@@ -75,22 +75,27 @@
 		
 		<h4>Le gagnant enfreint les règles de mon concours.</h4>
 		<p>
-		Vous pouvez demander la désignation d'un nouveau gagnant aux admins sur
-		<a href="<%= Constants.TOPIC_CANARDS_GENEREUX %>">le topic des canards généreux</a>
-		en indiquant dans le post le lien du giveaway et la règle que le gagnant enfreint.
+		Vous pouvez demander la désignation d'un nouveau gagnant aux admins 
+		en utilisant le formulaire dédié sur la page du giveaway.
 		</p>
 		
 		<h4>Je n'ai pas de nouvelles du gagnant.</h4>
 		<p>Si le concours est terminé depuis plus d'une semaine, vous pouvez demander la désignation d'un
-		nouveau gagnant sur
-		<a href="<%= Constants.TOPIC_CANARDS_GENEREUX %>">le topic des canards généreux</a>.
+		nouveau gagnant en utilisant le formulaire dédié sur la page du giveaway.
 		</p>
 		
 		<hr />
 		<h3>Le site CPC Gifts</h3>
 		<hr />
 		<h4>J'ai trouvé un bug, une faute d'orthographe, etc...</h4>
-		<p>Merci de me le signaler dans le <a href="<%= Constants.TOPIC_DEV %>">topic dédié à CPC Gifts</a>.
+		<p>
+		Merci de me le signaler dans le <a href="<%= Constants.TOPIC_DEV %>">topic dédié à CPC Gifts</a>.
+		</p>
+		
+		<h4>Je suis développeur et souhaite contribuer à l'amélioration du site / réutiliser le code pour un projet.</h4>
+		<p>
+		Les sources sont hébergées sur <a href="<%= Constants.GITHUB %>">github</a> et sont sous libres de droits.<br />
+		Pour la contribution au développement, toute la communication se fait sur <a href="<%= Constants.TOPIC_DEV %>">le topic dédié</a>.
 		</p>
 
 		<hr />

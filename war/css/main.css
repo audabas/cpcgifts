@@ -77,6 +77,10 @@
 	margin-right: 50px;
 }
 
+.closed-admin-request:not(:hover) {
+	background-color: #F3F3F3;
+}
+
 /* css for timepicker */
 .ui-timepicker-div .ui-widget-header {
 	margin-bottom: 8px;

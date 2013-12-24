@@ -38,7 +38,7 @@
 		}
 
 		if (uid != null) {
-			Key k = KeyFactory.createKey("CpcUser", uid);
+			Key k = KeyFactory.createKey(CpcUser.class.getSimpleName(), uid);
 			
 			try {
 				profileCpcUser = CpcUserPersistance.getUserFromCache(k);

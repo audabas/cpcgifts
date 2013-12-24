@@ -11,6 +11,11 @@
     <schedule>every friday 05:30</schedule>
   </cron>
   <cron>
+    <url>/cron/cleanOldRequests</url>
+    <description>Nettoie de la base de donnée les demandes admin de plus de deux semaines</description>
+    <schedule>every monday 05:30</schedule>
+  </cron>
+  <cron>
     <url>/_ah/datastore_admin/backup.create?name=CronDatastoreBackup&amp;kind=Comment&amp;kind=CpcUser&amp;kind=Giveaway&amp;filesystem=blobstore</url>
     <description>Backup journalier du datastore</description>
     <schedule>every day 05:00</schedule>

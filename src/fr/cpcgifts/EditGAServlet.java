@@ -104,7 +104,7 @@ public class EditGAServlet extends HttpServlet {
 					ga.setRules(newRules);
 				}
 			} else if("closeGa".equals(reqType)) {				
-				if(ga.getAuthor().equals(cpcuser.getKey()) || userService.isUserAdmin()) {
+				if(cpcuser.getKey().equals(ga.getAuthor()) || userService.isUserAdmin()) {
 					log.info(cpcuser + " closed giveaway " + ga);
 					
 					ga.setTitle(ga.getTitle() + " (Fermé par " + cpcuser.getCpcNickname() + ")");

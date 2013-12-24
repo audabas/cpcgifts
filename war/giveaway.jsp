@@ -1,3 +1,4 @@
+<%@page import="fr.cpcgifts.model.AdminRequest"%>
 <%@page import="fr.cpcgifts.utils.TextTools"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="javax.jdo.JDOObjectNotFoundException"%>
@@ -40,7 +41,7 @@
 		}
 
 		if (gid != null) {
-			Key k = KeyFactory.createKey("Giveaway", gid);
+			Key k = KeyFactory.createKey(Giveaway.class.getSimpleName(), gid);
 
 			try {
 				currentGA = GAPersistance.getGAFromCache(k);
@@ -123,6 +124,14 @@
 					}
 				%>
 				</h1>
+				<% if(isAuthor) { %>
+				<a href="#admin-request-modal"
+					class="btn btn-mini"
+					onclick="editTitleRequest(<%= currentGA.getKey().getId() %>)"
+					data-toggle="modal">
+						<i class="icon-pencil"></i> Demander la modification du titre
+					</a>
+				<% } %>
 				<hr>
 				<div class="span2">
 					<h4>Créé par :</h4>
@@ -190,17 +199,13 @@
 			</div>
 			<% if(isAuthor) { %>
 			<div class="offset1 span9 well well-small">
-				Si vous souhaitez rendre ces conditions moins restrictives vous pouvez demander une modification à un admin par
-				<a href="http://forum.canardpc.com/private.php?do=newpm&u=27519">MP</a> ou <a href="
-				<%= "mailto:cpcgifts.appspot@gmail.com?Subject=" + TextTools.urlEncode("Modification des conditions du giveway « " +
-				currentGA.getTitle() + " »") +
-				"&body=" + TextTools.urlEncode("Bonjour Bastien,\n" +
-				"pourrais tu remplacer les conditions de mon concours : \n" + request.getRequestURL()+ "?" + request.getQueryString() + "\n" +
-				"par les conditions suivantes : \n" +
-				"**nouvelles conditions**\n\n" + 
-				"Merci\n" + 
-				cpcuser.getCpcNickname()) %>
-				">email</a>.
+				Si vous souhaitez rendre ces conditions moins restrictives vous pouvez demander une modification à un admin 
+				via 
+				<a href="#admin-request-modal"
+					onclick="editRulesRequest(<%= currentGA.getKey().getId() %>)"
+					data-toggle="modal">
+						ce formulaire
+					</a>.
 			</div>
 			<% } %>
 		</div>
@@ -233,7 +238,6 @@
 		%>
 
 		<div class="tabbable">
-			<!-- Only required for left/right tabs -->
 			<ul class="nav nav-tabs">
 				<li class="active"><a href="#commentaires" data-toggle="tab">Commentaires <span class="gray">(<%=currentGA.getComments().size()%>)</span></a></li>
 				<li><a href="#entrants" data-toggle="tab">Participants <span class="gray">(<%=currentGA.getEntrants().size()%>)</span></a></li>
@@ -350,19 +354,31 @@
 				<%
 									if (!currentGA.isOpen() && currentGA.getWinners().size() > 0) {
 										for (Key k : currentGA.getWinners()) {
-								%>
-						<%=ViewTools.userView(CpcUserPersistance.getUserFromCache(k))%>
+											CpcUser winner = CpcUserPersistance.getUserFromCache(k);
+				%>
+						<%=ViewTools.userView(winner)%>
 						<%
-							if (isAdmin
-											&& !currentGA.isOpen()
-											&& currentGA.getEntrants().size() > currentGA
-													.getWinners().size()) {
+							if (isAdmin && !currentGA.isOpen()
+										&& currentGA.getEntrants().size() > currentGA.getWinners().size()) {
 						%>
 							<a	href="/admin/reroll?reqtype=reroll&gaid=<%=currentGA.getKey().getId()%>&winnerToReroll=<%=k.getId()%>"
 								class="btn btn-warning"><i class="icon-repeat icon-white"></i> Relancer le tirage</a>
 						<%
 							}
 						%>	
+						<%
+							if (isAuthor && !currentGA.isOpen() &&
+									currentGA.getEntrants().size() > currentGA.getWinners().size()) {
+						%>
+							<a href="#admin-request-modal"
+								class="btn btn-mini"
+								onclick="rerollRequest(<%= currentGA.getKey().getId() %>,<%= winner.getKey().getId() %>, '<%= winner.getCpcNickname() %>')"
+								data-toggle="modal">
+									<i class="icon-repeat"></i> Demander un nouveau tirage
+							</a>
+						<%
+							}
+						%>
 						<hr />
 										
 				<%
@@ -536,6 +552,52 @@
 			$("#rulesform").submit();
 		}
 	</script>
+	
+	<!-- Modal requête admin -->
+	<div id="admin-request-modal" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Requête aux administrateurs</h3>
+		</div>
+		<div class="modal-body">
+			<form id="admin-request-form" name="admin-request-form">
+				<fieldset>
+					<label>Objet : <span id="admin-request-type-display"></span></label>
+					<input type="hidden" id="admin-request-type" name="type" />
+				</fieldset>
+				<fieldset id="reroll-fieldset" class="hidden">
+					<label>Utilisateur concerné : <span id="user-to-reroll-name"></span></label>
+					<input type="hidden" name="userid" id="user-to-reroll-id" />
+					<div class="well well-small">
+					Merci d'indiquer la règle que le gagnant ne respecte pas.
+    				</div>
+				</fieldset>
+				<fieldset>
+					<label>Votre message :</label>
+					<textarea class="span5" name="text" id="admin-request-text"></textarea>
+				</fieldset>
+				<input type="hidden" name="req" id="admin-request-formreqtype" value="create" />
+				<input type="hidden" name="attachmentid" id="admin-request-attachmentid" />
+			</form>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Annuler</a>
+			<a href="javascript:submitAdminRequestForm()" class="btn btn-primary">Envoyer</a>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		function submitAdminRequestForm() {
+			var params = $('#admin-request-form').serialize();
+		    
+		    $.post('/adminrequest',
+		          params,
+		          function(data){
+		              alert("Votre demande a bien été enregistrée et sera bientôt traitée par les administrateurs de CPC Gifts.");
+		              $("#admin-request-modal").modal("hide");
+		          });
+		}
+	</script>
 
 	
 	<!-- /container -->
@@ -587,6 +649,38 @@
 		}
 		
 		<% } %>
+		
+		/* requêtes administrateur */
+		<% if(isAuthor) { %>
+		
+		function editRulesRequest(gaid) {
+			$("#reroll-fieldset").addClass("hidden");
+			$("#admin-request-type").val("<%= AdminRequest.Type.RulesModification.name() %>");
+			$("#admin-request-type-display").html("Modification des règles");
+			$("#admin-request-attachmentid").val(gaid);
+		}
+		
+		function editTitleRequest(gaid) {
+			$("#reroll-fieldset").addClass("hidden");
+			$("#admin-request-type").val("<%= AdminRequest.Type.TitleModification.name() %>");
+			$("#admin-request-type-display").html("Modification du titre");
+			$("#admin-request-attachmentid").val(gaid);
+		}
+		
+		function rerollRequest(gaid,userid,username) {
+			$("#reroll-fieldset").removeClass("hidden");
+			$("#admin-request-type").val("<%= AdminRequest.Type.Reroll.name() %>");
+			$("#admin-request-type-display").html("Demande de reroll");
+			$("#user-to-reroll-id").val(userid);
+			$("#user-to-reroll-name").html(username);
+			$("#admin-request-attachmentid").val(gaid);
+		}
+		
+		<% } %>
+		
+		function reportPostRequest(postId) {
+			
+		}
 	</script>
 	
 </body>

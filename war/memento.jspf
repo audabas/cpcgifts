@@ -1,0 +1,71 @@
+<%@page import="fr.cpcgifts.utils.Constants"%>
+<h3>Memento des administrateurs</h3>
+
+<hr />
+
+<h4>Liste des fonctionnalités admin</h4>
+
+<h5>Page Giveaway</h5>
+<ul>
+<li>Mêmes droits que l'auteur du giveaway</li>
+<li>Suppression des commentaires</li>
+<li>Reroll</li>
+<li>Onglet admin :
+	<ul>
+		<li>Modification du titre</li>
+		<li>Modification des règles</li>
+		<li>Fermer le concours : permet d'annuler un concours en fermant les inscriptions immédiatement. Pas de tirage au sort, le concours sera supprimé 15 jours après sa date de fin. (provoque un bug sur l'affichage de la date de fin)</li>
+		<li>Rouvrir le concours : annule la fonction précédente. Rouvre les inscriptions si la date de fin n'est pas passée.</li>
+	</ul>
+</li>
+</ul>
+
+<h5>Page Utilisateur</h5>
+<ul>
+<li>Mêmes droits que l'utilisateur</li>
+<li>Onglet admin : possibilité de bannir un utilisateur</li>
+</ul>
+
+<hr />
+<h4>Traiter les demandes</h4>
+
+<h5>Demande de reroll</h5>
+
+<ol>
+<li>Vérifier que la condition indiquée n'est pas respectée.</li>
+<li>Notifier le gifter par MP que le reroll a été effectué, ou la raison du refus.</li>
+<li>Si le reroll est dû au comportement du gagnant (ne lit pas les conditions), mettre à jour le <a href="<%= Constants.USERS_ADMIN_GOOGLEDOC %>">google drive</a>.</li>
+<li>Passer le statut de la demande à "traitée" ou "refusée" si le reroll ne parait pas justifié.</li>
+</ol>
+
+<h5>Demande de modification de titre</h5>
+
+<ul>
+<li>Acceptées tant que le titre reflète le contenu du gift.</li>
+<li>Le bouton permettant de modifier le titre se trouve dans l'onglet "Admin" du giveaway</li>
+</ul>
+
+<h5>Demande de modification des règles</h5>
+
+<ul>
+<li>Acceptées si les nouvelles règles sont moins restrictives.</li>
+<li>Le bouton permettant de modifier les règles se trouve dans l'onglet "Admin" du giveaway</li>
+</ul>
+
+<h5>Commentaire signalé</h5>
+
+<ul>
+<li>Supprimer le commentaire s'il est contraire à la <a href="<%= Constants.TOPIC_CHARTE_FORUMS %>">charte des forums cpc</a>.</li>
+<li>Mettre à jour le <a href="<%= Constants.USERS_ADMIN_GOOGLEDOC %>">google drive</a> (nombre de commentaires hors charte postés par l'utilisateur).</li>
+</ul>
+
+<hr />
+
+<h4>Divers</h4>
+<ul>
+<li>Merci de consigner le comportement de tout utilisateur qui ne respecte pas les règles dans le
+<a href="<%= Constants.USERS_ADMIN_GOOGLEDOC %>">google drive dédié</a>
+</li>
+<li>Vous pouvez me contacter quand vous voulez par mp, email (en bas de chaque page publique de cpcgifts) ou chat steam.</li>
+</ul>
+
