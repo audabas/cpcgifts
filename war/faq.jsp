@@ -79,6 +79,16 @@
 		en utilisant le formulaire dédié sur la page du giveaway.
 		</p>
 		
+		<h4>Comment transmettre son cadeau au gagnant ?</h4>
+		<p>
+		S'il s'agit d'une clé, ou d'un lien cadeau, il suffit de l'envoyer directement par MP au gagnant.
+		S'il ne peut plus recevoir de MP, postez sur le <a href="<%= Constants.TOPIC_CANARDS_GENEREUX %>">topic</a>
+		en lui demandant de vous contacter. <br />
+		S'il s'agit d'un cadeau Steam ou d'une autre plateforme, utilisez le système d'échange de la plateforme en question. <br />
+		Il est interdit d'utiliser un service tiers (Steamgifts, Steamtrades, etc.) dans le but d'augmenter sa contribution ou sa réputation
+		sur ces sites.
+		</p>
+		
 		<h4>Je n'ai pas de nouvelles du gagnant.</h4>
 		<p>Si le concours est terminé depuis plus d'une semaine, vous pouvez demander la désignation d'un
 		nouveau gagnant en utilisant le formulaire dédié sur la page du giveaway.
