@@ -179,7 +179,7 @@
 			
 			var options = {
 				keys: ['title', 'author'],
-				threshold : 0.20
+				threshold : 0.30
 			}
 			
 			var f = new Fuse(giveaways, options);

@@ -241,6 +241,7 @@
 		$("#custom-rules-checkbox").click(function () {
 			if($(this).prop('checked')) {
 				$("#custom-rules-row").removeClass("hidden");
+				$(this).hide();
 			} else {
 				$("#custom-rules-row").addClass("hidden");
 			}

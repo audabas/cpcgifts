@@ -37,13 +37,23 @@
 }
 
 .big-modal{
-   width:940px;
-   max-width : 100%;
-   margin-left:-470px;
+	width: 940px;
+	margin-left: -470px;
 }
 
 .big-modal .modal-body {
 	max-height: 90%;
+}
+
+@media (max-width: 979px) {
+	top: 1%;
+	right: 1%;
+	left: 1%;
+	bottom: auto;
+	width: auto !important;
+	height: auto !important;
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
 .carousel-inner { text-align: left; }
@@ -79,6 +89,11 @@
 
 .closed-admin-request:not(:hover) {
 	background-color: #F3F3F3;
+}
+
+#commentaires p img {
+	max-height: 500px;
+	max-width: 75%;
 }
 
 /* css for timepicker */

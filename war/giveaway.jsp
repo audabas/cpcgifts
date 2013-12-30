@@ -641,10 +641,12 @@
 			if (r==true)
 			  {
 				$.post( "/editga", 
-						{ req: "closeGa", gaid: "<%=currentGA.getKey().getId()%>" }
+						{ req: "closeGa", gaid: "<%=currentGA.getKey().getId()%>" },
+						function() {
+							window.location.reload(true);
+						}
 					);
 				
-				window.location.href = "/user?userID=<%= cpcuser.getKey().getId() %>";
 			  }
 		}
 		

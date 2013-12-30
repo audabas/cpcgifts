@@ -74,6 +74,8 @@ public class EditGAServlet extends HttpServlet {
 				
 				Comment comment = new Comment(cpcuser.getKey(), ga.getKey(), commentText);
 				
+				log.info("New comment : " + comment);
+				
 				pm.makePersistent(comment);
 				
 				ga.addComment(comment.getKey());

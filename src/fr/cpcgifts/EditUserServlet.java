@@ -37,6 +37,8 @@ public class EditUserServlet extends HttpServlet {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		HttpSession session = req.getSession();
 		CpcUser cpcuser = (CpcUser) session.getAttribute("cpcuser");
+		if(cpcuser == null)
+			resp.sendRedirect(userService.createLogoutURL("/logout.jsp"));
 		cpcuser = pm.getObjectById(CpcUser.class, cpcuser.getKey());
 
 		if (user != null && cpcuser != null) {
