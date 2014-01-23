@@ -8,7 +8,6 @@
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.List"%>
 <%@page import="fr.cpcgifts.persistance.GAPersistance"%>
-<%@page import="fr.cpcgifts.utils.ViewTools"%>
 <%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@page import="com.google.appengine.api.datastore.KeyFactory"%>
 <%@page import="com.google.appengine.api.datastore.Key"%>
@@ -65,7 +64,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Profil de <%=profileCpcUser.getCpcNickname()%> - CPCGifts
+<title>Profil de <%= profileCpcUser.getCpcNickname()%> - CPCGifts
 </title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width">
@@ -223,7 +222,9 @@
 					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(gas)) {
 					%>
 		
-					<%=ViewTools.gaView(ga)%>
+					<jsp:include page="/templates/gaview.jsp">
+						<jsp:param value="<%= ga.getKey().getId() %>" name="gaID"/>
+					</jsp:include>
 					<hr>
 					<%
 						}
@@ -238,7 +239,9 @@
 													
 					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(entries)) {
 					%>
-					<%=ViewTools.gaView(ga)%>
+					<jsp:include page="/templates/gaview.jsp">
+						<jsp:param value="<%= ga.getKey().getId() %>" name="gaID"/>
+					</jsp:include>
 					<hr>
 					<%
 						}
@@ -253,7 +256,9 @@
 													
 					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(won)) {
 					%>
-					<%=ViewTools.gaView(ga)%>
+					<jsp:include page="/templates/gaview.jsp">
+						<jsp:param value="<%= ga.getKey().getId() %>" name="gaID"/>
+					</jsp:include>
 					<hr>
 					<%
 						}

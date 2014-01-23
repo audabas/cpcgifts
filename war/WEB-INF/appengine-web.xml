@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
 	<application>cpcgifts</application>
-	<version>prerelease</version>
+	<version>dev</version>
 
 	<!-- Allows App Engine to send multiple requests to one instance in parallel: -->
 	<threadsafe>true</threadsafe>
@@ -25,7 +25,7 @@
 
 	<automatic-scaling>
     	<max-idle-instances>2</max-idle-instances>
-    	<min-pending-latency>1.0s</min-pending-latency>
+    	<min-pending-latency>10.0s</min-pending-latency>
   	</automatic-scaling>
 
 </appengine-web-app>

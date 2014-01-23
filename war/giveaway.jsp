@@ -8,7 +8,6 @@
 <%@page import="java.util.Map"%>
 <%@page import="fr.cpcgifts.model.Comment"%>
 <%@page import="fr.cpcgifts.persistance.CommentPersistance"%>
-<%@page import="fr.cpcgifts.utils.ViewTools"%>
 <%@page import="fr.cpcgifts.utils.DateTools"%>
 <%@page import="fr.cpcgifts.persistance.GAPersistance"%>
 <%@page import="fr.cpcgifts.model.Giveaway"%>
@@ -283,7 +282,9 @@
 						for (Comment c : commentsArray) {
 					%>
 					
-					<%=ViewTools.commentView(c)%>
+					<jsp:include page="/templates/commentview.jsp">
+						<jsp:param value="<%= c.getKey().getId() %>" name="commentID"/>
+					</jsp:include>
 					
 					<%
 							if (userService.isUserLoggedIn() && (c.getAuthor().equals(cpcuser.getKey()) || isAdmin)) {
@@ -327,7 +328,9 @@
 							for (CpcUser entrant : entrants.values()) {
 						%>
 						
-						<%=ViewTools.userView(entrant)%>
+						<jsp:include page="/templates/userview.jsp">
+							<jsp:param value="<%= entrant.getKey().getId() %>" name="userID"/>
+						</jsp:include>
 						<hr>
 						<%
 							}
@@ -340,7 +343,7 @@
 				<p class="well">[url=<%=request.getRequestURL().toString() + '?'
 					+ request.getQueryString()%>]<%=currentGA.getTitle()%>[/url]</p>
 				<%
-					if (!currentGA.getImgUrl().equals("img/game.png")) {
+					if (!currentGA.getImgUrl().equals("/img/game.png")) {
 				%>
 				<h4>Signature image :</h4>
 				<p class="well">[url=<%=request.getRequestURL().toString() + '?'
@@ -356,7 +359,9 @@
 										for (Key k : currentGA.getWinners()) {
 											CpcUser winner = CpcUserPersistance.getUserFromCache(k);
 				%>
-						<%=ViewTools.userView(winner)%>
+						<jsp:include page="/templates/userview.jsp">
+							<jsp:param value="<%= winner.getKey().getId() %>" name="userID"/>
+						</jsp:include>
 						<%
 							if (isAdmin && !currentGA.isOpen()
 										&& currentGA.getEntrants().size() > currentGA.getWinners().size()) {

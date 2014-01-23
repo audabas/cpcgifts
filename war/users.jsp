@@ -1,6 +1,5 @@
 <%@page import="net.sf.jsr107cache.CacheException"%>
 <%@page import="java.util.Collections"%>
-<%@page import="fr.cpcgifts.utils.ViewTools"%>
 <%@page import="java.util.List"%>
 <%@page import="com.google.appengine.api.datastore.KeyFactory"%>
 <%@page import="com.google.appengine.api.datastore.Key"%>
@@ -56,8 +55,11 @@
 		%>
 		
 		<div>
-		<%= ViewTools.userView(u) %>
-		<hr>
+			<jsp:include page="/templates/userview.jsp">
+				<jsp:param value="<%= u.getKey().getId() %>" name="userID"/>
+			</jsp:include>
+			
+			<hr>
 		</div>
 
 		<%

@@ -9,7 +9,6 @@
 <%@page import="net.sf.jsr107cache.CacheManager"%>
 <%@page import="net.sf.jsr107cache.Cache"%>
 <%@page import="java.util.List"%>
-<%@page import="fr.cpcgifts.utils.ViewTools"%>
 <%@page import="fr.cpcgifts.persistance.GAPersistance"%>
 <%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@ page import="com.google.appengine.api.users.User"%>
@@ -71,7 +70,9 @@
 		%>
 		
 		<div>
-			<%=ViewTools.adminRequestView(ar)%>
+			<jsp:include page="/templates/adminrequestview.jsp">
+				<jsp:param value="<%= ar.getKey().getId() %>" name="arID"/>
+			</jsp:include>
 			<hr>
 		</div>
 		

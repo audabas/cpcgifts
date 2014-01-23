@@ -7,7 +7,6 @@
 <%@page import="net.sf.jsr107cache.CacheManager"%>
 <%@page import="net.sf.jsr107cache.Cache"%>
 <%@page import="java.util.List"%>
-<%@page import="fr.cpcgifts.utils.ViewTools"%>
 <%@page import="fr.cpcgifts.persistance.GAPersistance"%>
 <%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@ page import="com.google.appengine.api.users.User"%>
@@ -87,9 +86,19 @@
 			</ol>
 			<!-- Carousel items -->
 			<div class="carousel-inner">
-				<%= ViewTools.gaCarouselView(opengas.get(0), true) %>
-				<%= ViewTools.gaCarouselView(opengas.get(1), false) %>
-				<%= ViewTools.gaCarouselView(opengas.get(2), false) %>
+				
+				<jsp:include page="/templates/gacarouselview.jsp">
+					<jsp:param value="<%= opengas.get(0).getKey().getId() %>" name="gaID"/>
+					<jsp:param value="true" name="isActive"/>
+				</jsp:include>
+				<jsp:include page="/templates/gacarouselview.jsp">
+					<jsp:param value="<%= opengas.get(1).getKey().getId() %>" name="gaID"/>
+					<jsp:param value="false" name="isActive"/>
+				</jsp:include>
+				<jsp:include page="/templates/gacarouselview.jsp">
+					<jsp:param value="<%= opengas.get(2).getKey().getId() %>" name="gaID"/>
+					<jsp:param value="false" name="isActive"/>
+				</jsp:include>
 			</div>
 			<!-- Carousel nav -->
 			<a class="carousel-control left" href="#featuredGAs"
@@ -110,7 +119,9 @@
 		%>
 		
 		<div>
-			<%=ViewTools.gaView(ga)%>
+			<jsp:include page="/templates/gaview.jsp">
+				<jsp:param value="<%= ga.getKey().getId() %>" name="gaID"/>
+			</jsp:include>
 			<hr>
 		</div>
 		

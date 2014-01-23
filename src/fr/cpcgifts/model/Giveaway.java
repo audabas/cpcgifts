@@ -144,7 +144,7 @@ public class Giveaway implements Serializable {
 
 	public void setImgUrl(String imgUrl) {
 		if(imgUrl == "")
-			imgUrl = "img/game.png";
+			imgUrl = "/img/game.png";
 		
 		this.imgUrl = imgUrl;
 	}

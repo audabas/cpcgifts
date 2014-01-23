@@ -7,7 +7,6 @@
 <%@page import="net.sf.jsr107cache.CacheManager"%>
 <%@page import="net.sf.jsr107cache.Cache"%>
 <%@page import="java.util.List"%>
-<%@page import="fr.cpcgifts.utils.ViewTools"%>
 <%@page import="fr.cpcgifts.persistance.GAPersistance"%>
 <%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
