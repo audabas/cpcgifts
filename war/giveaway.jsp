@@ -194,7 +194,7 @@
 		<hr>
 
 		<div class="row">
-			<div class="offset1 span9 alert alert-warning" id="custom-rules">
+			<div class="offset1 span9 alert alert-warning alert-error-color" id="custom-rules">
 			</div>
 			<% if(isAuthor) { %>
 			<div class="offset1 span9 well well-small">
