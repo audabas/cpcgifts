@@ -55,6 +55,14 @@
 		Les inscriptions ne sont pas filtrées mais si le gagnant enfreint une de ces règles, un nouveau gagnant sera désigné.
 		</p>
 		
+		<h4>J'ai gagné un concours, mais le donateur refuse de me donner mon gain.</h4>
+		<p>
+			Si le donateur ne peut pas vous donner votre gain alors que vous remplissez toutes les conditions d'inscriptions,
+			merci de le signaler à un admin afin que nous puissions mettre à jour la page du giveaway et, si nécessaire,
+			prendre des mesures à l'encontre du canard en question.<br />
+			Merci de rester poli et courtois, un oubli/une erreur peut arriver à tout le monde ;-)
+		</p>
+		
 		<hr />
 		<h3>F.A.Q. Créateurs de concours</h3>
 		<hr />
@@ -99,6 +107,17 @@
 		<h4>J'ai trouvé un bug, une faute d'orthographe, etc...</h4>
 		<p>
 		Merci de me le signaler dans le <a href="<%= Constants.TOPIC_DEV %>">topic dédié à CPC Gifts</a>.
+		</p>
+		
+		<h4>Qui sont les admins ?</h4>
+		<p>
+			<ul>
+				<li><a href="http://cpcgifts.appspot.com/user?userID=6001">bastien09</a> (créateur de CPC Gifts)</li>
+				<li><a href="http://cpcgifts.appspot.com/user?userID=131001">sebarnolds</a></li>
+				<li><a href="http://cpcgifts.appspot.com/user?userID=12005">SiGarrett</a></li>
+				<li><a href="http://cpcgifts.appspot.com/user?userID=6005">Yakaaa</a></li>
+			</ul>
+			Merci de ne pas nous contacter individuellement pour des demandes pouvant se faire via CPC Gifts.
 		</p>
 		
 		<h4>Je suis développeur et souhaite contribuer à l'amélioration du site / réutiliser le code pour un projet.</h4>
