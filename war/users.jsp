@@ -1,3 +1,4 @@
+<%@page import="com.google.appengine.api.datastore.Entity"%>
 <%@page import="net.sf.jsr107cache.CacheException"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.List"%>
@@ -51,14 +52,12 @@
 		List<CpcUser> users = CpcUserPersistance.getAllUsersFromCache();
 		
 				
-		for(CpcUser u : users) {
+		for(CpcUser userToDisplay : users) {
 		%>
 		
 		<div>
-			<jsp:include page="/templates/userview.jsp">
-				<jsp:param value="<%= u.getKey().getId() %>" name="userID"/>
-			</jsp:include>
 			
+			<%@ include file="/templates/userview.jspf" %>
 			<hr>
 		</div>
 

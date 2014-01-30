@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@page import="com.google.appengine.api.memcache.jsr107cache.GCacheFactory"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
@@ -8,7 +9,6 @@
 <%@page import="net.sf.jsr107cache.Cache"%>
 <%@page import="java.util.List"%>
 <%@page import="fr.cpcgifts.persistance.GAPersistance"%>
-<%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
@@ -51,7 +51,7 @@
 	<%
 	
 	Cache cache;
-	List<Giveaway> opengas;
+	List<Giveaway> opengas = null;
 	
 	Map props = new HashMap();
     props.put(GCacheFactory.EXPIRATION_DELTA, 300); // on garde la liste en cache 5 minutes
@@ -87,18 +87,24 @@
 			<!-- Carousel items -->
 			<div class="carousel-inner">
 				
-				<jsp:include page="/templates/gacarouselview.jsp">
-					<jsp:param value="<%= opengas.get(0).getKey().getId() %>" name="gaID"/>
-					<jsp:param value="true" name="isActive"/>
-				</jsp:include>
-				<jsp:include page="/templates/gacarouselview.jsp">
-					<jsp:param value="<%= opengas.get(1).getKey().getId() %>" name="gaID"/>
-					<jsp:param value="false" name="isActive"/>
-				</jsp:include>
-				<jsp:include page="/templates/gacarouselview.jsp">
-					<jsp:param value="<%= opengas.get(2).getKey().getId() %>" name="gaID"/>
-					<jsp:param value="false" name="isActive"/>
-				</jsp:include>
+				<% 
+				Giveaway ga = opengas.get(0);
+				boolean active = true; 
+				%>				
+				<%@ include file="/templates/gacarouselview.jspf" %>
+				
+				<% 
+				ga = opengas.get(1);
+				active = false; 
+				%>				
+				<%@ include file="/templates/gacarouselview.jspf" %>
+				
+				<% 
+				ga = opengas.get(2);
+				active = false; 
+				%>				
+				<%@ include file="/templates/gacarouselview.jspf" %>
+
 			</div>
 			<!-- Carousel nav -->
 			<a class="carousel-control left" href="#featuredGAs"
@@ -119,9 +125,7 @@
 		%>
 		
 		<div>
-			<jsp:include page="/templates/gaview.jsp">
-				<jsp:param value="<%= ga.getKey().getId() %>" name="gaID"/>
-			</jsp:include>
+			<%@ include file="/templates/gaview.jspf" %>
 			<hr>
 		</div>
 		

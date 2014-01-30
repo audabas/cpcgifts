@@ -20,10 +20,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet>
 		<servlet-name>CloseGAServlet</servlet-name>
 		<servlet-class>fr.cpcgifts.CloseGAServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>EditGAServlet</servlet-name>
 		<servlet-class>fr.cpcgifts.EditGAServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>EditUserServlet</servlet-name>
@@ -32,6 +34,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet>
 		<servlet-name>EnterGAServlet</servlet-name>
 		<servlet-class>fr.cpcgifts.EnterGiveawayServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>AdminServlet</servlet-name>
@@ -106,6 +109,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet>
 		<servlet-name>Profile</servlet-name>
 		<jsp-file>/profile.jsp</jsp-file>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>CreateGA</servlet-name>
@@ -114,6 +118,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet>
 		<servlet-name>Giveaway</servlet-name>
 		<jsp-file>/giveaway.jsp</jsp-file>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>FAQ</servlet-name>
@@ -266,6 +271,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<auth-constraint>
 			<role-name>admin</role-name>
 		</auth-constraint>
-	</security-constraint> -->
+	</security-constraint> -->	
 
 </web-app>

@@ -3,29 +3,13 @@
 <%@page import="com.google.appengine.api.datastore.KeyFactory"%>
 <%@page import="com.google.appengine.api.datastore.Key"%>
 <%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
-<% 
-
-String sgaid = request.getParameter("gaID");
-
-String active = request.getParameter("isActive");
-
-Long gaid = Long.parseLong(sgaid);
-
-Key k = KeyFactory.createKey(Giveaway.class.getSimpleName(), gaid);
-
-Giveaway ga = GAPersistance.getGAFromCache(k);
-
-%>
 
 <div class="item
 	<%
-		if ("true".equals(active)) {
+		if (active)
+			out.print("active");
 	%>
-			active
-	<%
-		}
-	%>
-">
+	">
 	<a href="/giveaway?gaID=<%= ga.getKey().getId() %>" >
 		<img alt="Steam game image" class="img-steam-game" src="<%= ga.getImgUrl()  %>" alt="" >
 	</a>

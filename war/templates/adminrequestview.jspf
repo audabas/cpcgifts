@@ -10,13 +10,7 @@
 <%@page import="fr.cpcgifts.model.CpcUser"%>
 <% 
 
-String sarid = request.getParameter("arID");
-
-Long arid = Long.parseLong(sarid);
-
-Key k = KeyFactory.createKey(AdminRequest.class.getSimpleName(), arid);
-
-AdminRequest ar = AdminRequestPersistance.getRequestFromCache(k);
+Long arid = ar.getKey().getId();
 
 CpcUser auth = CpcUserPersistance.getUserFromCache(ar.getAuthor());
 
@@ -28,28 +22,36 @@ CpcUser auth = CpcUserPersistance.getUserFromCache(ar.getAuthor());
 		<h4 class='span3'>Demande #<%= arid %></h4>
 		<div class='span9 btn-toolbar'>
 			<% if(ar.getState() == AdminRequest.State.Open) { %>
-				<button class='btn btn-success btn-small' id='proceed-" + arId + "'>Traitée</button>
-				<button class='btn btn-danger btn-small' id='deny-" + arId + "'>Refusée</button>
+				<button class='btn btn-success btn-small' id='proceed-<%= arid %>'>Traitée</button>
+				<button class='btn btn-danger btn-small' id='deny-<%= arid  %>'>Refusée</button>
 			<% } %>
 		</div>
 	</div>
 	
 	<h5>Statut : <span class='label' id='statedisplay-<%= arid %>'></span></h5>
 	
-	<h5>Type de demande : <span class='label label-info' id='typedisplay-" + arId + "'></span></h5>
+	<h5>Type de demande : <span class='label label-info' id='typedisplay-<%= arid %>'></span></h5>
 	
 	<h6>Date : <%= ar.getRequestDate() %></h6>
 	
 	<h5>Envoyée par :</h5>
-	<jsp:include page="/templates/userview.jsp">
-		<jsp:param value="<%= auth.getKey().getId() %>" name="userID"/>
-	</jsp:include>
+	<%
+		{ CpcUser userToDisplay = auth;
+	%>
+			<%@ include file="/templates/userview.jspf" %>
+	<%
+		}
+	%>
 	
 	<% if(ar.getState() != AdminRequest.State.Open && ar.getConsideredBy() != null ) {	%>
 		<h5>Traitée par :</h5>
-		<jsp:include page="/templates/userview.jsp">
-			<jsp:param value="<%= ar.getConsideredBy().getId() %>" name="userID"/>
-		</jsp:include>
+		<%
+			{ CpcUser userToDisplay = CpcUserPersistance.getUserFromCache(ar.getConsideredBy());
+		%>
+				<%@ include file="/templates/userview.jspf" %>
+		<%
+			}
+		%>
 	<% } %>
 	
 	<br />
@@ -62,17 +64,12 @@ CpcUser auth = CpcUserPersistance.getUserFromCache(ar.getAuthor());
 		<h5>Pièce jointe :</h5>
 		<% switch (ar.getType()) {
 		case ReportUser:
-			// pour obtenir une exception si l'objet n'existe pas
-			CpcUserPersistance.getUserFromCache(ar.getAttachment()); %>
-			<jsp:include page="/templates/userview.jsp">
-				<jsp:param value="<%= ar.getAttachment().getId() %>" name="userID"/>
-			</jsp:include>
+			CpcUser userToDisplay = CpcUserPersistance.getUserFromCache(ar.getAttachment()); %>
+			<%@ include file="/templates/userview.jspf" %>
 			<% break;
 		default:
-			GAPersistance.getGAFromCache(ar.getAttachment()); %>
-			<jsp:include page="/templates/gaview.jsp">
-				<jsp:param value="<%= ar.getAttachment().getId() %>" name="gaID"/>
-			</jsp:include>
+			Giveaway ga = GAPersistance.getGAFromCache(ar.getAttachment()); %>
+			<%@include file="/templates/gaview.jspf" %>
 			<%break;
 		}
 	} catch(JDOObjectNotFoundException e) { %> 

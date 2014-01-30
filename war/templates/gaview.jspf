@@ -8,20 +8,12 @@
 <%@page import="fr.cpcgifts.model.CpcUser"%>
 <% 
 
-String sgaid = request.getParameter("gaID");
-
-Long gaid = Long.parseLong(sgaid);
-
-Key k = KeyFactory.createKey(Giveaway.class.getSimpleName(), gaid);
-
-Giveaway ga = GAPersistance.getGAFromCache(k);
-
-CpcUser auth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
+CpcUser gaAuth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
 
 %>
 
 <div class="row-fluid" data-type='giveaway' data-id='<%= ga.getKey().getId() %>'
-				data-title='<%= ga.getTitle() %>' data-author='<%=auth.getCpcNickname() %>'>
+				data-title='<%= ga.getTitle() %>' data-author='<%=gaAuth.getCpcNickname() %>'>
 	<div class="span2">
 		<a href="/giveaway?gaID=<%= ga.getKey().getId() %>" >
 			<img alt="Game Image" class="img-rounded img-small-ga lazy" src="/img/game.png"
@@ -82,14 +74,14 @@ CpcUser auth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
 	</div>
 	<div class="span3">
 		<div class="media">
-			<a class="pull-left" href="/user?userID=<%= auth.getKey().getId() %>">
+			<a class="pull-left" href="/user?userID=<%= gaAuth.getKey().getId() %>">
 				<img alt="Avatar Image" class="media-object img-small-avatar lazy" src="img/avatar.jpg"
-					data-original="<%= auth.getAvatarUrl() %>" />
+					data-original="<%= gaAuth.getAvatarUrl() %>" />
 			</a>
 			<div class="media-body">
 				<h4 class="media-heading">
-					<a href="/user?userID=<%= auth.getKey().getId() %>">
-						<%= auth.getCpcNickname() %>
+					<a href="/user?userID=<%= gaAuth.getKey().getId() %>">
+						<%= gaAuth.getCpcNickname() %>
 					</a>
 				</h4>
 			</div>

@@ -1,6 +1,8 @@
-<%@page import="fr.cpcgifts.model.AdminRequest"%>
-<%@page import="fr.cpcgifts.persistance.AdminRequestPersistance"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@page import="fr.cpcgifts.model.AdminRequest"%>
+<%@page import="com.google.appengine.api.datastore.Entity"%>
+<%@page import="com.google.appengine.api.datastore.Key"%>
+<%@page import="fr.cpcgifts.persistance.AdminRequestPersistance"%>
 <%@page import="com.google.appengine.api.memcache.jsr107cache.GCacheFactory"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Map"%>
@@ -9,8 +11,6 @@
 <%@page import="net.sf.jsr107cache.CacheManager"%>
 <%@page import="net.sf.jsr107cache.Cache"%>
 <%@page import="java.util.List"%>
-<%@page import="fr.cpcgifts.persistance.GAPersistance"%>
-<%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
@@ -70,9 +70,7 @@
 		%>
 		
 		<div>
-			<jsp:include page="/templates/adminrequestview.jsp">
-				<jsp:param value="<%= ar.getKey().getId() %>" name="arID"/>
-			</jsp:include>
+			<%@ include file="/templates/adminrequestview.jspf" %>
 			<hr>
 		</div>
 		

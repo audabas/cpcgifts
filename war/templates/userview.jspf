@@ -1,0 +1,16 @@
+<%@page import="com.google.appengine.api.datastore.KeyFactory"%>
+<%@page import="com.google.appengine.api.datastore.Key"%>
+<%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
+<%@page import="fr.cpcgifts.model.CpcUser"%>
+
+<div class="row-fluid" data-type='user' data-id='<%= userToDisplay.getKey().getId() %>' data-nickname='<%= userToDisplay.getCpcNickname() %>' >
+	<div class="span1">
+		<a href="/user?userID=<%= userToDisplay.getKey().getId() %>">
+			<img alt="Avatar" class="img-rounded img-small-avatar lazy" src="img/avatar.jpg"
+			data-original="<%= userToDisplay.getAvatarUrl()  %>" />
+		</a>
+	</div>
+	<div class="span10">
+		<h4><a  href="/user?userID=<%=  userToDisplay.getKey().getId() %>"> <%=  userToDisplay.getCpcNickname()%></a></h4>
+	</div>
+</div>

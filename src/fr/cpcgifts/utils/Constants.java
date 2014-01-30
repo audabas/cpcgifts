@@ -16,7 +16,8 @@ public final class Constants {
 	
 	public static final String DEFAULT_RULES = "####Conditions d'inscription :  \n\n" +
 			"* Au moins un cadeau pour les canards sur Steamgifts ou CPC Gifts  \n" +
-			"* Au moins 25 messages postés sur le forum";
+			"* Au moins 25 messages postés sur le forum  \n" +
+			"* Ne pas déjà posséder le jeu  \n";
 	
 	public static final String DEFAULT_CONTACT_EMAIL = "cpcgifts.appspot@gmail.com";
 	public static final String DEFAULT_CONTACT_PERSONAL = "CPC Gifts";

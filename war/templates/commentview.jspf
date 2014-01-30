@@ -1,0 +1,29 @@
+<%@page import="fr.cpcgifts.persistance.GAPersistance"%>
+<%@page import="fr.cpcgifts.model.Giveaway"%>
+<%@page import="javax.jdo.JDOObjectNotFoundException"%>
+<%@page import="fr.cpcgifts.utils.DateTools"%>
+<%@page import="fr.cpcgifts.persistance.CommentPersistance"%>
+<%@page import="fr.cpcgifts.model.Comment"%>
+<%@page import="com.google.appengine.api.datastore.KeyFactory"%>
+<%@page import="com.google.appengine.api.datastore.Key"%>
+<%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
+<%@page import="fr.cpcgifts.model.CpcUser"%>
+<% 
+
+CpcUser commentAuth = CpcUserPersistance.getUserFromCache(comment.getAuthor());
+
+%>
+
+<div class='media'>
+	<a class='pull-left' href='/user?userID=<%= commentAuth.getKey().getId() %>'>
+		<img alt="Avatar" class='media-object img-small-avatar' src='<%= commentAuth.getAvatarUrl() %>'>
+	</a>
+	<div class='media-body'>
+		<h6 class='media-heading'>
+			<a href='/user?userID=<%= commentAuth.getKey().getId() %>'><%= commentAuth.getCpcNickname() %></a>
+			<small>(il y a <%= DateTools.dateDifference(comment.getCommentDate()) %>)</small>
+		</h6>
+		<textarea class='hidden' id='comment-<%= comment.getKey().getId() %>'><%= comment.getCommentText() %></textarea>
+		<p class='' id='comment-<%= comment.getKey().getId() %>-display'></p>
+	</div>
+</div>

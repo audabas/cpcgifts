@@ -21,7 +21,13 @@ import net.sf.jsr107cache.CacheManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.memcache.jsr107cache.GCacheFactory;
 
 import fr.cpcgifts.model.AdminRequest;
@@ -231,6 +237,57 @@ public class AdminRequestPersistance {
 
 		return res;
 
+	}
+	
+	/**
+	 * Récupère la liste des requêtes encore ouvertes.
+	 * @param detached
+	 * @return
+	 */
+	public static List<Entity> getAllRequestsKeys() {
+
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	
+		com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query(AdminRequest.class.getSimpleName());
+		q.addSort("requestDate", SortDirection.DESCENDING);
+		q.setKeysOnly();
+	
+		PreparedQuery pq = datastore.prepare(q);
+		
+		return pq.asList(FetchOptions.Builder.withDefaults());
+
+	}
+	
+	/**
+	 * Récupère la liste des requêtes encore ouvertes.
+	 * @param detached
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Entity> getAllRequestsKeysFromCache() {
+		List<Entity> res;
+		
+		Cache cache;
+		
+		Map<String, Object> props = new HashMap<String, Object>();
+	    props.put(GCacheFactory.EXPIRATION_DELTA, 600); // on garde la liste en cache 10 minutes
+		
+		try {
+	        cache = CacheManager.getInstance().getCacheFactory().createCache(props);
+	                    
+	        res = (List<Entity>) cache.get("allRequestsKeys");
+			
+			if(res == null) {
+				res = getAllRequestsKeys();
+				cache.put("allRequestsKeys", res);
+			}
+			
+	    } catch (CacheException e) {
+	    	res = getAllRequestsKeys();
+	    }
+		
+		return res;
+		
 	}
 	
 	/**

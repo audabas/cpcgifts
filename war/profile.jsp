@@ -1,3 +1,4 @@
+<%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="javax.jdo.JDOObjectNotFoundException"%>
 <%@page import="fr.cpcgifts.utils.DateTools"%>
@@ -8,7 +9,6 @@
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.List"%>
 <%@page import="fr.cpcgifts.persistance.GAPersistance"%>
-<%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@page import="com.google.appengine.api.datastore.KeyFactory"%>
 <%@page import="com.google.appengine.api.datastore.Key"%>
 <%@ page import="com.google.appengine.api.users.User"%>
@@ -222,9 +222,7 @@
 					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(gas)) {
 					%>
 		
-					<jsp:include page="/templates/gaview.jsp">
-						<jsp:param value="<%= ga.getKey().getId() %>" name="gaID"/>
-					</jsp:include>
+					<%@ include file="/templates/gaview.jspf" %>
 					<hr>
 					<%
 						}
@@ -239,9 +237,7 @@
 													
 					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(entries)) {
 					%>
-					<jsp:include page="/templates/gaview.jsp">
-						<jsp:param value="<%= ga.getKey().getId() %>" name="gaID"/>
-					</jsp:include>
+					<%@ include file="/templates/gaview.jspf" %>
 					<hr>
 					<%
 						}
@@ -256,9 +252,7 @@
 													
 					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(won)) {
 					%>
-					<jsp:include page="/templates/gaview.jsp">
-						<jsp:param value="<%= ga.getKey().getId() %>" name="gaID"/>
-					</jsp:include>
+					<%@ include file="/templates/gaview.jspf" %>
 					<hr>
 					<%
 						}

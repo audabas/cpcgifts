@@ -18,7 +18,13 @@ import net.sf.jsr107cache.CacheManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query.SortDirection;
 
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
@@ -313,6 +319,46 @@ public class CpcUserPersistance {
 		} catch (CacheException e) {
 			res = getAllUsers();
 		}
+		
+		return res;
+	}
+	
+	/**
+	 * Récupère tout les utilisateurs enregistrés dans le datastore.
+	 * @return
+	 */
+	public static List<Entity> getAllUserKeys() {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		
+		com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query(CpcUser.class.getSimpleName());
+		q.addSort("cpcNickname", SortDirection.ASCENDING);
+		q.setKeysOnly();
+	
+		PreparedQuery pq = datastore.prepare(q);
+		
+		return pq.asList(FetchOptions.Builder.withDefaults());
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public static List<Entity> getAllUserKeysFromCache() {
+		List<Entity> res;
+		
+		Cache cache;
+		
+		try {
+	        cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+	                    
+	        res = (List<Entity>) cache.get("allUsersKeys");
+			
+			if(res == null) {
+				res = getAllUserKeys();
+				cache.put("allUsersKeys", res);
+			}
+			
+	    } catch (CacheException e) {
+	    	res = getAllUserKeys();
+	    }
 		
 		return res;
 	}

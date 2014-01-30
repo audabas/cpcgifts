@@ -22,7 +22,16 @@ import net.sf.jsr107cache.CacheManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.SortDirection;
 
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
@@ -251,6 +260,26 @@ public class GAPersistance {
 		}
 
 		return res;
+	}
+	
+	/**
+	 * Récupère la liste des giveaways encore ouverts.
+	 * @param detached
+	 * @return
+	 */
+	public static List<Entity> getOpenGAKeys() {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		
+		Filter opengasFilter = new FilterPredicate("open", FilterOperator.EQUAL, true);
+		
+		com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query(Giveaway.class.getSimpleName());
+		q.setKeysOnly();
+		q.setFilter(opengasFilter);
+		q.addSort("endDate", SortDirection.ASCENDING);
+	
+		PreparedQuery pq = datastore.prepare(q);
+		
+		return pq.asList(FetchOptions.Builder.withDefaults());
 	}
 	
 	/**

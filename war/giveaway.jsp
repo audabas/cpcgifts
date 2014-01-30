@@ -279,18 +279,16 @@
 							}
 						});
 
-						for (Comment c : commentsArray) {
+						for (Comment comment : commentsArray) {
 					%>
 					
-					<jsp:include page="/templates/commentview.jsp">
-						<jsp:param value="<%= c.getKey().getId() %>" name="commentID"/>
-					</jsp:include>
+					<%@ include file="/templates/commentview.jspf" %>
 					
 					<%
-							if (userService.isUserLoggedIn() && (c.getAuthor().equals(cpcuser.getKey()) || isAdmin)) {
+							if (userService.isUserLoggedIn() && (comment.getAuthor().equals(cpcuser.getKey()) || isAdmin)) {
 					%>
 					
-						<a href="javascript:deleteComment(<%=c.getKey().getId()%>)" class="btn btn-mini"><i class="icon-trash"></i> Supprimer ce commentaire</a>
+						<a href="javascript:deleteComment(<%=comment.getKey().getId()%>)" class="btn btn-mini"><i class="icon-trash"></i> Supprimer ce commentaire</a>
 					
 					<%
 						}
@@ -323,18 +321,15 @@
 				<div class="tab-pane" id="entrants">
 					
 					<%
-							Map<Key, CpcUser> entrants = CpcUserPersistance.getAllFromCache(currentGA.getEntrants()); 
-							
-							for (CpcUser entrant : entrants.values()) {
-						%>
+							for (CpcUser entrant : CpcUserPersistance.getAllFromCache(currentGA.getEntrants()).values()) {
+								CpcUser userToDisplay = entrant;
+					%>
 						
-						<jsp:include page="/templates/userview.jsp">
-							<jsp:param value="<%= entrant.getKey().getId() %>" name="userID"/>
-						</jsp:include>
+						<%@ include file="/templates/userview.jspf" %>
 						<hr>
-						<%
-							}
-						%>
+					<%
+						}
+					%>
 					
 					
 				</div>
@@ -358,10 +353,9 @@
 									if (!currentGA.isOpen() && currentGA.getWinners().size() > 0) {
 										for (Key k : currentGA.getWinners()) {
 											CpcUser winner = CpcUserPersistance.getUserFromCache(k);
+											CpcUser userToDisplay = winner;
 				%>
-						<jsp:include page="/templates/userview.jsp">
-							<jsp:param value="<%= winner.getKey().getId() %>" name="userID"/>
-						</jsp:include>
+						<%@ include file="/templates/userview.jspf" %>
 						<%
 							if (isAdmin && !currentGA.isOpen()
 										&& currentGA.getEntrants().size() > currentGA.getWinners().size()) {
