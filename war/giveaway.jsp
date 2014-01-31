@@ -324,6 +324,10 @@
 					%>
 						
 						<%@ include file="/templates/userview.jspf" %>
+						<% if(isAdmin) { %>
+							<a	href="/admin/gaWinner?reqtype=addWinner&gaid=<%=currentGA.getKey().getId()%>&userid=<%=entrant.getKey().getId()%>"
+								class="btn btn-small btn-success"><i class="icon-plus icon-white"></i> Ajouter aux gagnants</a>
+						<% } %>
 						<hr>
 					<%
 						}
@@ -348,10 +352,10 @@
 				<div class="tab-pane" id="winner">
 				
 				<%
-									if (!currentGA.isOpen() && currentGA.getWinners().size() > 0) {
-										for (Key k : currentGA.getWinners()) {
-											CpcUser winner = CpcUserPersistance.getUserFromCache(k);
-											CpcUser userToDisplay = winner;
+					if (!currentGA.isOpen() && currentGA.getWinners().size() > 0) {
+						for (Key k : currentGA.getWinners()) {
+							CpcUser winner = CpcUserPersistance.getUserFromCache(k);
+							CpcUser userToDisplay = winner;
 				%>
 						<%@ include file="/templates/userview.jspf" %>
 						<%
@@ -362,8 +366,12 @@
 								class="btn btn-warning"><i class="icon-repeat icon-white"></i> Relancer le tirage</a>
 						<%
 							}
+							if(isAdmin) {
 						%>	
+							<a	href="/admin/gaWinner?reqtype=removeWinner&gaid=<%=currentGA.getKey().getId()%>&userid=<%=k.getId()%>"
+								class="btn btn-danger"><i class="icon-trash icon-white"></i> Supprimer gagnant</a>
 						<%
+							}
 							if (isAuthor && !currentGA.isOpen() &&
 									currentGA.getEntrants().size() > currentGA.getWinners().size()) {
 						%>

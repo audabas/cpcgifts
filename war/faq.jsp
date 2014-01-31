@@ -70,6 +70,14 @@
 		Les clés séparées de jeux provenant d'un bundle sont interdites tant que le bundle est encore en vente.
 		</p>
 		
+		<h4>Puis-je créer un concours sans tirage au sort ?</h4>
+		<p>
+		Oui !<br />
+		Pour cela il vous suffit de créer le concours normalement, en prenant soin d'indiquer dans les règles personnalisées qu'il s'agit d'un concours sans tirage au sort.
+		Les participants devront s'inscrire en cliquant sur le bouton "Participer".<br />
+		À la fin du concours, un des participants sera tout de même tiré au sort. Il vous suffira de faire une demande de reroll en indiquant le vainqueur que vous avez désigné.
+		</p>
+		
 		<h4>Comment limiter les inscriptions de mon concours à certains canards uniquement ?</h4>
 		<p>Il n'existe pour le moment aucun moyen de filtrer les inscriptions aux concours.<br />
 		Vous pouvez cependant indiquer vos propres règles dans la description.
