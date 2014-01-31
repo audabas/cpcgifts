@@ -74,11 +74,11 @@ public class EditGAServlet extends HttpServlet {
 				
 				Comment comment = new Comment(cpcuser.getKey(), ga.getKey(), commentText);
 				
-				log.info("New comment : " + comment);
-				
 				pm.makePersistent(comment);
 				
 				ga.addComment(comment.getKey());
+				
+				log.info(cpcuser + " posted new comment : " + comment);
 			} else if("changetitle".equals(reqType)) {
 				String newTitle = params.get("title")[0];
 				

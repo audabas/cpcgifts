@@ -92,7 +92,7 @@ public class Comment implements Serializable {
 	@Override
 	public String toString() {
 		return "Comment [key=" + key + ", author=" + author + ", giveaway="
-				+ giveaway + ", commentDate=" + commentDate + "]";
+				+ giveaway + ", commentDate=" + commentDate + ", commentText=" + commentText + " ]";
 	}
 	
 	

@@ -14,7 +14,7 @@
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 
-<%!	UserService userService = UserServiceFactory.getUserService(); %>
+<%	UserService userService = UserServiceFactory.getUserService(); %>
 <%	User user = userService.getCurrentUser(); %>
 
 <!DOCTYPE html>
@@ -68,6 +68,14 @@
 		<p>Tout ce que vous voulez du moment que ça n'enfreint pas les règles de la plateforme sur laquelle vous avez acheté le jeu.<br />
 		Les bons de réductions sont interdits à moins d'être très intéressant (80% ou plus).<br />
 		Les clés séparées de jeux provenant d'un bundle sont interdites tant que le bundle est encore en vente.
+		</p>
+		
+		<h4>Puis-je créer un concours sans tirage au sort ?</h4>
+		<p>
+		Oui !<br />
+		Pour cela il vous suffit de créer le concours normalement, en prenant soin d'indiquer dans les règles personnalisées qu'il s'agit d'un concours sans tirage au sort.
+		Les participants devront s'inscrire en cliquant sur le bouton "Participer".<br />
+		À la fin du concours, un des participants sera tout de même tiré au sort. Il vous suffira de faire une demande de reroll en indiquant le vainqueur que vous avez désigné.
 		</p>
 		
 		<h4>Comment limiter les inscriptions de mon concours à certains canards uniquement ?</h4>
