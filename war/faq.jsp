@@ -14,10 +14,8 @@
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 
-<%
-	UserService userService = UserServiceFactory.getUserService();
-	User user = userService.getCurrentUser();
-%>
+<%!	UserService userService = UserServiceFactory.getUserService(); %>
+<%	User user = userService.getCurrentUser(); %>
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->

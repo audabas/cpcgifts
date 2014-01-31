@@ -6,9 +6,10 @@
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 
+<%! UserService userService = UserServiceFactory.getUserService(); %>
+<%!	User user; %>
 <%
-	UserService userService = UserServiceFactory.getUserService();
-	User user = userService.getCurrentUser();
+	user = userService.getCurrentUser();
 %>
 
 <%@ include file="forcelogin.jspf"%>

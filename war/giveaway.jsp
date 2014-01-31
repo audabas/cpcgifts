@@ -17,13 +17,11 @@
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 
+<%!	UserService userService = UserServiceFactory.getUserService(); %>
+<%!	User user = null; %>
 <%
-	UserService userService = UserServiceFactory.getUserService();
-	User user = userService.getCurrentUser();
-%>
+	user = userService.getCurrentUser();
 
-
-<%
 	Giveaway currentGA = null;
 
 	String gaid = request.getParameter("gaID");

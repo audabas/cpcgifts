@@ -13,9 +13,11 @@
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 
-<%
-	UserService userService = UserServiceFactory.getUserService();
-	User user = userService.getCurrentUser();
+<%! UserService userService = UserServiceFactory.getUserService(); %>
+<%	User user = userService.getCurrentUser();
+	
+	Cache cache = null;
+	List<Giveaway> opengas = null;
 %>
 
 <!DOCTYPE html>
@@ -50,25 +52,19 @@
 
 	<%
 	
-	Cache cache;
-	List<Giveaway> opengas = null;
+	if(cache == null) {
+		Map props = new HashMap();
+    	props.put(GCacheFactory.EXPIRATION_DELTA, 300); // on garde la liste en cache 5 minutes
 	
-	Map props = new HashMap();
-    props.put(GCacheFactory.EXPIRATION_DELTA, 300); // on garde la liste en cache 5 minutes
-	
-	try {
         cache = CacheManager.getInstance().getCacheFactory().createCache(props);
-                    
-        opengas = (List<Giveaway>) cache.get("openGAsList");
-		
-		if(opengas == null) {
-			opengas = GAPersistance.getOpenGAs();
-			cache.put("openGAsList", opengas);
-		}
-		
-    } catch (CacheException e) {
-    	opengas = GAPersistance.getOpenGAs();
-    }
+	}        
+    
+    opengas = (List<Giveaway>) cache.get("openGAsList");
+	
+	if(opengas == null) {
+		opengas = GAPersistance.getOpenGAs();
+		cache.put("openGAsList", opengas);
+	}
 	%>
 
 	<div class="row hero-unit text-center">
