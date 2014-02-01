@@ -49,7 +49,7 @@ public class SendEmailUtils {
 			body.append("<p>\n" +
 					"S'il ne respecte pas une des conditions indiquées sur " +
 					"<a href='http://cpcgifts.appspot.com/giveaway?gaID=" + ga.getKey().getId() + "'>la page du concours</a>, " +
-					"vous pouvez demander la désignation d'un nouveau gagnant en répondant directement à ce mail tout en précisant la condition qu'il enfreint.\n" +
+					"vous pouvez demander la désignation d'un nouveau gagnant en utilisant le formulaire présent sur la page du concours.\n" +
 					"</p>\n");
 		} else {
 			body.append("Les gagnants qui ont été tirés au sort sont : \n");
@@ -63,13 +63,13 @@ public class SendEmailUtils {
 			body.append("<p>\n" +
 					"Si l'un d'eux ne respecte pas une des conditions indiquées sur " +
 					"<a href='http://cpcgifts.appspot.com/giveaway?gaID=" + ga.getKey().getId() + "'>la page du concours</a>, " +
-					"vous pouvez demander la désignation d'un nouveau gagnant en répondant directement à ce mail tout en précisant son pseudo et la condition qu'il enfreint.\n" +
+					"vous pouvez demander la désignation d'un nouveau gagnant en utilisant le formulaire présent sur la page du concours.\n" +
 					"</p>\n");
 		}
 		
 		body.append("<p>\n" +
 				"Cordialement,<br />\n" +
-				"Bastien - Admin de cpcgifts.appspot.com\n" +
+				"L'équipe cpcgifts.appspot.com\n" +
 				"</p>\n");
 		
 		body.append("</p>\n" +
