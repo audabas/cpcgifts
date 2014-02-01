@@ -159,6 +159,10 @@
 				
             });
 			
+            $("textarea[id^='comment-']").each(function(i) {
+            	$("#" + $(this).attr("id") + "-display").html(markdown.toHTML($(this).val()));
+            });
+	            
 		});
 		
 		function editRequest(requestId,reqType) {

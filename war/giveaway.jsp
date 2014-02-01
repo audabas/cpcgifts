@@ -285,12 +285,16 @@
 					<%
 							if (userService.isUserLoggedIn() && (comment.getAuthor().equals(cpcuser.getKey()) || isAdmin)) {
 					%>
-					
-						<a href="javascript:deleteComment(<%=comment.getKey().getId()%>)" class="btn btn-mini"><i class="icon-trash"></i> Supprimer ce commentaire</a>
-					
+						<a href="javascript:deleteComment(<%=comment.getKey().getId()%>)" class="btn btn-mini">
+							<i class="icon-trash"></i> Supprimer ce commentaire
+						</a>
 					<%
-						}
+						} if(userService.isUserLoggedIn()) {
 					%>
+					<a class="pull-right" title="Signaler un message hors-charte" data-toggle="modal" onclick="reportPostRequest(<%= comment.getKey().getId() %>)" href="#admin-request-modal">
+						<i class="icon-warning-sign"></i>
+					</a>
+					<% } %>
 					<hr>
 					
 					<%
@@ -620,6 +624,12 @@
             	$("#" + $(this).attr("id") + "-display").html(markdown.toHTML($(this).val()));
             });
             
+            var hash = window.location.hash;
+            
+            if(hash.match(/comment-/g)) {
+            	$(hash).css("background-color", "yellow");
+            }
+            
 		});
 		
 		function deleteComment(commentId) {
@@ -631,7 +641,7 @@
 						{ req: "deletecomment", gaid: "<%=currentGA.getKey().getId()%>", comment : commentId }
 					);
 					
-				var parent = $("#comment-" + commentId).parents(".media");
+				var parent = $("#comment-" + commentId + "-div");
 				parent.slideUp();
 				parent.next().hide();
 			  }
@@ -686,7 +696,10 @@
 		<% } %>
 		
 		function reportPostRequest(postId) {
-			
+			$("#reroll-fieldset").addClass("hidden");
+			$("#admin-request-type").val("<%= AdminRequest.Type.ReportPost.name() %>");
+			$("#admin-request-type-display").html("Signaler un commentaire hors charte");
+			$("#admin-request-attachmentid").val(postId);
 		}
 	</script>
 	

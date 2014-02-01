@@ -1,3 +1,4 @@
+<%@page import="fr.cpcgifts.persistance.CommentPersistance"%>
 <%@page import="fr.cpcgifts.persistance.AdminRequestPersistance"%>
 <%@page import="fr.cpcgifts.model.AdminRequest"%>
 <%@page import="fr.cpcgifts.utils.DateTools"%>
@@ -67,10 +68,22 @@ CpcUser auth = CpcUserPersistance.getUserFromCache(ar.getAuthor());
 			CpcUser userToDisplay = CpcUserPersistance.getUserFromCache(ar.getAttachment()); %>
 			<%@ include file="/templates/userview.jspf" %>
 			<% break;
+		case ReportPost:
+			{
+				Comment comment = CommentPersistance.getCommentFromCache(ar.getAttachment()); %>
+				<%@ include file="/templates/commentview.jspf" %>
+				<% Giveaway ga = GAPersistance.getGAFromCache(comment.getGiveaway()); %>
+				Dans giveaway <a href="/giveaway?gaID=<%= ga.getKey().getId() %>#comment-<%= comment.getKey().getId() %>-div">
+				<%= ga.getTitle() %>
+				</a>
+			<% }
+			break;
 		default:
-			Giveaway ga = GAPersistance.getGAFromCache(ar.getAttachment()); %>
-			<%@include file="/templates/gaview.jspf" %>
-			<%break;
+			{
+				Giveaway ga = GAPersistance.getGAFromCache(ar.getAttachment()); %>
+				<%@	include file="/templates/gaview.jspf" %>
+			<%}
+			break;
 		}
 	} catch(JDOObjectNotFoundException e) { %> 
 		<h5>Aucune pièce jointe.</h5>

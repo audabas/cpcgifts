@@ -7,9 +7,8 @@
 <%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
 <%@page import="fr.cpcgifts.model.CpcUser"%>
 <% 
-
-CpcUser gaAuth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
-
+{
+	CpcUser gaAuth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
 %>
 
 <div class="row-fluid" data-type='giveaway' data-id='<%= ga.getKey().getId() %>'
@@ -88,3 +87,5 @@ CpcUser gaAuth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
 		</div>
 	</div>
 </div>
+
+<% } %>

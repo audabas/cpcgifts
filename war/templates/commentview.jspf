@@ -14,7 +14,7 @@ CpcUser commentAuth = CpcUserPersistance.getUserFromCache(comment.getAuthor());
 
 %>
 
-<div class='media'>
+<div class='media' id="comment-<%= comment.getKey().getId() %>-div">
 	<a class='pull-left' href='/user?userID=<%= commentAuth.getKey().getId() %>'>
 		<img alt="Avatar" class='media-object img-small-avatar' src='<%= commentAuth.getAvatarUrl() %>'>
 	</a>
