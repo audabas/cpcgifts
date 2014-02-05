@@ -305,7 +305,7 @@
 						if (userService.isUserLoggedIn() && cpcuser != null && !cpcuser.isBanned()) {
 					%>
 
-					<form action="/editga" method="post">
+					<form id="comment-form" action="/editga" method="post">
 						<fieldset>
 							<label>Laisser un commentaire :</label>
 							<textarea class="span12" rows="5" id="comment" name="comment" required="required" data-provide="markdown"></textarea>
@@ -313,6 +313,9 @@
 							<input type="hidden" name="gaid" value="<%=currentGA.getKey().getId()%>">
 							
 							<button type="submit" class="btn">Commenter</button>
+							<% if(currentGA.isOpen() && !currentGA.getEntrants().contains(cpcuser.getKey()) && !isAuthor) { %>
+								<button type="button" onclick="enterGA(<%=currentGA.getKey().getId()%>)" class="btn">Commenter et participer</button>
+							<% } %>
 						</fieldset>
 					</form>
 					<%
@@ -645,6 +648,15 @@
 				parent.slideUp();
 				parent.next().hide();
 			  }
+		}
+		
+		function enterGA(gaId) {
+			$.get(
+					"/enterga?reqtype=enter&gaid=" + gaId,
+					function() {
+						$("#comment-form").submit();
+					}
+			);
 		}
 		
 		<% if(isAuthor || isAdmin) { %>
