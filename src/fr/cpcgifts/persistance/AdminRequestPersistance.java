@@ -27,6 +27,9 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.memcache.jsr107cache.GCacheFactory;
 
@@ -288,6 +291,23 @@ public class AdminRequestPersistance {
 		
 		return res;
 		
+	}
+	
+	/**
+	 * Récupère la liste des requêtes ouvertes.
+	 */
+	public static List<Entity> getOpenAdminRequestsKeys() {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		
+		Filter openarFilter = new FilterPredicate("state", FilterOperator.EQUAL, AdminRequest.State.Open.name());
+		
+		com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query(AdminRequest.class.getSimpleName());
+		q.setKeysOnly();
+		q.setFilter(openarFilter);
+	
+		PreparedQuery pq = datastore.prepare(q);
+		
+		return pq.asList(FetchOptions.Builder.withDefaults());
 	}
 	
 	/**

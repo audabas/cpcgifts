@@ -1,5 +1,6 @@
 
 
+<%@page import="fr.cpcgifts.persistance.AdminRequestPersistance"%>
 <%@page import="fr.cpcgifts.model.CpcUser"%>
 <div class="navbar navbar-inverse navbar-fixed-top">
 	<div class="navbar-inner">
@@ -47,6 +48,14 @@
 				
 				
 				<div class="pull-right">
+					<% if(userService.isUserLoggedIn() && userService.isUserAdmin()) {
+						int nbOpenRequests = AdminRequestPersistance.getOpenAdminRequestsKeys().size();
+						%>
+							<ul class="nav">
+								<li><a href="/adminrequests">Admin (<%= nbOpenRequests %>)</a></li>
+							</ul>
+					<% } %>
+				
 					<input id="search" type="text" class="input-medium search-query hidden searchbox hidden-phone hidden-tablet" placeholder="Rechercher...">
 				
 					<%
@@ -61,9 +70,6 @@
 							href="#"><span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="/user?userID=<%=cpcuser.getKey().getId() %>"><i class="icon-pencil"></i> Modifier votre profil</a></li>
-							<% if(userService.isUserAdmin()) { %>
-							<li><a href="/adminrequests">Page Administrateurs</a></li>
-							<% } %>
 							<li class="divider"></li>
 							<li><a href="<%=userService.createLogoutURL("/logout.jsp")%>"><i class="icon-off"></i> Déconnexion</a></li>
 						</ul>
