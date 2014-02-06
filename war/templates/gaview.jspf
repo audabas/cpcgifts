@@ -23,6 +23,9 @@
 		<h3 class="no-margin">
 			<a href="/giveaway?gaID=<%= ga.getKey().getId() %>" >
 				<%= ga.getTitle() %>
+				<% if(ga.isOpen() && cpcuser != null && ga.getEntrants().contains(cpcuser.getKey())) { %>
+					<img class="img-small-icon" src="/img/checked.png" alt=""></img>
+				<% } %>
 					<%
 						if(ga.getNbCopies() > 1) {
 					%>

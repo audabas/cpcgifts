@@ -112,6 +112,10 @@
 	background-color: #F3F3F3;
 }
 
+.entered h3 > a:not(:hover) {
+	color: #A0F0A0;
+}
+
 #commentaires p img {
 	max-height: 500px;
 	max-width: 75%;

@@ -85,7 +85,6 @@
 	<!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
 
 	<%@ include file="menubar.jspf"%>
-	<%@ include file="getuser.jspf"%>
 	
 	<%
 			boolean isAuthor = cpcuser != null && cpcuser.getKey().equals(gaAuthor.getKey());

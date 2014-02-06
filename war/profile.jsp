@@ -81,7 +81,6 @@
 	<!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
 
 	<%@ include file="menubar.jspf"%>
-	<%@ include file="getuser.jspf"%>
 
 	<%
 		boolean isCurrentUser = userService.isUserLoggedIn() && profileCpcUser.getKey().equals(cpcuser.getKey());

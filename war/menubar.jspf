@@ -1,4 +1,4 @@
-
+<%@ include file="getuser.jspf"%>
 
 <%@page import="fr.cpcgifts.persistance.AdminRequestPersistance"%>
 <%@page import="fr.cpcgifts.model.CpcUser"%>
@@ -17,7 +17,6 @@
 					<%
 						if (userService.isUserLoggedIn()) {
 					%>
-					<%@ include file="getuser.jspf"%>
 					<%
 							if (cpcuser != null) {
 					%>
@@ -61,7 +60,6 @@
 					<%
 						if (userService.isUserLoggedIn()) {
 					%>
-					<%@ include file="getuser.jspf"%>
 					<div class="btn-group">
 						<a class="btn" href="/user?userID=<%=cpcuser.getKey().getId() %>">
 						<i
