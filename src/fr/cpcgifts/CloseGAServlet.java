@@ -39,8 +39,11 @@ public class CloseGAServlet extends HttpServlet {
 	            
 	            for(Key k : ga.getWinners()) {
 	            	cache.remove(k);
+	            	cache.remove(k.getId() + "-won");
 	            }
 	            cache.remove(ga.getKey());
+	            
+	            cache.remove("contribution-" + ga.getAuthor().getId());
 				
 	        } catch (CacheException e) {
 	        	//rien

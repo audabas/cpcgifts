@@ -216,9 +216,9 @@
 			<div class="tab-content">
 				<div id="created" class="tab-pane">
 					<%
-					Map<Key,Giveaway> gas = GAPersistance.getAllFromCache(profileCpcUser.getGiveaways());
+					Giveaway[] gas = GAPersistance.getUserGAsFromCache(profileCpcUser, "created");
 					
-					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(gas)) {
+					for(Giveaway ga : gas) {
 					%>
 		
 					<%@ include file="/templates/gaview.jspf" %>
@@ -232,9 +232,9 @@
 		
 					<%
 					
-					Map<Key,Giveaway> entries = GAPersistance.getAllFromCache(profileCpcUser.getEntries());						
+					Giveaway[] entries = GAPersistance.getUserGAsFromCache(profileCpcUser, "entries");						
 													
-					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(entries)) {
+					for(Giveaway ga : entries) {
 					%>
 					<%@ include file="/templates/gaview.jspf" %>
 					<hr>
@@ -247,9 +247,9 @@
 				<div id="won" class="tab-pane" style="display: none">
 		
 					<%
-					Map<Key,Giveaway> won = GAPersistance.getAllFromCache(profileCpcUser.getWon());					
+					Giveaway[] won = GAPersistance.getUserGAsFromCache(profileCpcUser, "won");			
 													
-					for(Giveaway ga : DateTools.sortGiveawaysByEndDate(won)) {
+					for(Giveaway ga : won) {
 					%>
 					<%@ include file="/templates/gaview.jspf" %>
 					<hr>

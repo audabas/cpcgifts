@@ -68,6 +68,7 @@ public class EnterGiveawayServlet extends HttpServlet {
 	            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
 	            
 	            cache.remove(cpcuser.getKey());
+	            cache.remove(cpcuser.getKey().getId() + "-entries");
 	            cache.remove(ga.getKey());
 				
 	        } catch (CacheException e) {

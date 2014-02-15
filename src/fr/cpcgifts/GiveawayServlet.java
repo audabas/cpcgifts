@@ -91,6 +91,7 @@ public class GiveawayServlet extends HttpServlet {
 	            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
 	            
 	            cache.remove(cpcuser.getKey());
+	            cache.remove(cpcuser.getKey().getId() + "-created");
 				
 	        } catch (CacheException e) {
 	        	//rien

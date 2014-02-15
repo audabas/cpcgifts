@@ -35,6 +35,7 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
+import fr.cpcgifts.utils.DateTools;
 
 /**
  * Utilitaire permettant de récupérer des entités de type giveaway depuis le datastore.
@@ -138,6 +139,59 @@ public class GAPersistance {
 		
 		return res;
 	}
+	
+	/**
+	 * Récupère les giveaways triés par date de fin pour un utilisateur donné.
+	 * @param user
+	 * @param selection entries, won ou created
+	 * @return
+	 */
+	public static Giveaway[] getUserGAsFromCache(CpcUser user, String selection) {
+		Giveaway[] res = null;
+		
+		try {
+			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+
+			res = (Giveaway[]) cache.get(user.getKey().getId() + "-" + selection);
+			
+			if (res == null) {
+				
+				switch (selection) {
+				case "created":
+					res = DateTools.sortGiveawaysByEndDate(getAllFromCache(user.getGiveaways()));
+					break;
+				case "entries":
+					res = DateTools.sortGiveawaysByEndDate(getAllFromCache(user.getEntries()));
+					break;
+				case "won":
+					res = DateTools.sortGiveawaysByEndDate(getAllFromCache(user.getWon()));
+					break;
+				default:
+					break;
+				}
+				
+				cache.put(user.getKey().getId() + "-" + selection, res);
+				
+			}
+			
+		} catch (CacheException e) {
+			switch (selection) {
+			case "created":
+				res = DateTools.sortGiveawaysByEndDate(getAllFromCache(user.getGiveaways()));
+				break;
+			case "entries":
+				res = DateTools.sortGiveawaysByEndDate(getAllFromCache(user.getEntries()));
+				break;
+			case "won":
+				res = DateTools.sortGiveawaysByEndDate(getAllFromCache(user.getWon()));
+				break;
+			default:
+				break;
+			}
+		}
+		
+		return res;
+	}
 
 	/**
 	 * Récupère une liste de giveaways depuis le datastore.
@@ -194,36 +248,40 @@ public class GAPersistance {
 		return res;
 	}
 	
+	/**
+	 * Récupère tous les concours enregistrés dans le datastore.
+	 * @return
+	 */
+	public static List<Entity> getAllGAKeys() {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		
+		com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query(Giveaway.class.getSimpleName());
+		q.setKeysOnly();
+	
+		PreparedQuery pq = datastore.prepare(q);
+		
+		return pq.asList(FetchOptions.Builder.withDefaults());
+	}
+	
 	@SuppressWarnings("unchecked")
-	public static int getAllGASize() {
-		Integer res = null;
+	public static List<Entity> getAllGAKeysFromCache() {
+		List<Entity> res;
+		
+		Cache cache;
 		
 		try {
-			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-
-			res = (Integer) cache.get("giveaway-total");
-
-			if (res == null) { // s'il n'est pas dans le cache, on le met en cache
-				
-				PersistenceManagerFactory pmf = PMF.get();
-				PersistenceManager pm = pmf.getPersistenceManager();
-
-				Query query = pm.newQuery("select open from " + Giveaway.class.getName());
-				List<Boolean> ids = (List<Boolean>) query.execute();
-				
-				res = ids.size();
-				
-				cache.put("giveaway-total", res);
-			}
-		} catch (CacheException e) {
-			PersistenceManagerFactory pmf = PMF.get();
-			PersistenceManager pm = pmf.getPersistenceManager();
-
-			Query query = pm.newQuery("select open from " + Giveaway.class.getName());
-			List<Boolean> ids = (List<Boolean>) query.execute();
+	        cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+	                    
+	        res = (List<Entity>) cache.get("allGAKeys");
 			
-			res = ids.size();
-		}
+			if(res == null) {
+				res = getAllGAKeys();
+				cache.put("allGAKeys", res);
+			}
+			
+	    } catch (CacheException e) {
+	    	res = getAllGAKeys();
+	    }
 		
 		return res;
 	}

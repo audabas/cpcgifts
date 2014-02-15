@@ -160,6 +160,9 @@ public class AdminServlet extends HttpServlet {
 	            }
 	            if(userToUpdate != null) {
 	            	cache.remove(userToUpdate.getKey());
+	            	cache.remove(userToUpdate.getKey().getId() + "-created");
+	            	cache.remove(userToUpdate.getKey().getId() + "-entries");
+	            	cache.remove(userToUpdate.getKey().getId() + "-won");
 	            }
 	            if(needCacheClear) {
 	            	cache.clear();

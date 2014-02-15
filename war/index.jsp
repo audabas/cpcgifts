@@ -136,9 +136,9 @@
 			<div class="span3">
 				<h4>Statistiques : </h4>
 				<ul>
-					<li><strong><%= CpcUserPersistance.getAllUsersFromCache().size() %></strong> membres</li>
+					<li><strong><%= CpcUserPersistance.getAllUserKeysFromCache().size() %></strong> membres</li>
 					<li><strong><%= opengas.size() %></strong> concours en cours</li>
-					<li><strong><%= GAPersistance.getAllGASize() %></strong> concours créés</li>
+					<li><strong><%= GAPersistance.getAllGAKeysFromCache().size() %></strong> concours créés</li>
 				</ul>
 			</div>
 		</div>
