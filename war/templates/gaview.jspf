@@ -9,6 +9,12 @@
 <% 
 {
 	CpcUser gaAuth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
+	
+	//un giveaway est visible s'il n'est pas privé, si l'utilisateur est déjà inscrit ou bien s'il est l'auteur du concours.
+	boolean visible = !ga.isPrivate() || cpcuser != null && ga.getEntrants().contains(cpcuser.getKey()) 
+					|| cpcuser != null && gaAuth.getKey().equals(cpcuser.getKey());	
+	
+	if(visible) {
 %>
 
 <div class="row-fluid" data-type='giveaway' data-id='<%= ga.getKey().getId() %>'
@@ -23,9 +29,6 @@
 		<h3 class="no-margin">
 			<a href="/giveaway?gaID=<%= ga.getKey().getId() %>" >
 				<%= ga.getTitle() %>
-				<% if(ga.isOpen() && cpcuser != null && ga.getEntrants().contains(cpcuser.getKey())) { %>
-					<img class="img-small-icon" src="/img/checked.png" alt=""></img>
-				<% } %>
 					<%
 						if(ga.getNbCopies() > 1) {
 					%>
@@ -34,9 +37,15 @@
 						}
 					%>
 			</a>
+			<% if(ga.isOpen() && cpcuser != null && ga.getEntrants().contains(cpcuser.getKey())) { %>
+					<img class="img-small-icon" src="/img/checked.png" alt=""></img>
+			<% } %>
+			<% if(ga.isPrivate()) { %>
+				<img class="img-small-icon" src="/img/eye.png" alt=""></img>
+			<% } %>
 		</h3>
 		<div>
-			<img alt="Clock" class="img-smallest-icon" src="img/clock.png" />
+			<img alt="Clock" class="img-smallest-icon" src="/img/clock.png" />
 			<%
 				if(ga.isOpen()) {
 			%>
@@ -77,7 +86,7 @@
 	<div class="span3">
 		<div class="media">
 			<a class="pull-left" href="/user?userID=<%= gaAuth.getKey().getId() %>">
-				<img alt="Avatar Image" class="media-object img-small-avatar lazy" src="img/avatar.jpg"
+				<img alt="Avatar Image" class="media-object img-small-avatar lazy" src="/img/avatar.jpg"
 					data-original="<%= gaAuth.getAvatarUrl() %>" />
 			</a>
 			<div class="media-body">
@@ -91,4 +100,8 @@
 	</div>
 </div>
 
-<% } %>
+<hr />
+
+<% }
+	
+}%>

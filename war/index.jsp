@@ -35,7 +35,7 @@
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width">
 
-<script src="js/vendor/modernizr-2.6.2.min.js"></script>
+<script src="/js/vendor/modernizr-2.6.2.min.js"></script>
 
 <%@ include file="css.jspf" %>
 
@@ -123,7 +123,6 @@
 		
 		<div>
 			<%@ include file="/templates/gaview.jspf" %>
-			<hr>
 		</div>
 		
 		<%
@@ -174,7 +173,7 @@
 
 	<%@ include file="jscripts.jspf" %>
 	
-	<script src="js/vendor/fuse.min.js"></script>
+	<script src="/js/vendor/fuse.min.js"></script>
 	
 	<script type="text/javascript">
 		$(document).ready(function() {

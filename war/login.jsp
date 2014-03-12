@@ -40,7 +40,7 @@
 
 <%@ include file="css.jspf" %>
 
-<script src="js/vendor/modernizr-2.6.2.min.js"></script>
+<script src="/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
 	<!--[if lt IE 7]>

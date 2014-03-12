@@ -68,7 +68,7 @@ public class Giveaway implements Serializable {
 	private boolean open = true;
 	
 	@Persistent
-	private boolean rerolled = false;
+	private Boolean isPrivate = false;
 	
 	public Giveaway() {
 		super();
@@ -245,6 +245,17 @@ public class Giveaway implements Serializable {
 	public void setOpen(boolean open) {
 		this.open = open;
 	}
+	
+	public boolean isPrivate() {
+		if(this.isPrivate == null)
+			this.isPrivate = false;
+		
+		return this.isPrivate;
+	}
+	
+	public void setPrivate(boolean isPrivate) {
+		this.isPrivate = isPrivate;
+	}
 
 	public int getNbCopies() {
 		return nbCopies;
@@ -255,7 +266,8 @@ public class Giveaway implements Serializable {
 	}
 
 	public void drawWinner() {
-		open = false;
+		setOpen(false);
+		setPrivate(false);
 		
 		log.info("Giveaway " + getKey().getId() + ":" + title + " ended.");
 		
@@ -284,7 +296,6 @@ public class Giveaway implements Serializable {
 	}
 	
 	public void reroll(Key winnerToReroll) {
-		rerolled = true;
 		
 		Random rand = new Random();
 		
@@ -311,15 +322,12 @@ public class Giveaway implements Serializable {
 		
 	}
 	
-	public boolean isRerolled() {
-		return rerolled;
-	}
-
 	@Override
 	public String toString() {
 		return "Giveaway [key=" + getKey() + ", author=" + getAuthor() + ", title="
 				+ getTitle() + ", description=" + getDescription() + ", endDate="
-				+ getEndDate() + ", winners=" + Arrays.deepToString(winners.toArray()) + ", open=" + isOpen() + "]";
+				+ getEndDate() + ", winners=" + Arrays.deepToString(winners.toArray()) + ", open="
+				+ isOpen() + ", private=" + isPrivate() + "]";
 	}
 
 	

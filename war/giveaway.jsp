@@ -53,10 +53,16 @@
 		response.sendRedirect("/404.html");
 		return;
 	}
+	
+	String requestedUri = request.getRequestURI().toString();
+	
+	if(currentGA.isPrivate() && !requestedUri.contains("/private/")) {
+		response.sendRedirect("/private" + requestedUri + '?' + request.getQueryString());
+		return;
+	}
 
 	CpcUser gaAuthor = CpcUserPersistance.getUserFromCache(currentGA.getAuthor());
 
-	
 %>
 
 <!DOCTYPE html>
@@ -73,9 +79,9 @@
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width">
 
-<%@ include file="css.jspf" %>
+<%@ include file="/css.jspf" %>
 
-<script src="js/vendor/modernizr-2.6.2.min.js"></script>
+<script src="/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
 	<!--[if lt IE 7]>
@@ -89,10 +95,19 @@
 	<%
 			boolean isAuthor = cpcuser != null && cpcuser.getKey().equals(gaAuthor.getKey());
 			boolean isAdmin = (userService.isUserLoggedIn() && userService.isUserAdmin());
+			boolean isPrivate = currentGA.isPrivate();
 	%>
 
 	<div class="container">
 
+		<% if(isPrivate) { %>
+			
+			<%@ include file="/forcelogin.jspf" %>
+			
+			<div class="row alert alert-error">
+				Ce concours est privé. Merci de ne pas partager le lien sans autorisation.
+			</div>
+		<% } %>
 
 		<div class="row">
 			<div class="span5">
@@ -146,7 +161,7 @@
 				</div>
 				<hr>
 
-				<img alt="Clock" class="img-small-icon" src="img/clock.png" />
+				<img alt="Clock" class="img-small-icon" src="/img/clock.png" />
 				<%
 					if (currentGA.isOpen()) {
 				%>

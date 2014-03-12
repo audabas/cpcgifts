@@ -53,6 +53,8 @@ public class GiveawayServlet extends HttpServlet {
 			String[] endDateSplittedStr = endDateStr.split("@");
 			String[] splittedDate = endDateSplittedStr[0].split("-");
 			String[] splittedTime = endDateSplittedStr[1].split("-");
+			boolean isPrivate = (params.get("visibility") != null && "private".equals(params.get("visibility")[0]));
+			
 			int nbCopies = 1;
 			try {
 				nbCopies = Integer.parseInt(params.get("nbCopies")[0]);
@@ -72,6 +74,8 @@ public class GiveawayServlet extends HttpServlet {
 			
 			
 			Giveaway ga = new Giveaway(cpcuser.getKey(), gameName, gameDescription, customRules, imgUrl, c.getTime(), nbCopies);
+			
+			ga.setPrivate(isPrivate);
 			
 			log.info("Created ga : " + ga.getTitle() + " by " + cpcuser.getCpcNickname());
 			

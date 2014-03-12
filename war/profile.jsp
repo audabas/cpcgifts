@@ -71,7 +71,7 @@
 
 <%@ include file="css.jspf" %>
 
-<script src="js/vendor/modernizr-2.6.2.min.js"></script>
+<script src="/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
 	<!--[if lt IE 7]>
@@ -222,7 +222,6 @@
 					%>
 		
 					<%@ include file="/templates/gaview.jspf" %>
-					<hr>
 					<%
 						}
 					%>
@@ -237,7 +236,6 @@
 					for(Giveaway ga : entries) {
 					%>
 					<%@ include file="/templates/gaview.jspf" %>
-					<hr>
 					<%
 						}
 					%>
@@ -252,7 +250,6 @@
 					for(Giveaway ga : won) {
 					%>
 					<%@ include file="/templates/gaview.jspf" %>
-					<hr>
 					<%
 						}
 					%>

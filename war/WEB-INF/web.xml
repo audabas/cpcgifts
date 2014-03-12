@@ -150,6 +150,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<url-pattern>/giveaway</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
+		<servlet-name>Giveaway</servlet-name>
+		<url-pattern>/private/giveaway</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>FAQ</servlet-name>
 		<url-pattern>/faq</url-pattern>
 	</servlet-mapping>

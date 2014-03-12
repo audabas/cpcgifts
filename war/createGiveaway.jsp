@@ -32,7 +32,7 @@
 <%@ include file="css.jspf" %>
 
 <link rel="stylesheet" href="css/smoothness/jquery-ui-1.10.2.custom.min.css">
-<script src="js/vendor/modernizr-2.6.2.min.js"></script>
+<script src="/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
 	<!--[if lt IE 7]>
@@ -121,6 +121,31 @@
 				</div>
 			</div>
 			<hr>
+			<div class="row" id="visibility">
+				<div class="span1">
+					<img src="/img/eye.png" />
+				</div>
+				<div class="span10 offset1">
+					<div class="row">
+						<h4>Visibilité</h4>
+					</div>
+					<div class="row" style="margin-bottom: 20px;">
+						<input type="checkbox" id="visibility-checkbox" name="visibility" value="private" class="hidden">
+						<div class="btn-group" data-toggle="buttons-radio">
+						    <button type="button" class="btn active" id="public-button">Public</button>
+						    <button type="button" class="btn" id="private-button">Privé</button>
+					    </div>
+					</div>
+					<div class="row">
+						<div class="help-block well well-small">Un concours privé restera invisible jusqu'à sa clôture.</div>
+						<div class="help-block well well-small">Les concours privés sont principalement destinés à la création de concours puzzle.<br />
+							Vous pouvez utiliser le site web <a href="http://www.itstoohard.com/create">itstoohard.com</a> pour créer vos puzzles.<br />
+							Si le concours présente des conditions d'inscriptions particulières, vous devez les recopier pour qu'elles soient visibles avant la résolution du puzzle.  
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
 			<div class="row control-group" id="endDateCg">
 				<div class="span1">
 					<img src="/img/date.png" />
@@ -148,11 +173,11 @@
 
 	<%@ include file="jscripts.jspf" %>
 	
-	<script src="js/vendor/jquery-ui-1.10.2.custom.min.js"></script>
-	<script src="js/vendor/jquery-ui-timepicker-addon.js"></script>
+	<script src="/js/vendor/jquery-ui-1.10.2.custom.min.js"></script>
+	<script src="/js/vendor/jquery-ui-timepicker-addon.js"></script>
 
-	<script src="js/datepicker.js"></script>
-	<script src="js/bootstrap-limit.js"></script>
+	<script src="/js/datepicker.js"></script>
+	<script src="/js/bootstrap-limit.js"></script>
 	
 	<script type="text/javascript">
 	
@@ -246,6 +271,13 @@
 			} else {
 				$("#custom-rules-row").addClass("hidden");
 			}
+		});
+		
+		$("#public-button").click(function () {
+			document.getElementById("visibility-checkbox").checked = false;
+		});		
+		$("#private-button").click(function () {
+			document.getElementById("visibility-checkbox").checked = true;
 		});
 		
 	</script>

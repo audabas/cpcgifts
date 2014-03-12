@@ -31,7 +31,7 @@
 
 <%@ include file="css.jspf" %>
 
-<script src="js/vendor/modernizr-2.6.2.min.js"></script>
+<script src="/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
 	<!--[if lt IE 7]>
@@ -69,7 +69,7 @@
 
 	<%@ include file="jscripts.jspf" %>
 	
-	<script src="js/vendor/fuse.min.js"></script>
+	<script src="/js/vendor/fuse.min.js"></script>
 	
 	<script type="text/javascript">
 		$(document).ready(function() {
