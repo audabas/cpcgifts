@@ -169,3 +169,7 @@
 .ui-datepicker-current {
 	display: none;
 }
+
+.ui-datepicker {
+	z-index: 10 !important;
+}
