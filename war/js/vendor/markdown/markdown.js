@@ -842,6 +842,22 @@ Markdown.dialects.Gruber.inline = {
       return [ 2, "![" ];
     },
 
+	"[video": function video( text ) {
+	
+	  var res = Markdown.DialectHelpers.inline_until_char.call( this, text.substr(1), ']' );
+	  res[1] = res[1].toString().replace(/\,/g, "");
+	
+	  var m = text.match( /(http|https):\/\/www\.youtube\.com\/watch\?v\=([A-Za-z0-9\=\/\_\.\?]+)/gi );
+	  
+	  if ( m ) {
+		m[0] = m[0].replace( /feature=[A-Za-z\_]+\&/ , "");
+		m[0] = m[0].replace("/watch?v=", "/embed/");
+        return [ res[1].length+2, [ "video", { src: m[0], width: "560", height: "315", frameborder: "0", allowfullscreen: "true" } ] ];
+      }
+	  
+	  return [ 1, '[' ];
+	},
+	
     "[": function link( text ) {
 
       var orig = String(text);
@@ -1471,6 +1487,9 @@ function convert_tree_to_html( tree, references, options ) {
     case "header":
       jsonml[ 0 ] = "h" + jsonml[ 1 ].level;
       delete jsonml[ 1 ].level;
+      break;
+	case "video":
+      jsonml[ 0 ] = "iframe";
       break;
     case "bulletlist":
       jsonml[ 0 ] = "ul";

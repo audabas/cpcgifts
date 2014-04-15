@@ -129,6 +129,8 @@
 		<h4>Je suis développeur et souhaite contribuer à l'amélioration du site / réutiliser le code pour un projet.</h4>
 		<p>
 		Les sources sont hébergées sur <a href="<%= Constants.GITHUB %>">github</a> et sont sous licence libre.<br />
+		Les icônes sont fournies par <a href="http://glyphicons.com/">Glyphicons</a> 
+		sous licence <a href="http://creativecommons.org/licenses/by/3.0/deed.fr">CC BY 3.0</a>.<br />
 		Pour la contribution au développement, toute la communication se fait sur <a href="<%= Constants.TOPIC_DEV %>">le topic dédié</a>.
 		</p>
 

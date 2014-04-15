@@ -674,7 +674,7 @@
         name: 'groupFont',
         data: [{
           name: 'cmdBold',
-          title: 'Bold',
+          title: 'Gras',
           icon: 'icon icon-bold',
           callback: function(e){
             // Give/remove ** surround the selection
@@ -682,7 +682,7 @@
 
             if (selected.length == 0) {
               // Give extra word
-              chunk = 'strong text'
+              chunk = 'texte en gras'
             } else {
               chunk = selected.text
             }
@@ -703,7 +703,7 @@
           }
         },{
           name: 'cmdItalic',
-          title: 'Italic',
+          title: 'Italique',
           icon: 'icon icon-italic',
           callback: function(e){
             // Give/remove * surround the selection
@@ -711,7 +711,7 @@
 
             if (selected.length == 0) {
               // Give extra word
-              chunk = 'emphasized text'
+              chunk = 'texte en italique'
             } else {
               chunk = selected.text
             }
@@ -732,7 +732,7 @@
           }
         },{
           name: 'cmdHeading',
-          title: 'Heading',
+          title: 'Titre',
           icon: 'icon icon-font',
           callback: function(e){
             // Append/remove ### surround the selection
@@ -740,7 +740,7 @@
 
             if (selected.length == 0) {
               // Give extra word
-              chunk = 'heading text'
+              chunk = 'Titre'
             } else {
               chunk = selected.text
             }
@@ -768,7 +768,7 @@
         name: 'groupLink',
         data: [{
           name: 'cmdUrl',
-          title: 'URL/Link',
+          title: 'URL/Lien',
           icon: 'icon icon-globe',
           callback: function(e){
             // Give [] surround the selection and prepend the link
@@ -776,14 +776,17 @@
 
             if (selected.length == 0) {
               // Give extra word
-              chunk = 'enter link description here'
+              chunk = ''
             } else {
               chunk = selected.text
             }
 
-            link = prompt('Insert Hyperlink','http://')
+            link = prompt('Veuillez insérer l\'adresse URL du lien :','http://')
 
             if (link != null) {
+            	if(chunk.length == 0) {
+            		chunk = link;
+            	}
               // transform selection and set the cursor into chunked text
               e.replaceSelection('['+chunk+']('+link+')')
               cursor = selected.start+1
@@ -802,16 +805,16 @@
 
             if (selected.length == 0) {
               // Give extra word
-              chunk = 'enter image description here'
+              chunk = 'description de l\'image'
             } else {
               chunk = selected.text
             }
 
-            link = prompt('Insert Image Hyperlink','http://')
+            link = prompt('Veuillez insérer l\'adresse URL de votre image :','http://')
 
             if (link != null) {
               // transform selection and set the cursor into chunked text
-              e.replaceSelection('!['+chunk+']('+link+' "enter image title here")')
+              e.replaceSelection('!['+chunk+']('+link+' "titre de l\'image")')
               cursor = selected.start+2
 
               // Set the next tab
@@ -821,12 +824,30 @@
               e.setSelection(cursor,cursor+chunk.length)
             }
           }
-        }]
+        },{
+            name: 'cmdYoutube',
+            title: 'YouTube',
+            icon: 'icon icon-film',
+            callback: function(e){
+                // Give [] surround the selection and prepend the link
+                var chunk, cursor, selected = e.getSelection(), content = e.getContent(), link
+
+                link = prompt('Veuillez insérer l\'adresse URL de la vidéo YouTube :','http://')
+
+                if (link != null) {
+                  e.replaceSelection('[video ' +link+']')
+                  cursor = selected.start+1
+
+                  // Set the cursor
+                  e.setSelection(cursor + 6,cursor + 6 + link.length)
+                }
+              }
+          }]
       },{
         name: 'groupMisc',
         data: [{
           name: 'cmdList',
-          title: 'List',
+          title: 'Liste',
           icon: 'icon icon-list',
           callback: function(e){
             // Prepend/Give - surround the selection
@@ -877,8 +898,8 @@
         data: [{
           name: 'cmdPreview',
           toggle: true,
-          title: 'Preview',
-          btnText: 'Preview',
+          title: 'Prévisualisation du message',
+          btnText: 'Prévisualisation',
           btnClass: 'btn btn-inverse',
           icon: 'icon icon-white icon-search',
           callback: function(e){
