@@ -847,7 +847,7 @@ Markdown.dialects.Gruber.inline = {
 	  var res = Markdown.DialectHelpers.inline_until_char.call( this, text.substr(1), ']' );
 	  res[1] = res[1].toString().replace(/\,/g, "");
 	
-	  var m = text.match( /(http|https):\/\/www\.youtube\.com\/watch\?v\=([A-Za-z0-9\=\/\_\.\?]+)/gi );
+	  var m = text.match( /(http|https):\/\/www\.youtube\.com\/([A-Za-z0-9\=\/\_\.\?\&]+)/gi );
 	  
 	  if ( m ) {
 		m[0] = m[0].replace( /feature=[A-Za-z\_]+\&/ , "");
