@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
 	<application>cpcgifts</application>
-	<version>prerelease</version>
+	<version>dev-14-04-25</version>
 
 	<!-- Allows App Engine to send multiple requests to one instance in parallel: -->
 	<threadsafe>true</threadsafe>
@@ -25,7 +25,7 @@
 
   	<automatic-scaling>
 	    <max-idle-instances>1</max-idle-instances>
-	    <min-pending-latency>15s</min-pending-latency>
+	    <min-pending-latency>10s</min-pending-latency>
 	    <max-concurrent-requests>100</max-concurrent-requests>
 	</automatic-scaling>
   	
@@ -34,6 +34,7 @@
         <include path="/css/**" expiration="5d" />
         <include path="/js/**" expiration="5d" />
         <include path="/favicon.ico" expiration="30d" />
+        <include path="/**.html" expiration="30d" />
     </static-files>
 
 	<warmup-requests-enabled>true</warmup-requests-enabled>
