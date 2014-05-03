@@ -6,21 +6,36 @@
 
 <div class="item
 	<%
-		if (active)
-			out.print("active");
+	{
+		CpcUser gaAuth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
+		
+		//un giveaway est visible s'il n'est pas privé, si l'utilisateur est déjà inscrit ou bien s'il est l'auteur du concours.
+		boolean visible = !ga.isPrivate() || cpcuser != null && ga.getEntrants().contains(cpcuser.getKey()) 
+						|| cpcuser != null && gaAuth.getKey().equals(cpcuser.getKey());	
+		
+		if(visible) {
 	%>
-	">
-	<a href="/giveaway?gaID=<%= ga.getKey().getId() %>" >
-		<img alt="Steam game image" class="img-steam-game" src="<%= ga.getImgUrl()  %>" alt="" >
-	</a>
-	<div class="carousel-caption">
-		<h4><%= ga.getTitle() %></h4>
-		<p>
-			<% if(ga.getDescription().length() < 150) { %>
-				<%= ga.getDescription() %>
-			<% } else { %>
-				<%= ga.getDescription().substring(0, 150) + " ..."  %>
-			<% } %>
-		</p>
-	</div>
+		<%
+			if (active)
+				out.print("active");
+		%>
+		">
+		<a href="/giveaway?gaID=<%= ga.getKey().getId() %>" >
+			<img alt="Steam game image" class="img-steam-game" src="<%= ga.getImgUrl()  %>" alt="" >
+		</a>
+		<div class="carousel-caption">
+			<h4><%= ga.getTitle() %></h4>
+			<p>
+				<% if(ga.getDescription().length() < 150) { %>
+					<%= ga.getDescription() %>
+				<% } else { %>
+					<%= ga.getDescription().substring(0, 150) + " ..."  %>
+				<% } %>
+			</p>
+		</div>
+	
+	<%
+		}
+	}
+	%>
 </div>
