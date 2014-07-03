@@ -1,28 +1,22 @@
 package fr.cpcgifts;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import net.sf.jsr107cache.Cache;
-import net.sf.jsr107cache.CacheException;
-import net.sf.jsr107cache.CacheManager;
-
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.googlecode.objectify.Key;
 
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
-import fr.cpcgifts.persistance.PMF;
+import fr.cpcgifts.persistance.CpcUserPersistance;
+import fr.cpcgifts.persistance.GiveawayPersistance;
 
 @SuppressWarnings("serial")
 public class EnterGiveawayServlet extends HttpServlet {
@@ -34,13 +28,12 @@ public class EnterGiveawayServlet extends HttpServlet {
 			throws IOException {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		HttpSession session = req.getSession();
-		CpcUser cpcuser = (CpcUser) session.getAttribute("cpcuser");
+		CpcUser cpcuser = null;
+		if(user != null)
+			cpcuser = CpcUserPersistance.getCpcUser(user.getUserId());
 		if(cpcuser == null)
-			resp.sendRedirect(userService.createLogoutURL("/logout.jsp"));
-		cpcuser = pm.getObjectById(CpcUser.class, cpcuser.getKey());
-
+			resp.sendRedirect(userService.createLogoutURL("/"));
+		
 		if (user != null && cpcuser != null) {
 
 			@SuppressWarnings("unchecked")
@@ -48,7 +41,7 @@ public class EnterGiveawayServlet extends HttpServlet {
 			
 			String reqType = params.get("reqtype")[0];
 			String gaID = params.get("gaid")[0];
-			Giveaway ga = pm.getObjectById(Giveaway.class, KeyFactory.createKey(Giveaway.class.getSimpleName(),Long.parseLong(gaID)));
+			Giveaway ga = GiveawayPersistance.getGA(Key.create(Giveaway.class,Long.parseLong(gaID)));
 			
 			if(reqType.equals("enter")) {
 				if(! ga.getEntrants().contains(cpcuser.getKey()) && !cpcuser.isBanned()) { // vérifie que l'utilisateur n'est pas déjà inscrit et qu'il n'est pas banni.
@@ -60,26 +53,17 @@ public class EnterGiveawayServlet extends HttpServlet {
 				cpcuser.removeEntry(ga.getKey());
 			}
 			
-			
+			GiveawayPersistance.updateOrCreate(ga);
+			CpcUserPersistance.updateOrCreate(cpcuser);
 			
 			resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());
 			
-			try {
-	            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-	            
-	            cache.remove(cpcuser.getKey());
-	            cache.remove(cpcuser.getKey().getId() + "-entries");
-	            cache.remove(ga.getKey());
-				
-	        } catch (CacheException e) {
-	        	//rien
-	        }
+			
 			
 		} else {
 
 			resp.sendRedirect("/");
 		}
 		
-		pm.close();
 	}
 }

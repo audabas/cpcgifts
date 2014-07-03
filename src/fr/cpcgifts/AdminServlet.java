@@ -2,32 +2,24 @@ package fr.cpcgifts;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import net.sf.jsr107cache.Cache;
-import net.sf.jsr107cache.CacheException;
-import net.sf.jsr107cache.CacheManager;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.googlecode.objectify.Key;
 
 import fr.cpcgifts.model.Comment;
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
+import fr.cpcgifts.persistance.CommentPersistance;
 import fr.cpcgifts.persistance.CpcUserPersistance;
-import fr.cpcgifts.persistance.GAPersistance;
-import fr.cpcgifts.persistance.PMF;
+import fr.cpcgifts.persistance.GiveawayPersistance;
 
 @SuppressWarnings("serial")
 public class AdminServlet extends HttpServlet {
@@ -38,12 +30,11 @@ public class AdminServlet extends HttpServlet {
 			throws IOException {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		HttpSession session = req.getSession();
-		CpcUser cpcuser = (CpcUser) session.getAttribute("cpcuser");
+		CpcUser cpcuser = null;
+		if(user != null)
+			cpcuser = CpcUserPersistance.getCpcUser(user.getUserId());
 		if(cpcuser == null)
-			resp.sendRedirect(userService.createLogoutURL("/logout.jsp"));
-		cpcuser = pm.getObjectById(CpcUser.class, cpcuser.getKey());
+			resp.sendRedirect(userService.createLogoutURL("/"));
 
 		if (user != null && cpcuser != null && userService.isUserAdmin()) {
 
@@ -51,38 +42,35 @@ public class AdminServlet extends HttpServlet {
 			Map<String, String[]> params = req.getParameterMap();
 			
 			String reqType = params.get("reqtype")[0];
-			boolean needCacheClear = false;
 			
 			Giveaway ga = null;
-			Key gaKey = null;
+			Key<Giveaway> gaKey = null;
 			if (params.containsKey("gaid")) {
 				String gaID = params.get("gaid")[0];
-				gaKey = KeyFactory.createKey(Giveaway.class.getSimpleName(),Long.parseLong(gaID.trim()));
-				try {
-					ga = pm.getObjectById(Giveaway.class, gaKey);
-				} catch(Exception e) {}
+				gaKey = Key.create(Giveaway.class,Long.parseLong(gaID.trim()));
+				ga = GiveawayPersistance.getGA(gaKey);
 			}
 			
 			CpcUser userToUpdate = null;
-			Key userToUpdateKey = null;
+			Key<CpcUser> userToUpdateKey = null;
 			if (params.containsKey("userid")) {
 				String userID = params.get("userid")[0];
-				userToUpdateKey = KeyFactory.createKey(CpcUser.class.getSimpleName(),Long.parseLong(userID.trim()));
+				userToUpdateKey = Key.create(CpcUser.class,Long.parseLong(userID.trim()));
 				try {
-					userToUpdate = pm.getObjectById(CpcUser.class, userToUpdateKey);
+					userToUpdate = CpcUserPersistance.getCpcUser(userToUpdateKey);
 				} catch(Exception e) {}
 			}
 			
-			Key commentToUpdateKey = null;
+			Key<Comment> commentToUpdateKey = null;
 			if (params.containsKey("commentid")) {
 				String commentID = params.get("commentid")[0];
-				commentToUpdateKey = KeyFactory.createKey(Comment.class.getSimpleName(),Long.parseLong(commentID.trim()));
+				commentToUpdateKey = Key.create(Comment.class,Long.parseLong(commentID.trim()));
 			}
 			
 			if("reroll".equals(reqType)) { //reroll
 				String winnerToRerollId = params.get("winnerToReroll")[0];
 				
-				ga.reroll(KeyFactory.createKey(CpcUser.class.getSimpleName(), Long.parseLong(winnerToRerollId)));
+				ga.reroll(Key.create(CpcUser.class, Long.parseLong(winnerToRerollId)));
 				log.info("[ADMIN] " + cpcuser + " rerolled the giveaway " + ga + "." + "\n"
 						+ "New winners are : " + Arrays.deepToString(ga.getWinners().toArray()) + "."
 						);
@@ -95,7 +83,7 @@ public class AdminServlet extends HttpServlet {
 				ga.setOpen(true);
 			} else if("deleteGiveaway".equals(reqType)) {
 				log.info("[ADMIN] " + cpcuser + " deleted " + ga + ".");
-				GAPersistance.deleteGa(gaKey);
+				GiveawayPersistance.deleteGa(gaKey);
 			} else if("addWinner".equals(reqType)) {
 				log.info("[ADMIN] " + cpcuser + " added " + userToUpdate + " to winner list of " + ga + ".");
 				if(userToUpdate != null)
@@ -132,6 +120,7 @@ public class AdminServlet extends HttpServlet {
 			} else if("removeComment".equals(reqType)) {
 				log.info("[ADMIN] " + cpcuser + " removed " + commentToUpdateKey + " from comments of " + ga + ".");
 				ga.removeComment(commentToUpdateKey);
+				CommentPersistance.delete(commentToUpdateKey);
 			} else if("banuser".equals(reqType)) {
 				log.info("[ADMIN] " + cpcuser + " banned " + userToUpdate + ".");
 				userToUpdate.setBanned(true);
@@ -140,43 +129,23 @@ public class AdminServlet extends HttpServlet {
 				userToUpdate.setBanned(false);
 			} else if("userfusion".equals(reqType)) {
 				String userToDeleteID = params.get("user2id")[0];
-				Key userToDeleteKey = KeyFactory.createKey(CpcUser.class.getSimpleName(),Long.parseLong(userToDeleteID.trim()));
+				Key<CpcUser> userToDeleteKey = Key.create(CpcUser.class,Long.parseLong(userToDeleteID.trim()));
 				log.info("[ADMIN] " + cpcuser + " fusionned " + userToUpdate + " with " + userToDeleteKey + ".");
 				CpcUserPersistance.cpcusersFusion(userToUpdateKey, userToDeleteKey);
-				needCacheClear = true;
 			}
 			
 			if(ga != null) {
+				GiveawayPersistance.updateOrCreate(ga);
 				resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());
 			} else if(userToUpdate != null) {
+				CpcUserPersistance.updateOrCreate(userToUpdate);
 				resp.sendRedirect("/user?userID=" + userToUpdate.getKey().getId());
 			}
-			
-			try {
-	            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-	            
-	            if(ga != null) {
-	            	cache.remove(ga.getKey());
-	            }
-	            if(userToUpdate != null) {
-	            	cache.remove(userToUpdate.getKey());
-	            	cache.remove(userToUpdate.getKey().getId() + "-created");
-	            	cache.remove(userToUpdate.getKey().getId() + "-entries");
-	            	cache.remove(userToUpdate.getKey().getId() + "-won");
-	            }
-	            if(needCacheClear) {
-	            	cache.clear();
-	            }
-				
-	        } catch (CacheException e) {
-	        	//rien
-	        }
 			
 		} else {
 
 			resp.sendRedirect("/");
 		}
 		
-		pm.close();
 	}
 }

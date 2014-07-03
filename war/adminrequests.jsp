@@ -1,22 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="fr.cpcgifts.model.AdminRequest"%>
-<%@page import="com.google.appengine.api.datastore.Entity"%>
-<%@page import="com.google.appengine.api.datastore.Key"%>
 <%@page import="fr.cpcgifts.persistance.AdminRequestPersistance"%>
-<%@page import="com.google.appengine.api.memcache.jsr107cache.GCacheFactory"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
-<%@page import="net.sf.jsr107cache.CacheException"%>
-<%@page import="java.util.Collections"%>
-<%@page import="net.sf.jsr107cache.CacheManager"%>
-<%@page import="net.sf.jsr107cache.Cache"%>
 <%@page import="java.util.List"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 
-<% UserService userService = UserServiceFactory.getUserService(); %>
-<%	User user; %>
+<%
+	UserService userService = UserServiceFactory.getUserService();
+%>
+<%
+	User user;
+%>
 <%
 	user = userService.getCurrentUser();
 %>
@@ -60,9 +55,7 @@
 				<div class="tab-pane active" id="requests">
 
 	<%
-	
-		List<AdminRequest> adminrequests = AdminRequestPersistance.getAllRequestsFromCache();
-	
+		List<AdminRequest> adminrequests = AdminRequestPersistance.getAllRequests();
 	%>
 
 

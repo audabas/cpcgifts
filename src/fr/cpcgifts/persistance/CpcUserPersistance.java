@@ -1,411 +1,201 @@
 package fr.cpcgifts.persistance;
 
-import java.util.ArrayList;
+import static fr.cpcgifts.persistance.OfyService.ofy;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javax.jdo.JDOObjectNotFoundException;
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.Query;
-
 import net.sf.jsr107cache.Cache;
 import net.sf.jsr107cache.CacheException;
 import net.sf.jsr107cache.CacheManager;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.map.HashedMap;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query.SortDirection;
+import com.googlecode.objectify.Key;
 
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
 
 /**
- * Utilitaire permettant de récupérer des entités de type CpcUser depuis le datastore.
+ * Utilitaire permettant de récupérer des entités de type CpcUser depuis le
+ * datastore.
+ * 
  * @author bastien
- *
  */
 public class CpcUserPersistance {
 
+	public static void updateOrCreate(CpcUser u) {
+		ofy().save().entity(u);
+	}
+
+	public static void delete(Key<CpcUser> key) {
+		ofy().delete().key(key);
+	}
+
 	/**
 	 * Récupère un utilisateur dans le datastore grâce à son id google.
-	 * @param id L'identifiant google de l'utilisateur à récupérer.
+	 * 
+	 * @param id
+	 *            L'identifiant google de l'utilisateur à récupérer.
 	 * @return
 	 */
 	public static CpcUser getCpcUser(String id) {
 		CpcUser res = null;
 		
-		PersistenceManagerFactory pmf = PMF.get();
-		PersistenceManager pm = pmf.getPersistenceManager();
-
-		Query query = pm.newQuery(CpcUser.class);
-		query.setFilter("id == idParam");
-		query.declareParameters("String idParam");
-
-		try {
-			@SuppressWarnings("unchecked")
-			List<CpcUser> results = (List<CpcUser>) query.execute(id);
-			if (!results.isEmpty()) {
-				for (CpcUser u : results) {
-					res = u;
-					res = pm.detachCopy(res);
-					break;
-				}
-			}
-		} finally {
-			query.closeAll();
-			pm.close();
-		}
+		res = ofy().load().type(CpcUser.class).filter("id", id).first().now();
 
 		return res;
 	}
-	
+
 	/**
 	 * Récupère un utilisateur grâce à sa clé.
+	 * 
 	 * @param key
 	 * @return
 	 */
-	public static CpcUser getCpcUserByKey(Key key) {
+	public static CpcUser getCpcUser(Key<CpcUser> key) {
 		CpcUser res = null;
-		
-		PersistenceManagerFactory pmf = PMF.get();
-		PersistenceManager pm = pmf.getPersistenceManager();
 
-		try {
-			res = pm.getObjectById(CpcUser.class, key);
-			res = pm.detachCopy(res);
-		} finally {
-			pm.close();
-		}
+		res = ofy().load().key(key).safe();
 
-		return res;
-	}
-	
-	/**
-	 * @see getCpcUserByKey
-	 * @param key
-	 * @return
-	 * @throws JDOObjectNotFoundException
-	 */
-	public static CpcUser getCpcUserUndetached(Key key) throws JDOObjectNotFoundException {
-		CpcUser res = null;
-		
-		PersistenceManagerFactory pmf = PMF.get();
-		PersistenceManager pm = pmf.getPersistenceManager();
-	
-		try {
-			res = pm.getObjectById(CpcUser.class, key);
-		} catch(JDOObjectNotFoundException e) {
-			throw e;
-		} finally {
-		}
-	
-		return res;
-	}
-	
-	/**
-	 * Récupère un utilisateur depuis le cache s'il y est, le place dans le cache sinon.
-	 * @param key La clé de l'utilisateur à récupérer.
-	 * @return Le giveaway demandé.
-	 * @throws JDOObjectNotFoundException si la clé ne correspond à aucune entité dans le datastore.
-	 */
-	public static CpcUser getUserFromCache(Key key) throws JDOObjectNotFoundException {
-		CpcUser res = null;
-		
-		try {
-			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-
-			res = (CpcUser) cache.get(key);
-
-			if (res == null) { // s'il n'est pas dans le cache, on le met en cache
-				res = getCpcUserByKey(key);
-				cache.put(key, res);
-			}
-		} catch (CacheException e) {
-			res = getCpcUserByKey(key);
-		}
-		
 		return res;
 	}
 
 	/**
 	 * Récupère un utilisateur à l'aide de son id sur le forum canard pc.
-	 * @param cpcProfileId L'identifiant de l'utilisateur sur le forum canard pc.
+	 * 
+	 * @param cpcProfileId
+	 *            L'identifiant de l'utilisateur sur le forum canard pc.
 	 * @param detached
 	 * @return
 	 */
-	public static CpcUser getCpcUserByCpcProfileId(String cpcProfileId, boolean detached) {
+	public static CpcUser getCpcUserByCpcProfileId(String cpcProfileId) {
 		CpcUser res = null;
-		
-		PersistenceManagerFactory pmf = PMF.get();
-		PersistenceManager pm = pmf.getPersistenceManager();
-		
-		Query query = pm.newQuery(CpcUser.class);
-		query.setFilter("cpcProfileId == idParam");
-		query.declareParameters("String idParam");
-		
-		try {
-			@SuppressWarnings("unchecked")
-			List<CpcUser> results = (List<CpcUser>) query.execute(cpcProfileId);
-			if (!results.isEmpty()) {
-					res = results.get(0);
-					if(detached)
-						res = pm.detachCopy(res);
-			}
-		} finally {
-			query.closeAll();
-			
-			if(detached)
-				pm.close();
-		}
-		
+
+		res = ofy().load().type(CpcUser.class).filter("cpcProfileId", cpcProfileId).first().now();
+
 		return res;
 	}
-	
+
 	/**
-	 * Récupère un ensemble d'utilisateurs depuis le cache. Les place dans le cache s'ils n'y sont pas déjà.
+	 * Récupère un ensemble d'utilisateurs depuis le cache. Les place dans le
+	 * cache s'ils n'y sont pas déjà.
+	 * 
 	 * @param keys
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public static Map<Key, CpcUser> getAllFromCache(Collection<Key> keys) {
-		Map<Key, CpcUser> res = null;
-		
-		try {
-			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+	public static Map<Key<CpcUser>, CpcUser> getAll(Collection<Key<CpcUser>> keys) {
+		Map<Key<CpcUser>, CpcUser> res = null;
 
-			res = cache.getAll(keys);
-
-			Collection<Key> notCachedKeys = CollectionUtils.subtract(keys, res.keySet());
-
-			for (Key k : notCachedKeys) {
-				CpcUser u = getUserFromCache(k);
-				res.put(k, u);
-			}
-
-		} catch (CacheException e) {
-			List<CpcUser> cpcUsers = getCpcUsers(new ArrayList<>(keys), true);
-			res = new HashedMap();
-			
-			for(CpcUser u : cpcUsers) {
-				res.put(u.getKey(), u);
-			}
-		}
-		
-		return res;
-	}
-	
-	/**
-	 * Récupère une liste d'utilisateurs à partir de leur clés.
-	 * @param keys
-	 * @param detached
-	 * @return
-	 */
-	public static List<CpcUser> getCpcUsers(List<Key> keys, boolean detached) {
-		List<CpcUser> res = new ArrayList<CpcUser>();
-
-		if (keys.size() == 0)
-			return res;
-
-		PersistenceManagerFactory pmf = PMF.get();
-		PersistenceManager pm = pmf.getPersistenceManager();
-
-		try {
-
-			for (Key k : keys) {
-
-				CpcUser u = pm.getObjectById(CpcUser.class,k);
-
-				if(detached) {
-					res.add(pm.detachCopy(u));
-				} else {
-					res.add(u);
-				}
-
-			}
-		} finally {
-			if(detached)
-				pm.close();
-		}
+		res = ofy().load().keys(keys);
 
 		return res;
 	}
-	
+
 	/**
 	 * Récupère le nombre de gifts envoyés par l'utilisateur donné
 	 */
-	public static int getContributionValue(Key user) {
+	public static int getContributionValue(Key<CpcUser> user) {
 		Integer res = null;
-		
+
 		try {
-			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+			Cache cache = CacheManager.getInstance().getCacheFactory()
+					.createCache(Collections.emptyMap());
 
 			res = (Integer) cache.get("contribution-" + user.getId());
 
-			if (res == null) { // s'il n'est pas dans le cache, on le met en cache
+			if (res == null) { // s'il n'est pas dans le cache, on le met en
+								// cache
 				res = 0;
-				
-				CpcUser u = getUserFromCache(user);
-				Map<Key, Giveaway> gas = GAPersistance.getAllFromCache(u.getGiveaways());
-				
-				for(Giveaway ga : gas.values()) {
+
+				CpcUser u = getCpcUser(user);
+				List<Giveaway> gas = GiveawayPersistance.getAll(u.getGiveaways(),
+						false);
+
+				for (Giveaway ga : gas) {
 					res += ga.getWinners().size();
 				}
-				
+
 				cache.put("contribution-" + user.getId(), res);
 			}
 		} catch (CacheException e) {
 			res = 0;
-			
-			CpcUser u = getUserFromCache(user);
-			Map<Key, Giveaway> gas = GAPersistance.getAllFromCache(u.getGiveaways());
-			
-			for(Giveaway ga : gas.values()) {
-				res += ga.getWinners().size();
-			}
 		}
-		
+
 		return res;
 	}
 
 	/**
 	 * Récupère tout les utilisateurs enregistrés dans le datastore.
+	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static List<CpcUser> getAllUsers() {
 		List<CpcUser> res;
-		
-		PersistenceManagerFactory pmf = PMF.get();
-		PersistenceManager pm = pmf.getPersistenceManager();
-		
-		Query query = pm.newQuery(CpcUser.class);
-		query.setOrdering("cpcNickname asc");
-		
-		try {
-			res = (List<CpcUser>) query.execute();
-			res = (List<CpcUser>) pm.detachCopyAll(res);
-		} finally {
-			query.closeAll();
-			pm.close();
-		}
-		
+
+		res = ofy().load().type(CpcUser.class).order("cpcNickname").list();
+
 		return res;
 	}
-	
-	
-	@SuppressWarnings("unchecked")
-	public static List<CpcUser> getAllUsersFromCache() {
-		List<CpcUser> res;
-		
-		try {
-			Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
 
-			res = (List<CpcUser>) cache.get("alluserslist");
+	public static int getAllUserCountFromCache() {
+		Integer res = null;
 
-			if (res == null) { // s'il n'est pas dans le cache, on le met en cache
-				res = getAllUsers();
-				cache.put("alluserslist", res);
-			}
-		} catch (CacheException e) {
-			res = getAllUsers();
-		}
-		
-		return res;
-	}
-	
-	/**
-	 * Récupère tout les utilisateurs enregistrés dans le datastore.
-	 * @return
-	 */
-	public static List<Entity> getAllUserKeys() {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		
-		com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query(CpcUser.class.getSimpleName());
-		q.addSort("cpcNickname", SortDirection.ASCENDING);
-		q.setKeysOnly();
-	
-		PreparedQuery pq = datastore.prepare(q);
-		
-		return pq.asList(FetchOptions.Builder.withDefaults());
-	}
-	
-	
-	@SuppressWarnings("unchecked")
-	public static List<Entity> getAllUserKeysFromCache() {
-		List<Entity> res;
-		
 		Cache cache;
-		
+
 		try {
-	        cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-	                    
-	        res = (List<Entity>) cache.get("allUsersKeys");
-			
-			if(res == null) {
-				res = getAllUserKeys();
-				cache.put("allUsersKeys", res);
+			cache = CacheManager.getInstance().getCacheFactory()
+					.createCache(Collections.emptyMap());
+
+			res = (Integer) cache.get("usersCount");
+
+			if (res == null) {
+				res = ofy().load().type(CpcUser.class).count();
+				cache.put("usersCount", res);
 			}
-			
-	    } catch (CacheException e) {
-	    	res = getAllUserKeys();
-	    }
-		
+
+		} catch (CacheException e) {
+		}
+
 		return res;
 	}
-	
+
 	/**
-	 * Fusionne les giveaways de deux profils en un seul. 
+	 * Fusionne les giveaways de deux profils en un seul.
 	 */
-	public static void cpcusersFusion(Key profileToKeep, Key profileToDelete) {
-		PersistenceManagerFactory pmf = PMF.get();
-		PersistenceManager pm = pmf.getPersistenceManager();
-		
-		CpcUser userToKeep = pm.getObjectById(CpcUser.class,profileToKeep);
-		CpcUser userToDelete = pm.getObjectById(CpcUser.class, profileToDelete);
-		
+	public static void cpcusersFusion(Key<CpcUser> profileToKeep,
+			Key<CpcUser> profileToDelete) {
+		CpcUser userToKeep = getCpcUser(profileToKeep);
+		CpcUser userToDelete = getCpcUser(profileToDelete);
+
 		userToKeep.addGiveaways(userToDelete.getGiveaways());
-		for(Key k : userToDelete.getGiveaways()) {
-			Giveaway ga = pm.getObjectById(Giveaway.class, k);
+		for (Key<Giveaway> k : userToDelete.getGiveaways()) {
+			Giveaway ga = GiveawayPersistance.getGA(k);
 			ga.setAuthor(profileToKeep);
+			GiveawayPersistance.updateOrCreate(ga);
 		}
-		
+
 		userToKeep.addEntries(userToDelete.getEntries());
-		for(Key k : userToDelete.getEntries()) {
-			Giveaway ga = pm.getObjectById(Giveaway.class, k);
+		for (Key<Giveaway> k : userToDelete.getEntries()) {
+			Giveaway ga = GiveawayPersistance.getGA(k);
 			ga.removeEntrant(profileToDelete);
 			ga.addEntrant(profileToKeep);
+			GiveawayPersistance.updateOrCreate(ga);
 		}
-		
+
 		userToKeep.addWon(userToDelete.getWon());
-		for(Key k : userToDelete.getWon()) {
-			Giveaway ga = pm.getObjectById(Giveaway.class, k);
+		for (Key<Giveaway> k : userToDelete.getWon()) {
+			Giveaway ga = GiveawayPersistance.getGA(k);
 			ga.removeWinner(profileToDelete);
 			ga.addWinner(profileToKeep);
+			GiveawayPersistance.updateOrCreate(ga);
 		}
 		
-		pm.makePersistent(userToKeep);
-		pm.deletePersistent(userToDelete);
-		
-		pm.close();
-	}
+		CommentPersistance.changeCommentsAuthor(profileToDelete, profileToKeep);
 
-	/**
-	 * Ferme le persistance manager utilisé par cette instance.
-	 */
-	public static void closePm() {
-		PersistenceManagerFactory pmf = PMF.get();
-		PersistenceManager pm = pmf.getPersistenceManager();
-		pm.close();
+		updateOrCreate(userToKeep);
+		delete(profileToDelete);
+
 	}
 
 }

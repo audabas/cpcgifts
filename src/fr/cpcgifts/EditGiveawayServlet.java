@@ -1,48 +1,40 @@
 package fr.cpcgifts;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import net.sf.jsr107cache.Cache;
-import net.sf.jsr107cache.CacheException;
-import net.sf.jsr107cache.CacheManager;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.googlecode.objectify.Key;
 
 import fr.cpcgifts.model.Comment;
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
 import fr.cpcgifts.persistance.CommentPersistance;
-import fr.cpcgifts.persistance.PMF;
+import fr.cpcgifts.persistance.CpcUserPersistance;
+import fr.cpcgifts.persistance.GiveawayPersistance;
 
 @SuppressWarnings("serial")
-public class EditGAServlet extends HttpServlet {
+public class EditGiveawayServlet extends HttpServlet {
 	
-	private static final Logger log = Logger.getLogger(EditGAServlet.class.getName());
+	private static final Logger log = Logger.getLogger(EditGiveawayServlet.class.getName());
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		HttpSession session = req.getSession();
-		CpcUser cpcuser = (CpcUser) session.getAttribute("cpcuser");
+		CpcUser cpcuser = null;
+		if(user != null)
+			cpcuser = CpcUserPersistance.getCpcUser(user.getUserId());
 		if(cpcuser == null)
-			resp.sendRedirect(userService.createLogoutURL("/logout.jsp"));
-		cpcuser = pm.getObjectById(CpcUser.class, cpcuser.getKey());
+			resp.sendRedirect(userService.createLogoutURL("/"));
 
 		if (user != null && cpcuser != null) {
 
@@ -50,7 +42,7 @@ public class EditGAServlet extends HttpServlet {
 			Map<String, String[]> params = req.getParameterMap();
 			
 			String gaID = params.get("gaid")[0];
-			Giveaway ga = pm.getObjectById(Giveaway.class, KeyFactory.createKey(Giveaway.class.getSimpleName(),Long.parseLong(gaID)));
+			Giveaway ga = GiveawayPersistance.getGA(Key.create(Giveaway.class,Long.parseLong(gaID)));
 
 			String reqType = params.get("req")[0];
 
@@ -74,7 +66,7 @@ public class EditGAServlet extends HttpServlet {
 				
 				Comment comment = new Comment(cpcuser.getKey(), ga.getKey(), commentText);
 				
-				pm.makePersistent(comment);
+				CommentPersistance.updateOrCreate(comment);
 				
 				ga.addComment(comment.getKey());
 				
@@ -88,14 +80,14 @@ public class EditGAServlet extends HttpServlet {
 				}
 			} else if("deletecomment".equals(reqType)) {
 				String commentId = params.get("comment")[0];
-				Key commentKey = KeyFactory.createKey(Comment.class.getSimpleName(), Long.parseLong(commentId));
+				Key<Comment> commentKey = Key.create(Comment.class, Long.parseLong(commentId));
 				Comment c = CommentPersistance.getComment(commentKey);
 				
 				if(c.getAuthor().equals(cpcuser.getKey()) || userService.isUserAdmin()) {
 					log.info(cpcuser + " deleted comment " + c + " from giveaway " + ga + ".");
 					
 					ga.removeComment(commentKey);
-					pm.deletePersistent(c);
+					CommentPersistance.delete(commentKey);
 				}
 				
 			} else if("changerules".equals(reqType)) {
@@ -116,21 +108,11 @@ public class EditGAServlet extends HttpServlet {
 			
 			resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());
 			
-			
-			try {
-	            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-	            
-	            cache.remove(ga.getKey());
-				
-	        } catch (CacheException e) {
-	        	//rien
-	        }
+			GiveawayPersistance.updateOrCreate(ga);
 			
 		} else {
 			resp.sendRedirect("/");
 		}
-		
-		pm.close();
 		
 	}
 }

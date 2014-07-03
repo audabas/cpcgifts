@@ -1,24 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="fr.cpcgifts.model.Giveaway"%>
-<%@page import="com.google.appengine.api.memcache.jsr107cache.GCacheFactory"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
-<%@page import="net.sf.jsr107cache.CacheException"%>
-<%@page import="java.util.Collections"%>
-<%@page import="net.sf.jsr107cache.CacheManager"%>
-<%@page import="net.sf.jsr107cache.Cache"%>
 <%@page import="java.util.List"%>
-<%@page import="fr.cpcgifts.persistance.GAPersistance"%>
+<%@page import="fr.cpcgifts.persistance.GiveawayPersistance"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 
-<%!
-	Cache cache = null;
-	List<Giveaway> opengas = null;
+<%!	List<Giveaway> opengas = null;%>
+<%
+	UserService userService = UserServiceFactory.getUserService();
 %>
-<% UserService userService = UserServiceFactory.getUserService(); %>
-<% User user = userService.getCurrentUser(); %>
+<%
+	User user = userService.getCurrentUser();
+%>
 	
 
 <!DOCTYPE html>
@@ -52,20 +46,7 @@
 	<div class="container">
 
 	<%
-	
-	if(cache == null) {
-		Map props = new HashMap();
-    	props.put(GCacheFactory.EXPIRATION_DELTA, 300); // on garde la liste en cache 5 minutes
-	
-        cache = CacheManager.getInstance().getCacheFactory().createCache(props);
-	}        
-    
-    opengas = (List<Giveaway>) cache.get("openGAsList");
-	
-	if(opengas == null) {
-		opengas = GAPersistance.getOpenGAs();
-		cache.put("openGAsList", opengas);
-	}
+		opengas = GiveawayPersistance.getOpenGAs();
 	%>
 
 	<div class="row hero-unit text-center">
@@ -127,17 +108,15 @@
 		
 		<%
 			}
-				
-				GAPersistance.closePm();
 		%>
 		
 		<div class="row">
 			<div class="span3">
 				<h4>Statistiques : </h4>
 				<ul>
-					<li><strong><%= CpcUserPersistance.getAllUserKeysFromCache().size() %></strong> membres</li>
+					<li><strong><%= CpcUserPersistance.getAllUserCountFromCache() %></strong> membres</li>
 					<li><strong><%= opengas.size() %></strong> concours en cours</li>
-					<li><strong><%= GAPersistance.getAllGAKeysFromCache().size() %></strong> concours créés</li>
+					<li><strong><%= GiveawayPersistance.getAllGACount() %></strong> concours créés</li>
 				</ul>
 			</div>
 		</div>

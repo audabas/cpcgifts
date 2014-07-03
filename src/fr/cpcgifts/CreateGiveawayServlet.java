@@ -2,19 +2,12 @@ package fr.cpcgifts;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import net.sf.jsr107cache.Cache;
-import net.sf.jsr107cache.CacheException;
-import net.sf.jsr107cache.CacheManager;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -22,23 +15,23 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 import fr.cpcgifts.model.CpcUser;
 import fr.cpcgifts.model.Giveaway;
-import fr.cpcgifts.persistance.PMF;
+import fr.cpcgifts.persistance.CpcUserPersistance;
+import fr.cpcgifts.persistance.GiveawayPersistance;
 
 @SuppressWarnings("serial")
-public class GiveawayServlet extends HttpServlet {
+public class CreateGiveawayServlet extends HttpServlet {
 	
-	private static final Logger log = Logger.getLogger(GiveawayServlet.class.getName());
+	private static final Logger log = Logger.getLogger(CreateGiveawayServlet.class.getName());
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		HttpSession session = req.getSession();
-		CpcUser cpcuser = (CpcUser) session.getAttribute("cpcuser");
+		CpcUser cpcuser = null;
+		if(user != null)
+			cpcuser = CpcUserPersistance.getCpcUser(user.getUserId());
 		if(cpcuser == null)
-			resp.sendRedirect(userService.createLogoutURL("/logout.jsp"));
-		cpcuser = pm.getObjectById(CpcUser.class, cpcuser.getKey());
+			resp.sendRedirect(userService.createLogoutURL("/"));
 
 		if (user != null && cpcuser != null) {
 
@@ -77,29 +70,15 @@ public class GiveawayServlet extends HttpServlet {
 			
 			ga.setPrivate(isPrivate);
 			
+			GiveawayPersistance.updateOrCreate(ga);
+			
+			cpcuser.addGiveaway(ga.getKey());
+			
+			CpcUserPersistance.updateOrCreate(cpcuser);
+			
 			log.info("Created ga : " + ga.getTitle() + " by " + cpcuser.getCpcNickname());
 			
-			try {
-				pm.makePersistent(ga);
-				
-				cpcuser.addGiveaway(ga.getKey());				
-				pm.makePersistent(cpcuser);
-				
-			} finally {
-				pm.close();
-			}
-			
 			resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());
-			
-			try {
-	            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-	            
-	            cache.remove(cpcuser.getKey());
-	            cache.remove(cpcuser.getKey().getId() + "-created");
-				
-	        } catch (CacheException e) {
-	        	//rien
-	        }
 			
 		} else {
 

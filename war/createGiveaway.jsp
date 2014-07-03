@@ -1,7 +1,5 @@
-<%@page import="fr.cpcgifts.utils.Constants"%>
-<%@page import="com.google.appengine.api.datastore.KeyFactory"%>
-<%@page import="com.google.appengine.api.datastore.Key"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@page import="fr.cpcgifts.utils.Constants"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>

@@ -17,14 +17,14 @@ public class SendEmailUtils {
 	
 	public static void sendGiveawayFinishedEmail(Giveaway ga) {
 		
-		CpcUser author = CpcUserPersistance.getUserFromCache(ga.getAuthor());
+		CpcUser author = CpcUserPersistance.getCpcUser(ga.getAuthor());
 		
 		if(!author.isAcceptEmails()) {
 			// si l'utilisateur n'accepte pas l'envoi d'email, on s'arrête ici.
 			return;
 		}
 		
-		Collection<CpcUser> winners = CpcUserPersistance.getAllFromCache(ga.getWinners()).values();
+		Collection<CpcUser> winners = CpcUserPersistance.getAll(ga.getWinners()).values();
 		
 		String to = author.getGuser().getEmail();
 		String toPersonal = author.getCpcNickname();

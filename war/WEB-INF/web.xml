@@ -15,16 +15,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet>
 	<servlet>
 		<servlet-name>GiveawayServlet</servlet-name>
-		<servlet-class>fr.cpcgifts.GiveawayServlet</servlet-class>
+		<servlet-class>fr.cpcgifts.CreateGiveawayServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>CloseGAServlet</servlet-name>
-		<servlet-class>fr.cpcgifts.CloseGAServlet</servlet-class>
+		<servlet-class>fr.cpcgifts.CloseGiveawayServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>EditGAServlet</servlet-name>
-		<servlet-class>fr.cpcgifts.EditGAServlet</servlet-class>
+		<servlet-class>fr.cpcgifts.EditGiveawayServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
@@ -46,7 +46,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet>
 	<servlet>
 		<servlet-name>CleanEmptyGAServlet</servlet-name>
-		<servlet-class>fr.cpcgifts.CleanEmptyGAServlet</servlet-class>
+		<servlet-class>fr.cpcgifts.CleanEmptyGiveawayServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>CleanOldRequestsServlet</servlet-name>
@@ -276,5 +276,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 			<role-name>admin</role-name>
 		</auth-constraint>
 	</security-constraint> -->	
+	
+	<!-- Objectify -->
+	<filter>
+        <filter-name>ObjectifyFilter</filter-name>
+        <filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+	</filter>
+	<filter-mapping>
+	        <filter-name>ObjectifyFilter</filter-name>
+	        <url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 </web-app>

@@ -1,19 +1,18 @@
+<%@page import="com.googlecode.objectify.NotFoundException"%>
+<%@page import="fr.cpcgifts.persistance.OfyService"%>
 <%@page import="fr.cpcgifts.persistance.CommentPersistance"%>
 <%@page import="fr.cpcgifts.persistance.AdminRequestPersistance"%>
 <%@page import="fr.cpcgifts.model.AdminRequest"%>
 <%@page import="fr.cpcgifts.utils.DateTools"%>
-<%@page import="javax.jdo.JDOObjectNotFoundException"%>
-<%@page import="fr.cpcgifts.persistance.GAPersistance"%>
+<%@page import="fr.cpcgifts.persistance.GiveawayPersistance"%>
 <%@page import="fr.cpcgifts.model.Giveaway"%>
-<%@page import="com.google.appengine.api.datastore.KeyFactory"%>
-<%@page import="com.google.appengine.api.datastore.Key"%>
 <%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
 <%@page import="fr.cpcgifts.model.CpcUser"%>
 <% 
 
 Long arid = ar.getKey().getId();
 
-CpcUser auth = CpcUserPersistance.getUserFromCache(ar.getAuthor());
+CpcUser auth = CpcUserPersistance.getCpcUser(ar.getAuthor());
 
 %>
 
@@ -47,7 +46,7 @@ CpcUser auth = CpcUserPersistance.getUserFromCache(ar.getAuthor());
 	<% if(ar.getState() != AdminRequest.State.Open && ar.getConsideredBy() != null ) {	%>
 		<h5>Traitée par :</h5>
 		<%
-			{ CpcUser userToDisplay = CpcUserPersistance.getUserFromCache(ar.getConsideredBy());
+			{ CpcUser userToDisplay = CpcUserPersistance.getCpcUser(ar.getConsideredBy());
 		%>
 				<%@ include file="/templates/userview.jspf" %>
 		<%
@@ -65,14 +64,14 @@ CpcUser auth = CpcUserPersistance.getUserFromCache(ar.getAuthor());
 		<h5>Pièce jointe :</h5>
 		<% switch (ar.getType()) {
 		case ReportUser:
-			CpcUser userToDisplay = CpcUserPersistance.getUserFromCache(ar.getAttachment()); %>
+			CpcUser userToDisplay = (CpcUser) OfyService.ofy().load().key(ar.getAttachment()).safe(); %>
 			<%@ include file="/templates/userview.jspf" %>
 			<% break;
 		case ReportPost:
 			{
-				Comment comment = CommentPersistance.getCommentFromCache(ar.getAttachment()); %>
+				Comment comment = (Comment) OfyService.ofy().load().key(ar.getAttachment()).safe(); %>
 				<%@ include file="/templates/commentview.jspf" %>
-				<% Giveaway ga = GAPersistance.getGAFromCache(comment.getGiveaway()); %>
+				<% Giveaway ga = GiveawayPersistance.getGA(comment.getGiveaway()); %>
 				Dans giveaway <a href="/giveaway?gaID=<%= ga.getKey().getId() %>#comment-<%= comment.getKey().getId() %>-div">
 				<%= ga.getTitle() %>
 				</a>
@@ -80,12 +79,12 @@ CpcUser auth = CpcUserPersistance.getUserFromCache(ar.getAuthor());
 			break;
 		default:
 			{
-				Giveaway ga = GAPersistance.getGAFromCache(ar.getAttachment()); %>
+				Giveaway ga = (Giveaway) OfyService.ofy().load().key(ar.getAttachment()).safe(); %>
 				<%@	include file="/templates/gaview.jspf" %>
 			<%}
 			break;
 		}
-	} catch(JDOObjectNotFoundException e) { %> 
+	} catch(NotFoundException e) { %> 
 		<h5>Aucune pièce jointe.</h5>
 	<% } %>
 </div>

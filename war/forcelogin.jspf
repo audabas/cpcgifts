@@ -1,9 +1,5 @@
-<%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
-<%@page import="fr.cpcgifts.model.CpcUser"%>
-
 <%
 	if (!userService.isUserLoggedIn()) {
-		session.invalidate();
 		response.sendRedirect(userService.createLoginURL(request.getRequestURI() + '?' + request.getQueryString()));
 		return;
 	}

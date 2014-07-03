@@ -4,21 +4,20 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Unindex;
 
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.Text;
-
-@PersistenceCapable(detachable="true")
+@Cache
+@Unindex
+@Entity
 public class AdminRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Key key;
+	@Id Long id;
 
 	public enum Type {
 		Reroll,
@@ -34,38 +33,31 @@ public class AdminRequest implements Serializable {
 		Processed
 	}
 	
-	@Persistent
-	private Key author;
+	private Key<CpcUser> author;
 	
-	@Persistent
 	private Type type;
 	
-	@Persistent
-	private State state;
+	@Index private State state;
 	
-	@Persistent
-	private Key attachment;
+	private Key<?> attachment;
 	
-	@Persistent
-	private Text text;
+	private String text;
 	
-	@Persistent
-	private Date requestDate;
+	@Index private Date requestDate;
 	
 	/** L'admin qui à traité la requête. */
-	@Persistent
-	private Key consideredBy;
+	private Key<CpcUser> consideredBy;
 	
 	public AdminRequest() {
 		super();
 	}
 	
-	public AdminRequest(Key author, Type type, Key attachment, String text) {
+	public AdminRequest(Key<CpcUser> author, Type type, Key<?> attachment, String text) {
 		super();
 		this.author = author;
 		this.type = type;
 		this.attachment = attachment;
-		this.text = new Text(text);
+		this.text = text;
 		
 		Calendar c = Calendar.getInstance();
 		this.requestDate = c.getTime();
@@ -91,28 +83,28 @@ public class AdminRequest implements Serializable {
 		this.state = state;
 	}
 
-	public Key getAuthor() {
+	public Key<CpcUser> getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(Key author) {
+	public void setAuthor(Key<CpcUser> author) {
 		this.author = author;
 	}
 
-	public Key getAttachment() {
+	public Key<?> getAttachment() {
 		return attachment;
 	}
 
-	public void setAttachment(Key attachment) {
+	public void setAttachment(Key<?> attachment) {
 		this.attachment = attachment;
 	}
 
 	public String getText() {
-		return text.getValue();
+		return text;
 	}
 
 	public void setText(String text) {
-		this.text = new Text(text);
+		this.text = text;
 	}
 
 	public Date getRequestDate() {
@@ -123,22 +115,26 @@ public class AdminRequest implements Serializable {
 		this.requestDate = requestDate;
 	}
 
-	public Key getConsideredBy() {
+	public Key<CpcUser> getConsideredBy() {
 		return consideredBy;
 	}
 
-	public void setConsideredBy(Key consideredBy) {
+	public void setConsideredBy(Key<CpcUser> consideredBy) {
 		this.consideredBy = consideredBy;
 	}
 
-	public Key getKey() {
-		return key;
+	public Long getId() {
+		return id;
+	}
+	
+	public Key<AdminRequest> getKey() {
+		return Key.create(AdminRequest.class, id);
 	}
 
 	@Override
 	public String toString() {
-		return "Request [key=" + key + ", author=" + author + ", attachment="
-				+ attachment + ", requestDate=" + requestDate + "]";
+		return "Request [key=" + getId() + ", author=" + getAuthor() + ", attachment="
+				+ getAttachment() + ", requestDate=" + getRequestDate() + "]";
 	}
 	
 	
