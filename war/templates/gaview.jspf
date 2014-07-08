@@ -1,14 +1,9 @@
 <%@page import="fr.cpcgifts.utils.DateTools"%>
-<%@page import="javax.jdo.JDOObjectNotFoundException"%>
-<%@page import="fr.cpcgifts.persistance.GAPersistance"%>
-<%@page import="fr.cpcgifts.model.Giveaway"%>
-<%@page import="com.google.appengine.api.datastore.KeyFactory"%>
-<%@page import="com.google.appengine.api.datastore.Key"%>
 <%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
 <%@page import="fr.cpcgifts.model.CpcUser"%>
 <% 
 {
-	CpcUser gaAuth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
+	CpcUser gaAuth = CpcUserPersistance.getCpcUser(ga.getAuthor());
 	
 	//un giveaway est visible s'il n'est pas privé, si l'utilisateur est déjà inscrit ou bien s'il est l'auteur du concours.
 	boolean visible = !ga.isPrivate() || cpcuser != null && ga.getEntrants().contains(cpcuser.getKey()) 
@@ -70,7 +65,7 @@
 							out.write("s"); %>
 				<%	
 					} else if(ga.getWinners().size() == 1) {
-						CpcUser winner = CpcUserPersistance.getUserFromCache(ga.getWinners().iterator().next());
+						CpcUser winner = CpcUserPersistance.getCpcUser(ga.getWinners().iterator().next());
 				%>
 					<%=	"Gagné par : " + winner.getCpcNickname() %>
 				<%

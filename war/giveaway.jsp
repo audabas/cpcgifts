@@ -1,24 +1,24 @@
+<%@page import="com.googlecode.objectify.NotFoundException"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@page import="java.util.List"%>
+<%@page import="com.googlecode.objectify.Key"%>
 <%@page import="fr.cpcgifts.model.AdminRequest"%>
 <%@page import="fr.cpcgifts.utils.TextTools"%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@page import="javax.jdo.JDOObjectNotFoundException"%>
-<%@page import="java.util.Comparator"%>
-<%@page import="java.util.Arrays"%>
-<%@page import="java.util.Collection"%>
-<%@page import="java.util.Map"%>
 <%@page import="fr.cpcgifts.model.Comment"%>
 <%@page import="fr.cpcgifts.persistance.CommentPersistance"%>
 <%@page import="fr.cpcgifts.utils.DateTools"%>
-<%@page import="fr.cpcgifts.persistance.GAPersistance"%>
+<%@page import="fr.cpcgifts.persistance.GiveawayPersistance"%>
 <%@page import="fr.cpcgifts.model.Giveaway"%>
-<%@page import="com.google.appengine.api.datastore.KeyFactory"%>
-<%@page import="com.google.appengine.api.datastore.Key"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 
-<%	UserService userService = UserServiceFactory.getUserService(); %>
-<%	User user = null; %>
+<%
+	UserService userService = UserServiceFactory.getUserService();
+%>
+<%
+	User user = null;
+%>
 <%
 	user = userService.getCurrentUser();
 
@@ -27,9 +27,9 @@
 	String gaid = request.getParameter("gaID");
 
 	if (gaid != null) {
-		
+
 		Long gid = null;
-		
+
 		try {
 			gid = Long.parseLong(gaid);
 		} catch (NumberFormatException e) {
@@ -38,31 +38,32 @@
 		}
 
 		if (gid != null) {
-			Key k = KeyFactory.createKey(Giveaway.class.getSimpleName(), gid);
+			Key<Giveaway> k = Key.create(Giveaway.class, gid);
 
 			try {
-				currentGA = GAPersistance.getGAFromCache(k);
-			} catch (JDOObjectNotFoundException e) {
+				currentGA = GiveawayPersistance.getGA(k);
+			} catch (NotFoundException e) {
 				response.sendRedirect("/404.html");
 				return;
 			}
 
 		}
 	}
-	if(currentGA == null) {
+	if (currentGA == null) {
 		response.sendRedirect("/404.html");
 		return;
 	}
-	
+
 	String requestedUri = request.getRequestURI().toString();
-	
-	if(currentGA.isPrivate() && !requestedUri.contains("/private/")) {
-		response.sendRedirect("/private" + requestedUri + '?' + request.getQueryString());
+
+	if (currentGA.isPrivate() && !requestedUri.contains("/private/")) {
+		response.sendRedirect("/private" + requestedUri + '?'
+				+ request.getQueryString());
 		return;
 	}
 
-	CpcUser gaAuthor = CpcUserPersistance.getUserFromCache(currentGA.getAuthor());
-
+	CpcUser gaAuthor = CpcUserPersistance.getCpcUser(currentGA
+			.getAuthor());
 %>
 
 <!DOCTYPE html>
@@ -93,21 +94,27 @@
 	<%@ include file="menubar.jspf"%>
 	
 	<%
-			boolean isAuthor = cpcuser != null && cpcuser.getKey().equals(gaAuthor.getKey());
-			boolean isAdmin = (userService.isUserLoggedIn() && userService.isUserAdmin());
+			boolean isAuthor = cpcuser != null
+					&& cpcuser.getKey().equals(gaAuthor.getKey());
+			boolean isAdmin = (userService.isUserLoggedIn() && userService
+					.isUserAdmin());
 			boolean isPrivate = currentGA.isPrivate();
-	%>
+		%>
 
 	<div class="container">
 
-		<% if(isPrivate) { %>
+		<%
+			if (isPrivate) {
+		%>
 			
 			<%@ include file="/forcelogin.jspf" %>
 			
 			<div class="row alert alert-error">
 				Ce concours est privé. Merci de ne pas partager le lien sans autorisation.
 			</div>
-		<% } %>
+		<%
+			}
+		%>
 
 		<div class="row">
 			<div class="span5">
@@ -135,14 +142,18 @@
 					}
 				%>
 				</h1>
-				<% if(isAuthor) { %>
+				<%
+					if (isAuthor) {
+				%>
 				<a href="#admin-request-modal"
 					class="btn btn-mini"
-					onclick="editTitleRequest(<%= currentGA.getKey().getId() %>)"
+					onclick="editTitleRequest(<%=currentGA.getKey().getId()%>)"
 					data-toggle="modal">
 						<i class="icon-pencil"></i> Demander la modification du titre
 					</a>
-				<% } %>
+				<%
+					}
+				%>
 				<hr>
 				<div class="span2">
 					<h4>Créé par :</h4>
@@ -180,23 +191,23 @@
 				<%=DateTools.dateDifference(currentGA.getEndDate())%>
 				
 				<%
-					if (currentGA.isOpen() && !isAuthor && userService.isUserLoggedIn()
-							&& !cpcuser.isBanned()) {
-						if (currentGA.getEntrants().contains(cpcuser.getKey())) {
-				%>
+									if (currentGA.isOpen() && !isAuthor && userService.isUserLoggedIn()
+											&& !cpcuser.isBanned()) {
+										if (currentGA.getEntrants().contains(cpcuser.getKey())) {
+								%>
 						
 						<a
 						href="/enterga?reqtype=exit&gaid=<%=currentGA.getKey().getId()%>"
 						 style="margin-left: 250px" class="btn btn-danger">Ne plus participer</a>
 						
 						<%
-							} else {
-						%>
+													} else {
+												%>
 				<a
 					href="/enterga?reqtype=enter&gaid=<%=currentGA.getKey().getId()%>"
 					style="margin-left: 250px" class="btn btn-success">Participer</a>
 				<%
-						}
+					}
 					}
 				%>
 
@@ -208,17 +219,21 @@
 		<div class="row">
 			<div class="offset1 span9 alert alert-warning alert-error-color" id="custom-rules">
 			</div>
-			<% if(isAuthor) { %>
+			<%
+				if (isAuthor) {
+			%>
 			<div class="offset1 span9 well well-small">
 				Si vous souhaitez rendre ces conditions moins restrictives vous pouvez demander une modification à un admin 
 				via 
 				<a href="#admin-request-modal"
-					onclick="editRulesRequest(<%= currentGA.getKey().getId() %>)"
+					onclick="editRulesRequest(<%=currentGA.getKey().getId()%>)"
 					data-toggle="modal">
 						ce formulaire
 					</a>.
 			</div>
-			<% } %>
+			<%
+				}
+			%>
 		</div>
 
 		<div class="row">
@@ -230,18 +245,22 @@
 		
 		
 		<%
-			if (isAuthor || isAdmin) {
-		%>
+							if (isAuthor || isAdmin) {
+						%>
 				<div class="row btn-toolbar" style="margin-top: 10px;">
 					<a class="btn btn-success span2" href="#modif-desc"
 						data-toggle="modal"> <i class="icon-pencil icon-white"></i>
 						Modifier la description
 					</a>
-					<% if(currentGA.isOpen()) { %>
+					<%
+						if (currentGA.isOpen()) {
+					%>
 					<a	href="javascript:closeGA()"
 						class="btn btn-danger"><i class="icon-trash icon-white"></i> Annuler le concours
 					</a>
-					<% } %>
+					<%
+						}
+					%>
 				</div>
 				<hr />
 		<%
@@ -253,7 +272,7 @@
 				<li class="active"><a href="#commentaires" data-toggle="tab">Commentaires <span class="gray">(<%=currentGA.getComments().size()%>)</span></a></li>
 				<li><a href="#entrants" data-toggle="tab">Participants <span class="gray">(<%=currentGA.getEntrants().size()%>)</span></a></li>
 				<%
-					if (isAuthor|| isAdmin) {
+					if (isAuthor || isAdmin) {
 				%>
 				<li><a href="#signature" data-toggle="tab">Signature</a></li>
 				<%
@@ -281,42 +300,40 @@
 			<div class="tab-content">
 				<div class="tab-pane active" id="commentaires">
 					<%
-						Map<Key, Comment> comments = CommentPersistance.getAllFromCache(currentGA.getComments());
+						List<Comment> comments = CommentPersistance.getAll(
+								currentGA.getComments(), true);
 
-						Comment[] commentsArray = comments.values().toArray(new Comment[0]);
-
-						Arrays.sort(commentsArray, new Comparator<Comment>() {
-							public int compare(Comment c1, Comment c2) {
-								return c1.getCommentDate().compareTo(c2.getCommentDate());
-							}
-						});
-
-						for (Comment comment : commentsArray) {
+						for (Comment comment : comments) {
 					%>
 					
 					<%@ include file="/templates/commentview.jspf" %>
 					
 					<%
-							if (userService.isUserLoggedIn() && (comment.getAuthor().equals(cpcuser.getKey()) || isAdmin)) {
-					%>
+											if (userService.isUserLoggedIn()
+														&& (comment.getAuthor().equals(cpcuser.getKey()) || isAdmin)) {
+										%>
 						<a href="javascript:deleteComment(<%=comment.getKey().getId()%>)" class="btn btn-mini">
 							<i class="icon-trash"></i> Supprimer ce commentaire
 						</a>
 					<%
-						} if(userService.isUserLoggedIn()) {
+						}
+							if (userService.isUserLoggedIn()) {
 					%>
-					<a class="pull-right" title="Signaler un message hors-charte" data-toggle="modal" onclick="reportPostRequest(<%= comment.getKey().getId() %>)" href="#admin-request-modal">
+					<a class="pull-right" title="Signaler un message hors-charte" data-toggle="modal" onclick="reportPostRequest(<%=comment.getKey().getId()%>)" href="#admin-request-modal">
 						<i class="icon-warning-sign"></i>
 					</a>
-					<% } %>
-					<hr>
-					
 					<%
 						}
 					%>
+					<hr>
+					
+					<%
+											}
+										%>
 
 					<%
-						if (userService.isUserLoggedIn() && cpcuser != null && !cpcuser.isBanned()) {
+						if (userService.isUserLoggedIn() && cpcuser != null
+								&& !cpcuser.isBanned()) {
 					%>
 
 					<form id="comment-form" action="/editga" method="post">
@@ -327,9 +344,15 @@
 							<input type="hidden" name="gaid" value="<%=currentGA.getKey().getId()%>">
 							
 							<button type="submit" class="btn">Commenter</button>
-							<% if(currentGA.isOpen() && !currentGA.getEntrants().contains(cpcuser.getKey()) && !isAuthor) { %>
+							<%
+								if (currentGA.isOpen()
+											&& !currentGA.getEntrants().contains(cpcuser.getKey())
+											&& !isAuthor) {
+							%>
 								<button type="button" onclick="enterGA(<%=currentGA.getKey().getId()%>)" class="btn">Commenter et participer</button>
-							<% } %>
+							<%
+								}
+							%>
 						</fieldset>
 					</form>
 					<%
@@ -340,15 +363,20 @@
 				<div class="tab-pane" id="entrants">
 					
 					<%
-							for (CpcUser entrant : CpcUserPersistance.getAllFromCache(currentGA.getEntrants()).values()) {
-								CpcUser userToDisplay = entrant;
-					%>
+											for (CpcUser entrant : CpcUserPersistance.getAll(
+													currentGA.getEntrants()).values()) {
+												CpcUser userToDisplay = entrant;
+										%>
 						
 						<%@ include file="/templates/userview.jspf" %>
-						<% if(isAdmin) { %>
+						<%
+							if (isAdmin) {
+						%>
 							<a	href="/admin/gaWinner?reqtype=addWinner&gaid=<%=currentGA.getKey().getId()%>&userid=<%=entrant.getKey().getId()%>"
 								class="btn btn-small btn-success"><i class="icon-plus icon-white"></i> Ajouter aux gagnants</a>
-						<% } %>
+						<%
+							}
+						%>
 						<hr>
 					<%
 						}
@@ -373,32 +401,36 @@
 				<div class="tab-pane" id="winner">
 				
 				<%
-					if (!currentGA.isOpen() && currentGA.getWinners().size() > 0) {
-						for (Key k : currentGA.getWinners()) {
-							CpcUser winner = CpcUserPersistance.getUserFromCache(k);
-							CpcUser userToDisplay = winner;
-				%>
+									if (!currentGA.isOpen() && currentGA.getWinners().size() > 0) {
+										for (Key<CpcUser> k : currentGA.getWinners()) {
+											CpcUser winner = CpcUserPersistance.getCpcUser(k);
+											CpcUser userToDisplay = winner;
+								%>
 						<%@ include file="/templates/userview.jspf" %>
 						<%
-							if (isAdmin && !currentGA.isOpen()
-										&& currentGA.getEntrants().size() > currentGA.getWinners().size()) {
+							if (isAdmin
+											&& !currentGA.isOpen()
+											&& currentGA.getEntrants().size() > currentGA
+													.getWinners().size()) {
 						%>
 							<a	href="/admin/reroll?reqtype=reroll&gaid=<%=currentGA.getKey().getId()%>&winnerToReroll=<%=k.getId()%>"
 								class="btn btn-warning"><i class="icon-repeat icon-white"></i> Relancer le tirage</a>
 						<%
 							}
-							if(isAdmin) {
+									if (isAdmin) {
 						%>	
 							<a	href="/admin/gaWinner?reqtype=removeWinner&gaid=<%=currentGA.getKey().getId()%>&userid=<%=k.getId()%>"
 								class="btn btn-danger"><i class="icon-trash icon-white"></i> Supprimer gagnant</a>
 						<%
 							}
-							if (isAuthor && !currentGA.isOpen() &&
-									currentGA.getEntrants().size() > currentGA.getWinners().size()) {
+									if (isAuthor
+											&& !currentGA.isOpen()
+											&& currentGA.getEntrants().size() > currentGA
+													.getWinners().size()) {
 						%>
 							<a href="#admin-request-modal"
 								class="btn btn-mini"
-								onclick="rerollRequest(<%= currentGA.getKey().getId() %>,<%= winner.getKey().getId() %>, '<%= winner.getCpcNickname() %>')"
+								onclick="rerollRequest(<%=currentGA.getKey().getId()%>,<%=winner.getKey().getId()%>, '<%=winner.getCpcNickname()%>')"
 								data-toggle="modal">
 									<i class="icon-repeat"></i> Demander un nouveau tirage
 							</a>
@@ -408,9 +440,9 @@
 						<hr />
 										
 				<%
-						}
-					}
-				%>
+															}
+															}
+														%>
 				</div>
 				<%
 					if (isAdmin) {
@@ -673,7 +705,7 @@
 			);
 		}
 		
-		<% if(isAuthor || isAdmin) { %>
+		<%if (isAuthor || isAdmin) {%>
 		
 		function closeGA() {
 			var r=confirm("Êtes-vous sûr de vouloir supprimer ce concours ?\n"
@@ -691,39 +723,39 @@
 			  }
 		}
 		
-		<% } %>
+		<%}%>
 		
 		/* requêtes administrateur */
-		<% if(isAuthor) { %>
+		<%if (isAuthor) {%>
 		
 		function editRulesRequest(gaid) {
 			$("#reroll-fieldset").addClass("hidden");
-			$("#admin-request-type").val("<%= AdminRequest.Type.RulesModification.name() %>");
+			$("#admin-request-type").val("<%=AdminRequest.Type.RulesModification.name()%>");
 			$("#admin-request-type-display").html("Modification des règles");
 			$("#admin-request-attachmentid").val(gaid);
 		}
 		
 		function editTitleRequest(gaid) {
 			$("#reroll-fieldset").addClass("hidden");
-			$("#admin-request-type").val("<%= AdminRequest.Type.TitleModification.name() %>");
+			$("#admin-request-type").val("<%=AdminRequest.Type.TitleModification.name()%>");
 			$("#admin-request-type-display").html("Modification du titre");
 			$("#admin-request-attachmentid").val(gaid);
 		}
 		
 		function rerollRequest(gaid,userid,username) {
 			$("#reroll-fieldset").removeClass("hidden");
-			$("#admin-request-type").val("<%= AdminRequest.Type.Reroll.name() %>");
+			$("#admin-request-type").val("<%=AdminRequest.Type.Reroll.name()%>");
 			$("#admin-request-type-display").html("Demande de reroll");
 			$("#user-to-reroll-id").val(userid);
 			$("#user-to-reroll-name").html(username);
 			$("#admin-request-attachmentid").val(gaid);
 		}
 		
-		<% } %>
+		<%}%>
 		
 		function reportPostRequest(postId) {
 			$("#reroll-fieldset").addClass("hidden");
-			$("#admin-request-type").val("<%= AdminRequest.Type.ReportPost.name() %>");
+			$("#admin-request-type").val("<%=AdminRequest.Type.ReportPost.name()%>");
 			$("#admin-request-type-display").html("Signaler un commentaire hors charte");
 			$("#admin-request-attachmentid").val(postId);
 		}

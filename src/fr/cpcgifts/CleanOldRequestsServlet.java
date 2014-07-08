@@ -24,7 +24,7 @@ public class CleanOldRequestsServlet extends HttpServlet {
 		for(AdminRequest ar : ars) {
 			log.info("AdminRequest deleted : " + ar);
 			
-			AdminRequestPersistance.deleteAdminRequest(ar.getKey());
+			AdminRequestPersistance.delete(ar.getKey());
 		}
 		
 	}

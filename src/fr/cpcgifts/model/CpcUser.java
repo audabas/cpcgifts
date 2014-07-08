@@ -7,67 +7,58 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
 
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.users.User;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Serialize;
+import com.googlecode.objectify.annotation.Unindex;
 
-@PersistenceCapable(detachable="true")
+@Cache
+@Unindex
+@Entity
 public class CpcUser implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Key key;
-
-	@Persistent
-	private String id;
+	@Id Long keyId;
+	
+	@Index private String id;
 
 	/** Profil d'utilisateur google. */
-	@Persistent(defaultFetchGroup="true")
 	private User guser;
 
-	@Persistent
-	private String cpcProfileId;
+	@Index private String cpcProfileId;
 
-	@Persistent
-	private String cpcNickname;
+	@Index private String cpcNickname;
 
-	@Persistent
 	private String avatarUrl = "/img/avatar.jpg";
 	
-	@Persistent
 	private boolean banned;
 	
 	/** Indique si l'utilisateur accepte l'envoi d'emails. */
-	@Persistent
 	private boolean acceptEmails = false;
 	
 	/** Liste des concours créés. */
-	@Persistent(defaultFetchGroup="true")
-	private Set<Key> giveawaySet;
+	private Set<Key<Giveaway>> giveawaySet;
 	
 	/** Liste des participations aux concours. */
-	@Persistent(defaultFetchGroup="true")
-	private Set<Key> entrySet;
+	private Set<Key<Giveaway>> entrySet;
 	
 	/** Liste des concours gagnés */
-	@Persistent(defaultFetchGroup="true")
-	private Set<Key> wonSet;
+	private Set<Key<Giveaway>> wonSet;
 	
 	/**	 Liste des liens vers les profils externes (steam, etc...) */
-	@Persistent(serialized="true",defaultFetchGroup="true")
-	private HashMap<String,String> profilesMap;
+	@Serialize private HashMap<String,String> profilesMap;
 	
 	public CpcUser() {
 		super();
 		
-		this.giveawaySet = new HashSet<Key>();	
+		this.giveawaySet = new HashSet<Key<Giveaway>>();
 
-		this.entrySet = new HashSet<Key>();
+		this.entrySet = new HashSet<Key<Giveaway>>();
 		
 		this.profilesMap = new HashMap<String, String>();
 	}
@@ -88,13 +79,10 @@ public class CpcUser implements Serializable {
 	}
 
 
-	public Key getKey() {
-		return key;
+	public Key<CpcUser> getKey() {
+		return Key.create(CpcUser.class, keyId);
 	}
 
-	public void setKey(Key key) {
-		this.key = key;
-	}
 
 	public String getId() {
 		return id;
@@ -147,94 +135,94 @@ public class CpcUser implements Serializable {
 		this.avatarUrl = avatarUrl;
 	}
 
-	public Set<Key> getGiveaways() {
+	public Set<Key<Giveaway>> getGiveaways() {
 		if(this.giveawaySet == null)
-			this.giveawaySet = new HashSet<Key>();
+			this.giveawaySet = (Set<Key<Giveaway>>) new HashSet<Key<Giveaway>>();
 			
 		return giveawaySet;
 	}
 
-	public void setGiveaways(Set<Key> giveaways) {
+	public void setGiveaways(Set<Key<Giveaway>> giveaways) {
 		this.giveawaySet = giveaways;
 	}
 
-	public boolean addGiveaway(Key ga) {
+	public boolean addGiveaway(Key<Giveaway> ga) {
 		getGiveaways();
 		
 		return this.giveawaySet.add(ga);
 
 	}
 	
-	public boolean addGiveaways(Collection<Key> gas) {
+	public boolean addGiveaways(Collection<Key<Giveaway>> gas) {
 		getGiveaways();
 		
 		return this.giveawaySet.addAll(gas);
 
 	}
 	
-	public boolean removeGiveaway(Key ga) {
+	public boolean removeGiveaway(Key<Giveaway> ga) {
 		getGiveaways();
 		
 		return this.giveawaySet.remove(ga);
 	}
 
-	public Set<Key> getEntries() {
+	public Set<Key<Giveaway>> getEntries() {
 		if(entrySet == null)
-			entrySet = new HashSet<Key>();
+			entrySet = new HashSet<Key<Giveaway>>();
 		
 		return entrySet;
 	}
 
-	public void setEntries(Set<Key> entries) {
+	public void setEntries(Set<Key<Giveaway>> entries) {
 		this.entrySet = entries;
 	}
 	
-	public boolean addEntry(Key k) {
+	public boolean addEntry(Key<Giveaway> k) {
 		getEntries();
 		
 		return this.entrySet.add(k);
 
 	}
 	
-	public boolean addEntries(Collection<Key> keys) {
+	public boolean addEntries(Collection<Key<Giveaway>> keys) {
 		getEntries();
 		
 		return this.entrySet.addAll(keys);
 
 	}
 	
-	public boolean removeEntry(Key k) {
+	public boolean removeEntry(Key<Giveaway> k) {
 		getEntries();
 		
 		return this.entrySet.remove(k);
 	}
 
-	public Set<Key> getWon() {
+	public Set<Key<Giveaway>> getWon() {
 		if(wonSet == null)
-			wonSet = new HashSet<Key>();
+			wonSet = new HashSet<Key<Giveaway>>();
 			
 		return wonSet;
 	}
 
-	public void setWon(Set<Key> won) {
+	public void setWon(Set<Key<Giveaway>> won) {
 		this.wonSet = won;
 	}
 	
-	public boolean addWon(Key k) {
+	public boolean addWon(Key<Giveaway> k) {
 		getWon();
 		
 		return this.wonSet.add(k);
 
 	}
 	
-	public boolean addWon(Collection<Key> keys) {
+	public boolean addWon(Collection<Key<Giveaway>> keys) {
 		getWon();
 		
 		return this.wonSet.addAll(keys);
 
 	}
 	
-	public boolean removeWon(Key k) {
+	public boolean removeWon(Key<Giveaway> k) {
 		getWon();
 		
 		return this.wonSet.remove(k);
@@ -274,7 +262,7 @@ public class CpcUser implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CpcUser [key=" + key + ", id=" + id + ", guser=" + guser
+		return "CpcUser [key=" + getKey() + ", id=" + id + ", guser=" + guser
 				+ ", cpcProfileId=" + cpcProfileId + ", cpcNickname="
 				+ cpcNickname + "]";
 	}

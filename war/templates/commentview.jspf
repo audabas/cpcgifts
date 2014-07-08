@@ -1,16 +1,11 @@
-<%@page import="fr.cpcgifts.persistance.GAPersistance"%>
-<%@page import="fr.cpcgifts.model.Giveaway"%>
-<%@page import="javax.jdo.JDOObjectNotFoundException"%>
 <%@page import="fr.cpcgifts.utils.DateTools"%>
 <%@page import="fr.cpcgifts.persistance.CommentPersistance"%>
 <%@page import="fr.cpcgifts.model.Comment"%>
-<%@page import="com.google.appengine.api.datastore.KeyFactory"%>
-<%@page import="com.google.appengine.api.datastore.Key"%>
 <%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
 <%@page import="fr.cpcgifts.model.CpcUser"%>
 <% 
 
-CpcUser commentAuth = CpcUserPersistance.getUserFromCache(comment.getAuthor());
+CpcUser commentAuth = CpcUserPersistance.getCpcUser(comment.getAuthor());
 
 %>
 

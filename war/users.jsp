@@ -1,10 +1,5 @@
-<%@page import="com.google.appengine.api.datastore.Entity"%>
-<%@page import="net.sf.jsr107cache.CacheException"%>
-<%@page import="java.util.Collections"%>
-<%@page import="java.util.List"%>
-<%@page import="com.google.appengine.api.datastore.KeyFactory"%>
-<%@page import="com.google.appengine.api.datastore.Key"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@page import="java.util.List"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
@@ -47,7 +42,7 @@
 
 		<%
 		
-		List<CpcUser> users = CpcUserPersistance.getAllUsersFromCache();
+		List<CpcUser> users = CpcUserPersistance.getAllUsers();
 		
 				
 		for(CpcUser userToDisplay : users) {

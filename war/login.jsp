@@ -1,23 +1,23 @@
-<%@page import="fr.cpcgifts.utils.Constants"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@page import="fr.cpcgifts.utils.Constants"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 
 <%	UserService userService = UserServiceFactory.getUserService(); %>
-<%	User user = userService.getCurrentUser();
+<%	User user = userService.getCurrentUser(); %>
 
-	CpcUser cpcuser = (CpcUser) session.getAttribute("cpcuser");
+<%@ include file="getuser.jspf"%>
 
+<%
 	if (cpcuser == null) {
 		if (userService.isUserLoggedIn()) {
 			cpcuser = CpcUserPersistance.getCpcUser(user.getUserId());
-			session.setAttribute("cpcuser", cpcuser);
 		}
 	}
 
 	if (cpcuser != null) {
-		response.sendRedirect("/");
+		response.sendRedirect("/index.jsp");
 		return;
 	}
 %>

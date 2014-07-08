@@ -4,81 +4,71 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.Text;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Unindex;
 
 import fr.cpcgifts.utils.TextTools;
 
-@PersistenceCapable(detachable="true")
+@Cache
+@Unindex
+@Entity
 public class Comment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key key;
+	@Id Long id;
 	
-	@Persistent
-	private Key author;
+	private Key<CpcUser> author;
 	
-	@Persistent
-	private Key giveaway;
+	private Key<Giveaway> giveaway;
 	
-	@Persistent
-	private Text commentText;
+	private String commentText;
 	
-	@Persistent
 	private Date commentDate;
 	
 	public Comment() {
 		super();
 	}
 	
-	public Comment(Key author, Key giveaway, String commentText) {
+	public Comment(Key<CpcUser> author, Key<Giveaway> giveaway, String commentText) {
 		this();
 		
 		this.author = author;
 		this.giveaway = giveaway;
-		this.commentText = new Text(TextTools.escapeHtml(commentText));
+		this.commentText = TextTools.escapeHtml(commentText);
 		
 		Calendar c = Calendar.getInstance();
 		this.commentDate = c.getTime();
 	}
 
-	public Key getKey() {
-		return key;
+	public Key<Comment> getKey() {
+		return Key.create(Comment.class, id);
 	}
 
-	public void setKey(Key key) {
-		this.key = key;
-	}
-
-	public Key getAuthor() {
+	public Key<CpcUser> getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(Key author) {
+	public void setAuthor(Key<CpcUser> author) {
 		this.author = author;
 	}
 
-	public Key getGiveaway() {
+	public Key<Giveaway> getGiveaway() {
 		return giveaway;
 	}
 
-	public void setGiveaway(Key giveaway) {
+	public void setGiveaway(Key<Giveaway> giveaway) {
 		this.giveaway = giveaway;
 	}
 
 	public String getCommentText() {
-		return commentText.getValue();
+		return commentText;
 	}
 
 	public void setCommentText(String commentText) {
-		this.commentText = new Text(commentText);
+		this.commentText = commentText;
 	}
 
 	public Date getCommentDate() {
@@ -91,7 +81,7 @@ public class Comment implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Comment [key=" + key + ", author=" + author + ", giveaway="
+		return "Comment [key=" + getKey() + ", author=" + author + ", giveaway="
 				+ giveaway + ", commentDate=" + commentDate + ", commentText=" + commentText + " ]";
 	}
 	

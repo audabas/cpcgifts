@@ -1,21 +1,18 @@
-<%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@page import="javax.jdo.JDOObjectNotFoundException"%>
-<%@page import="fr.cpcgifts.utils.DateTools"%>
-<%@page import="java.util.Collection"%>
-<%@page import="org.apache.commons.collections.CollectionUtils"%>
 <%@page import="java.util.Map"%>
-<%@page import="net.sf.jsr107cache.CacheException"%>
-<%@page import="java.util.Collections"%>
+<%@page import="com.googlecode.objectify.NotFoundException"%>
+<%@page import="com.googlecode.objectify.Key"%>
+<%@page import="fr.cpcgifts.model.Giveaway"%>
+<%@page import="fr.cpcgifts.utils.DateTools"%>
 <%@page import="java.util.List"%>
-<%@page import="fr.cpcgifts.persistance.GAPersistance"%>
-<%@page import="com.google.appengine.api.datastore.KeyFactory"%>
-<%@page import="com.google.appengine.api.datastore.Key"%>
+<%@page import="fr.cpcgifts.persistance.GiveawayPersistance"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 
-<%	UserService userService = UserServiceFactory.getUserService(); %>
+<%
+	UserService userService = UserServiceFactory.getUserService();
+%>
 <%
 	User user = userService.getCurrentUser();
 %>
@@ -30,21 +27,21 @@
 		Long uid = null;
 		
 		try {
-			uid = Long.parseLong(suid);
+	uid = Long.parseLong(suid);
 		} catch(NumberFormatException e) {
-			response.sendRedirect("/404.html");
-			return;
+	response.sendRedirect("/404.html");
+	return;
 		}
 
 		if (uid != null) {
-			Key k = KeyFactory.createKey(CpcUser.class.getSimpleName(), uid);
-			
-			try {
-				profileCpcUser = CpcUserPersistance.getUserFromCache(k);
-			} catch(JDOObjectNotFoundException e) {
-				response.sendRedirect("/404.html");
-				return;
-			}
+	Key<CpcUser> k = Key.create(CpcUser.class, uid);
+	
+	try {
+		profileCpcUser = CpcUserPersistance.getCpcUser(k);
+	} catch(NotFoundException e) {
+		response.sendRedirect("/404.html");
+		return;
+	}
 		}
 	}
 
@@ -64,7 +61,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Profil de <%= profileCpcUser.getCpcNickname()%> - CPCGifts
+<title>Profil de <%=profileCpcUser.getCpcNickname()%> - CPCGifts
 </title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width">
@@ -110,9 +107,13 @@
 					<h1><%=profileCpcUser.getCpcNickname()%></h1>
 				</div>
 				<div class="row">
-					<% if(profileCpcUser.isBanned()) { %>
+					<%
+						if(profileCpcUser.isBanned()) {
+					%>
 						<div class="alert alert-error">Utilisateur banni !</div>
-					<% } else { %>
+					<%
+						} else {
+					%>
 						<div class="span">
 							<a class="btn"
 								href="http://forum.canardpc.com/members/<%=profileCpcUser.getCpcProfileId()%>">
@@ -127,39 +128,39 @@
 						
 						<div class="span">
 						
-							<% 
-								Map<String,String> profiles = profileCpcUser.getProfiles();
-							
-								if(profiles.containsKey("steamgifts")) {
-							%>
-								<a class="btn btn-link" href="<%= profiles.get("steamgifts") %>"><img class="img-small-icon" alt="steamgifts" src="/img/sg.png"></a>
-							<% 
+							<%
+														Map<String,String> profiles = profileCpcUser.getProfiles();
+																		
+																			if(profiles.containsKey("steamgifts")) {
+													%>
+								<a class="btn btn-link" href="<%=profiles.get("steamgifts")%>"><img class="img-small-icon" alt="steamgifts" src="/img/sg.png"></a>
+							<%
 								}
-								if(profiles.containsKey("steam")) {
+													if(profiles.containsKey("steam")) {
 							%>
-								<a class="btn btn-link" href="<%= profiles.get("steam") %>"><img class="img-small-icon" alt="steam" src="/img/steam.png"></a>
-							<% 
+								<a class="btn btn-link" href="<%=profiles.get("steam")%>"><img class="img-small-icon" alt="steam" src="/img/steam.png"></a>
+							<%
 								}
-								if(profiles.containsKey("desura")) {
+													if(profiles.containsKey("desura")) {
 							%>
-								<a class="btn btn-link" href="<%= profiles.get("desura") %>"><img class="img-small-icon" alt="desura" src="/img/desura.png"></a>
-							<% 
+								<a class="btn btn-link" href="<%=profiles.get("desura")%>"><img class="img-small-icon" alt="desura" src="/img/desura.png"></a>
+							<%
 								}
-								if(profiles.containsKey("gamersgate")) {
+													if(profiles.containsKey("gamersgate")) {
 							%>
-								<a class="btn btn-link" href="<%= profiles.get("gamersgate") %>"><img class="img-small-icon" alt="gamersgate" src="/img/gg.png"></a>
-							<% 
+								<a class="btn btn-link" href="<%=profiles.get("gamersgate")%>"><img class="img-small-icon" alt="gamersgate" src="/img/gg.png"></a>
+							<%
 								}
-								if(profiles.containsKey("jeuxonline")) {
+													if(profiles.containsKey("jeuxonline")) {
 							%>
-								<a class="btn btn-link" href="<%= profiles.get("jeuxonline") %>"><img class="img-small-icon" alt="jeuxonline" src="/img/jol.png"></a>
-							<% 
+								<a class="btn btn-link" href="<%=profiles.get("jeuxonline")%>"><img class="img-small-icon" alt="jeuxonline" src="/img/jol.png"></a>
+							<%
 								}
 							%>
 							
 							<%
-								if(isCurrentUser || (userService.isUserLoggedIn() && userService.isUserAdmin())) {
-							%>
+															if(isCurrentUser || (userService.isUserLoggedIn() && userService.isUserAdmin())) {
+														%>
 								<a class="btn btn-success" href="#add-profile" data-toggle="modal">
 								<i class="icon-plus-sign icon-white"></i> Ajouter/Modifier un profil
 								</a>
@@ -169,27 +170,33 @@
 							
 						</div>
 						
-					<% } %>
+					<%
+												}
+											%>
 				</div>
 				<hr />
 				<div class="row">
-					Cadeaux envoyés : <%= CpcUserPersistance.getContributionValue(profileCpcUser.getKey()) %>
+					Cadeaux envoyés : <%=CpcUserPersistance.getContributionValue(profileCpcUser.getKey())%>
 				</div>
-				<% if(isCurrentUser || (userService.isUserLoggedIn() && userService.isUserAdmin())) { %>
+				<%
+					if(isCurrentUser || (userService.isUserLoggedIn() && userService.isUserAdmin())) {
+				%>
 					<hr />
 					<div class="row">
 						<form id="emailform" name="emailform" action="/edituser" method="post" class="">
 						    <label class="checkbox">
-						    	<input name="acceptemails" type="checkbox" <% if(profileCpcUser.isAcceptEmails()) { %> checked="checked" <% } %>> J'accepte de recevoir des emails de la part de CPC Gifts
+						    	<input name="acceptemails" type="checkbox" <%if(profileCpcUser.isAcceptEmails()) {%> checked="checked" <%}%>> J'accepte de recevoir des emails de la part de CPC Gifts
 						    </label>
 						    
 						    <input type="hidden" name="req" value="email" />
-							<input type="hidden" name="userid" value="<%= profileCpcUser.getKey().getId() %>" />
+							<input type="hidden" name="userid" value="<%=profileCpcUser.getKey().getId()%>" />
 						    
 						    <button type="submit" class="btn">Valider</button>
 					    </form>
 					</div>
-				<% } %>
+				<%
+					}
+				%>
 			</div>
 		</div>
 		<hr />
@@ -198,12 +205,12 @@
 			<ul class="nav nav-tabs">
 				<li id="created-button" class="active"><a
 					onclick="javascript:changeSection('#created');" href="#created">Concours
-						créés <span class="gray">(<%= profileCpcUser.getGiveaways().size() %>)</span></a></li>
+						créés <span class="gray">(<%=profileCpcUser.getGiveaways().size()%>)</span></a></li>
 				<li id="entries-button"><a
-					onclick="javascript:changeSection('#entries');" href="#entries">Participations <span class="gray">(<%= profileCpcUser.getEntries().size() %>)</span></a></li>
+					onclick="javascript:changeSection('#entries');" href="#entries">Participations <span class="gray">(<%=profileCpcUser.getEntries().size()%>)</span></a></li>
 				<li id="won-button"><a
-					onclick="javascript:changeSection('#won');" href="#won">Concours gagnés <span class="gray">(<%= profileCpcUser.getWon().size() %>)</span></a></li>
-				<% 
+					onclick="javascript:changeSection('#won');" href="#won">Concours gagnés <span class="gray">(<%=profileCpcUser.getWon().size()%>)</span></a></li>
+				<%
 					if(userService.isUserLoggedIn() && userService.isUserAdmin()) {
 				%>
 					<li><a 
@@ -216,9 +223,9 @@
 			<div class="tab-content">
 				<div id="created" class="tab-pane">
 					<%
-					Giveaway[] gas = GAPersistance.getUserGAsFromCache(profileCpcUser, "created");
-					
-					for(Giveaway ga : gas) {
+						List<Giveaway> gas = GiveawayPersistance.getAll(profileCpcUser.getGiveaways(), true);
+								
+								for(Giveaway ga : gas) {
 					%>
 		
 					<%@ include file="/templates/gaview.jspf" %>
@@ -230,11 +237,10 @@
 				<div id="entries" class="tab-pane" style="display: none">
 		
 					<%
-					
-					Giveaway[] entries = GAPersistance.getUserGAsFromCache(profileCpcUser, "entries");						
-													
-					for(Giveaway ga : entries) {
-					%>
+								List<Giveaway> entries = GiveawayPersistance.getAll(profileCpcUser.getEntries(), true);						
+																		
+										for(Giveaway ga : entries) {
+							%>
 					<%@ include file="/templates/gaview.jspf" %>
 					<%
 						}
@@ -245,10 +251,10 @@
 				<div id="won" class="tab-pane" style="display: none">
 		
 					<%
-					Giveaway[] won = GAPersistance.getUserGAsFromCache(profileCpcUser, "won");			
-													
-					for(Giveaway ga : won) {
-					%>
+								List<Giveaway> won = GiveawayPersistance.getAll(profileCpcUser.getWon(), true);			
+																		
+										for(Giveaway ga : won) {
+							%>
 					<%@ include file="/templates/gaview.jspf" %>
 					<%
 						}
@@ -397,8 +403,3 @@
 
 </body>
 </html>
-
-
-<%
-	CpcUserPersistance.closePm();
-%>

@@ -8,77 +8,63 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.Text;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Unindex;
 
 import fr.cpcgifts.persistance.CpcUserPersistance;
 import fr.cpcgifts.utils.TextTools;
 
-@PersistenceCapable(detachable="true")
+@Cache
+@Unindex
+@Entity
 public class Giveaway implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private static final Logger log = Logger.getLogger(Giveaway.class.getSimpleName());
 
-	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key key;
+	@Id Long id;
 	
-	@Persistent
-	private Key author;
+	private Key<CpcUser> author;
 	
-	@Persistent
 	private String title = "";
 	
-	@Persistent
-	private Text longDescription = new Text("");
+	private String longDescription = "";
 	
 	/** Règles personnalisées */
-	@Persistent
-	private Text rules = new Text("");
+	private String rules = "";
 	
-	@Persistent
 	private String imgUrl = "";
 	
-	@Persistent(defaultFetchGroup="true")
-	private Set<Key> entrantsSet;
+	private Set<Key<CpcUser>> entrantsSet;
 	
-	@Persistent(defaultFetchGroup="true")
-	private Set<Key> commentsSet;
+	private Set<Key<Comment>> commentsSet;
 	
 	/* TimeZone en UTC */
-	@Persistent
-	private Date endDate;
+	@Index private Date endDate;
 	
-	@Persistent(defaultFetchGroup="true")
-	private Set<Key> winners;
+	private Set<Key<CpcUser>> winners;
 	
-	@Persistent(defaultFetchGroup="true")
-	public int nbWinners = 0;
+	@Index public int nbWinners = 0;
 	
-	@Persistent
 	public int nbCopies = 1;
 	
-	@Persistent
-	private boolean open = true;
+	@Index private Boolean open = true;
 	
-	@Persistent
 	private Boolean isPrivate = false;
 	
 	public Giveaway() {
 		super();
 		
-		this.entrantsSet = new HashSet<Key>();
-		this.commentsSet = new HashSet<Key>();
-		this.winners = new HashSet<Key>();
+		this.entrantsSet = new HashSet<Key<CpcUser>>();
+		this.commentsSet = new HashSet<Key<Comment>>();
+		this.winners = new HashSet<Key<CpcUser>>();
 	}
 	
-	public Giveaway(Key author, String title, String description, String customRules, String imgUrl, Date endDate, int nbCopies) {
+	public Giveaway(Key<CpcUser> author, String title, String description, String customRules, String imgUrl, Date endDate, int nbCopies) {
 		this();
 		
 		this.author = author;		
@@ -92,19 +78,19 @@ public class Giveaway implements Serializable {
 		
 	}
 
-	public Key getKey() {
-		return key;
+	public Long getId() {
+		return id;
+	}
+	
+	public Key<Giveaway> getKey() {
+		return Key.create(Giveaway.class, id);
 	}
 
-	public void setKey(Key key) {
-		this.key = key;
-	}
-
-	public Key getAuthor() {
+	public Key<CpcUser> getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(Key author) {
+	public void setAuthor(Key<CpcUser> author) {
 		this.author = author;
 	}
 
@@ -118,24 +104,24 @@ public class Giveaway implements Serializable {
 
 	public String getDescription() {
 		if(longDescription == null)
-			longDescription = new Text("");
+			longDescription = "";
 		
-		return longDescription.getValue();
+		return longDescription;
 	}
 
 	public void setDescription(String description) {
-		this.longDescription = new Text(TextTools.escapeHtml(description));
+		this.longDescription = TextTools.escapeHtml(description);
 	}
 	
 	public String getRules() {
 		if(rules == null)
-			rules = new Text("");
+			rules = "";
 		
-		return rules.getValue();
+		return rules;
 	}
 	
 	public void setRules(String rules) {
-		this.rules = new Text(TextTools.escapeHtml(rules));
+		this.rules = TextTools.escapeHtml(rules);
 	}
 
 	public String getImgUrl() {
@@ -149,48 +135,48 @@ public class Giveaway implements Serializable {
 		this.imgUrl = imgUrl;
 	}
 
-	public Set<Key> getEntrants() {
+	public Set<Key<CpcUser>> getEntrants() {
 		if(entrantsSet == null)
-			entrantsSet = new HashSet<Key>();
+			entrantsSet = new HashSet<Key<CpcUser>>();
 		
 		return entrantsSet;
 	}
 	
-	public boolean addEntrant(Key cpcuser) {
+	public boolean addEntrant(Key<CpcUser> cpcuser) {
 		getEntrants();
 		
 		return entrantsSet.add(cpcuser);
 	}
 	
-	public boolean removeEntrant(Key cpcuser) {
+	public boolean removeEntrant(Key<CpcUser> cpcuser) {
 		getEntrants();
 		
 		return entrantsSet.remove(cpcuser);
 	}
 	
-	public void setEntrants(Set<Key> entrants) {
+	public void setEntrants(Set<Key<CpcUser>> entrants) {
 		this.entrantsSet = entrants;
 	}
 
-	public Set<Key> getComments() {
+	public Set<Key<Comment>> getComments() {
 		if(commentsSet == null)
-			commentsSet = new HashSet<Key>();
+			commentsSet = new HashSet<Key<Comment>>();
 		
 		return commentsSet;
 	}
 
-	public void setComments(Set<Key> comments) {
+	public void setComments(Set<Key<Comment>> comments) {
 		this.commentsSet = comments;
 	}
 	
-	public boolean addComment(Key k) {
+	public boolean addComment(Key<Comment> k) {
 		getComments();
 		
 		return commentsSet.add(k);
 		
 	}
 	
-	public boolean removeComment(Key k) {
+	public boolean removeComment(Key<Comment> k) {
 		getComments();
 		
 		return commentsSet.remove(k);
@@ -205,20 +191,20 @@ public class Giveaway implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public Set<Key> getWinners() {
+	public Set<Key<CpcUser>> getWinners() {
 		if(winners == null)
-			this.winners = new HashSet<Key>();
+			this.winners = new HashSet<Key<CpcUser>>();
 		
 		return winners;
 	}
 	
-	public void setWinners(Set<Key> winners) {
+	public void setWinners(Set<Key<CpcUser>> winners) {
 		this.winners = winners;
 		
 		this.nbWinners = winners.size();
 	}
 
-	public boolean addWinner(Key winner) {
+	public boolean addWinner(Key<CpcUser> winner) {
 		getWinners();
 		
 		boolean res =winners.add(winner);
@@ -228,7 +214,7 @@ public class Giveaway implements Serializable {
 		return res;
 	}
 	
-	public boolean removeWinner(Key winner) {
+	public boolean removeWinner(Key<CpcUser> winner) {
 		getWinners();
 		
 		boolean res = winners.remove(winner);
@@ -281,50 +267,53 @@ public class Giveaway implements Serializable {
 		while(winners.size() < nbWinners) {
 			int winnerIndex = rand.nextInt(entrantsSet.size());
 			
-			Key winner = (Key) entrantsSet.toArray()[winnerIndex];
+			@SuppressWarnings("unchecked")
+			Key<CpcUser> winner = (Key<CpcUser>) entrantsSet.toArray()[winnerIndex];
 			
 			boolean newInSet = winners.add(winner);
 			
 			if(newInSet) {
-				CpcUser winnerEntity = CpcUserPersistance.getCpcUserUndetached(winner);
-				winnerEntity.addWon(this.key);
+				CpcUser winnerEntity = CpcUserPersistance.getCpcUser(winner);
+				winnerEntity.addWon(this.getKey());
 				log.info("Winner is " + winnerEntity.getCpcNickname() + " !");
+				CpcUserPersistance.updateOrCreate(winnerEntity);
 			}
 		}
 			
-		CpcUserPersistance.closePm();
 	}
 	
-	public void reroll(Key winnerToReroll) {
+	@SuppressWarnings("unchecked")
+	public void reroll(Key<CpcUser> winnerToReroll) {
 		
 		Random rand = new Random();
 		
 		if(entrantsSet.size() > winners.size()) {
 			
-			Key newWinner = winnerToReroll;
+			Key<CpcUser> newWinner = winnerToReroll;
 			
 			do {
 				
 				int winnerIndex = rand.nextInt(entrantsSet.size());
 				
-				newWinner = (Key) entrantsSet.toArray()[winnerIndex];
+				newWinner = (Key<CpcUser>) entrantsSet.toArray()[winnerIndex];
 				
 			} while (winners.contains(newWinner));
 			
-			CpcUser winnerEntity = CpcUserPersistance.getCpcUserUndetached(winnerToReroll);
-			CpcUser newWinnerEntity = CpcUserPersistance.getCpcUserUndetached(newWinner);
-			newWinnerEntity.addWon(this.key);
+			CpcUser winnerEntity = CpcUserPersistance.getCpcUser(winnerToReroll);
+			CpcUser newWinnerEntity = CpcUserPersistance.getCpcUser(newWinner);
+			newWinnerEntity.addWon(this.getKey());
 			addWinner(newWinner);
-			winnerEntity.removeWon(this.key);
+			winnerEntity.removeWon(this.getKey());
 			removeWinner(winnerToReroll);
-			CpcUserPersistance.closePm();
+			CpcUserPersistance.updateOrCreate(newWinnerEntity);
+			CpcUserPersistance.updateOrCreate(winnerEntity);
 		}
 		
 	}
 	
 	@Override
 	public String toString() {
-		return "Giveaway [key=" + getKey() + ", author=" + getAuthor() + ", title="
+		return "Giveaway [key=" + getId() + ", author=" + getAuthor() + ", title="
 				+ getTitle() + ", description=" + getDescription() + ", endDate="
 				+ getEndDate() + ", winners=" + Arrays.deepToString(winners.toArray()) + ", open="
 				+ isOpen() + ", private=" + isPrivate() + "]";

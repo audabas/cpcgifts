@@ -1,15 +1,5 @@
-<%@page import="fr.cpcgifts.utils.Constants"%>
-<%@page import="com.google.appengine.api.memcache.jsr107cache.GCacheFactory"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
-<%@page import="net.sf.jsr107cache.CacheException"%>
-<%@page import="java.util.Collections"%>
-<%@page import="net.sf.jsr107cache.CacheManager"%>
-<%@page import="net.sf.jsr107cache.Cache"%>
-<%@page import="java.util.List"%>
-<%@page import="fr.cpcgifts.persistance.GAPersistance"%>
-<%@page import="fr.cpcgifts.model.Giveaway"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@page import="fr.cpcgifts.utils.Constants"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>

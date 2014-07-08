@@ -1,8 +1,3 @@
-<%@page import="com.google.appengine.api.datastore.KeyFactory"%>
-<%@page import="com.google.appengine.api.datastore.Key"%>
-<%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
-<%@page import="fr.cpcgifts.model.CpcUser"%>
-
 <div class="row-fluid" data-type='user' data-id='<%= userToDisplay.getKey().getId() %>' data-nickname='<%= userToDisplay.getCpcNickname() %>' >
 	<div class="span1">
 		<a href="/user?userID=<%= userToDisplay.getKey().getId() %>">

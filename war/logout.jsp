@@ -1,5 +1,3 @@
 <%
-	session.invalidate();
-
 	response.sendRedirect("/");
 %>

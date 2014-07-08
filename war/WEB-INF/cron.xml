@@ -2,8 +2,8 @@
 <cronentries>
   <cron>
     <url>/cron/closeGA</url>
-    <description>Ferme les concours terminés et désigne les gagnants toute les 5 minutes</description>
-    <schedule>every 5 minutes</schedule>
+    <description>Ferme les concours terminés et désigne les gagnants toute les 2 minutes</description>
+    <schedule>every 2 minutes</schedule>
   </cron>
   <cron>
     <url>/cron/cleanEmptyGA</url>

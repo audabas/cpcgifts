@@ -1,27 +1,20 @@
 package fr.cpcgifts;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import net.sf.jsr107cache.Cache;
-import net.sf.jsr107cache.CacheException;
-import net.sf.jsr107cache.CacheManager;
-
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.googlecode.objectify.Key;
 
 import fr.cpcgifts.model.CpcUser;
-import fr.cpcgifts.persistance.PMF;
+import fr.cpcgifts.persistance.CpcUserPersistance;
 import fr.cpcgifts.utils.TextTools;
 
 @SuppressWarnings("serial")
@@ -34,12 +27,11 @@ public class EditUserServlet extends HttpServlet {
 		
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		HttpSession session = req.getSession();
-		CpcUser cpcuser = (CpcUser) session.getAttribute("cpcuser");
+		CpcUser cpcuser = null;
+		if(user != null)
+			cpcuser = CpcUserPersistance.getCpcUser(user.getUserId());
 		if(cpcuser == null)
-			resp.sendRedirect(userService.createLogoutURL("/logout.jsp"));
-		cpcuser = pm.getObjectById(CpcUser.class, cpcuser.getKey());
+			resp.sendRedirect(userService.createLogoutURL("/"));
 
 		if (user != null && cpcuser != null) {
 
@@ -47,7 +39,7 @@ public class EditUserServlet extends HttpServlet {
 			Map<String, String[]> params = req.getParameterMap();
 			
 			String userId = params.get("userid")[0];
-			CpcUser userToUpdate = pm.getObjectById(CpcUser.class, KeyFactory.createKey(CpcUser.class.getSimpleName(),Long.parseLong(userId)));
+			CpcUser userToUpdate = CpcUserPersistance.getCpcUser(Key.create(CpcUser.class,Long.parseLong(userId)));
 
 			String reqType = params.get("req")[0];
 
@@ -78,21 +70,11 @@ public class EditUserServlet extends HttpServlet {
 			
 			resp.sendRedirect("/user?userID=" + userToUpdate.getKey().getId());
 			
-			
-			try {
-	            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
-	            
-	            cache.remove(userToUpdate.getKey());
-				
-	        } catch (CacheException e) {
-	        	//rien
-	        }
+			CpcUserPersistance.updateOrCreate(userToUpdate);
 			
 		} else {
 			resp.sendRedirect("/");
 		}
-		
-		pm.close();
 		
 	}
 }

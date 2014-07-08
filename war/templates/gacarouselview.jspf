@@ -1,7 +1,4 @@
-<%@page import="fr.cpcgifts.persistance.GAPersistance"%>
-<%@page import="fr.cpcgifts.model.Giveaway"%>
-<%@page import="com.google.appengine.api.datastore.KeyFactory"%>
-<%@page import="com.google.appengine.api.datastore.Key"%>
+<%@page import="fr.cpcgifts.model.CpcUser"%>
 <%@page import="fr.cpcgifts.persistance.CpcUserPersistance"%>
 
 <%

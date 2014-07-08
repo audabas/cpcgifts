@@ -21,7 +21,6 @@ public class LoginServlet extends HttpServlet {
       
       if (user != null) {
     	  
-    	  
     	  if(CpcUserPersistance.getCpcUser(user.getUserId()) == null) { // si c'est sa première connexion
     		  resp.sendRedirect("/login.jsp");
     		  return;
