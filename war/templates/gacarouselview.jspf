@@ -3,7 +3,7 @@
 
 <%
 {
-	CpcUser gaAuth = CpcUserPersistance.getUserFromCache(ga.getAuthor());
+	CpcUser gaAuth = CpcUserPersistance.getCpcUser(ga.getAuthor());
 	
 	//un giveaway est visible s'il n'est pas privé, si l'utilisateur est déjà inscrit ou bien s'il est l'auteur du concours.
 	boolean visible = !ga.isPrivate() || cpcuser != null && ga.getEntrants().contains(cpcuser.getKey()) 
