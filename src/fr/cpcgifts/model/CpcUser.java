@@ -262,7 +262,7 @@ public class CpcUser implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CpcUser [key=" + getKey() + ", id=" + id + ", guser=" + guser
+		return "CpcUser [key=" + keyId + ", id=" + id + ", guser=" + guser
 				+ ", cpcProfileId=" + cpcProfileId + ", cpcNickname="
 				+ cpcNickname + "]";
 	}

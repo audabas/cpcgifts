@@ -137,7 +137,8 @@ public class AdminServlet extends HttpServlet {
 			if(ga != null) {
 				GiveawayPersistance.updateOrCreate(ga);
 				resp.sendRedirect("/giveaway?gaID=" + ga.getKey().getId());
-			} else if(userToUpdate != null) {
+			} 
+			if(userToUpdate != null) {
 				CpcUserPersistance.updateOrCreate(userToUpdate);
 				resp.sendRedirect("/user?userID=" + userToUpdate.getKey().getId());
 			}
