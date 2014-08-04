@@ -51,6 +51,13 @@
 	<input type="submit" value="Valider">
 </form>
 
+<form action="/admin/changeNbCopies" method="get">
+	<input name="reqtype" value="changeNbCopies" type="hidden">
+	<label>Giveaway :</label> <input type="text" name="gaid">
+	<label>Nombre de copies :</label> <input type="text" name="nbcopies">
+	<input type="submit" value="Valider">
+</form>
+
 <h2>Update datastore model</h2>
 <ul>
 <!-- <li><a href="gaupdate1.jsp">Update giveaways winners (single->set) and description (short[String]->long[Text])</a></li> -->

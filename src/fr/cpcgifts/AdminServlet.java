@@ -132,6 +132,11 @@ public class AdminServlet extends HttpServlet {
 				Key<CpcUser> userToDeleteKey = Key.create(CpcUser.class,Long.parseLong(userToDeleteID.trim()));
 				log.info("[ADMIN] " + cpcuser + " fusionned " + userToUpdate + " with " + userToDeleteKey + ".");
 				CpcUserPersistance.cpcusersFusion(userToUpdateKey, userToDeleteKey);
+			} else if("changeNbCopies".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " changed " +  ga + " number of copies.");
+				int newNbCopies = Integer.parseInt(params.get("nbcopies")[0]);
+				if(ga != null)
+					ga.setNbCopies(newNbCopies);
 			}
 			
 			if(ga != null) {
