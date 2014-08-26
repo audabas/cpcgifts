@@ -48,7 +48,9 @@ public class AdminServlet extends HttpServlet {
 			if (params.containsKey("gaid")) {
 				String gaID = params.get("gaid")[0];
 				gaKey = Key.create(Giveaway.class,Long.parseLong(gaID.trim()));
-				ga = GiveawayPersistance.getGA(gaKey);
+				try {
+					ga = GiveawayPersistance.getGA(gaKey);
+				} catch(Exception e) {}
 			}
 			
 			CpcUser userToUpdate = null;
@@ -137,7 +139,13 @@ public class AdminServlet extends HttpServlet {
 				int newNbCopies = Integer.parseInt(params.get("nbcopies")[0]);
 				if(ga != null)
 					ga.setNbCopies(newNbCopies);
+			} else if("changeNickname".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " changed " +  userToUpdate + " nickname.");
+				String newNickname = params.get("newnickname")[0];
+				if(userToUpdate != null)
+					userToUpdate.setCpcNickname(newNickname);
 			}
+			
 			
 			if(ga != null) {
 				GiveawayPersistance.updateOrCreate(ga);
