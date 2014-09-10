@@ -65,6 +65,11 @@
 	<input type="submit" value="Valider">
 </form>
 
+<form action="/adminconsole/giveawayedit.jsp" method="get">
+	<label>Giveaway :</label> <input type="text" name="gaid">
+	<input type="submit" value="Valider">
+</form>
+
 <h2>Update datastore model</h2>
 <ul>
 <!-- <li><a href="gaupdate1.jsp">Update giveaways winners (single->set) and description (short[String]->long[Text])</a></li> -->

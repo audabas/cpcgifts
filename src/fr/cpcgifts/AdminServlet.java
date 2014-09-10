@@ -1,7 +1,11 @@
 package fr.cpcgifts;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -20,6 +24,7 @@ import fr.cpcgifts.model.Giveaway;
 import fr.cpcgifts.persistance.CommentPersistance;
 import fr.cpcgifts.persistance.CpcUserPersistance;
 import fr.cpcgifts.persistance.GiveawayPersistance;
+import fr.cpcgifts.utils.Constants;
 
 @SuppressWarnings("serial")
 public class AdminServlet extends HttpServlet {
@@ -144,6 +149,14 @@ public class AdminServlet extends HttpServlet {
 				String newNickname = params.get("newnickname")[0];
 				if(userToUpdate != null)
 					userToUpdate.setCpcNickname(newNickname);
+			} else if("changeGiveawayDate".equals(reqType)) {
+				log.info("[ADMIN] " + cpcuser + " changed " +  ga + " end date.");
+				String newDate = params.get("newDate")[0];
+				SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.FRANCE);
+				try {
+					Date newGiveawayDate = sdf.parse(newDate);
+					ga.setEndDate(newGiveawayDate);
+				} catch (ParseException e) { }
 			}
 			
 			

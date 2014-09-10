@@ -22,4 +22,6 @@ public final class Constants {
 	public static final String DEFAULT_CONTACT_EMAIL = "cpcgifts.appspot@gmail.com";
 	public static final String DEFAULT_CONTACT_PERSONAL = "CPC Gifts";
 	
+	public static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
+	
 }
