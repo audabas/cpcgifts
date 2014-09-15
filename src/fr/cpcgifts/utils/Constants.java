@@ -2,9 +2,9 @@ package fr.cpcgifts.utils;
 
 public final class Constants {
 
-	public static final String TOPIC_CANARDS_GENEREUX_FIRST_POST = "http://forum.canardpc.com/threads/88418-Le-topic-des-canards-g%C3%A9n%C3%A9reux-%C3%A9pisode-III-R%C3%A8gles-de-bonne-conduite-dans-le-1er-post?p=7686450&viewfull=1#post7686450";
+	public static final String TOPIC_CANARDS_GENEREUX_FIRST_POST = "http://forum.canardpc.com/threads/91654-Le-topic-des-canards-g%C3%A9n%C3%A9reux-%C3%A9pisode-IV-Un-nouvel-espoir?p=8090582&viewfull=1#post8090582";
 	
-	public static final String TOPIC_CANARDS_GENEREUX = "http://forum.canardpc.com/threads/88418-Le-topic-des-canards-g%C3%A9n%C3%A9reux-%C3%A9pisode-III-R%C3%A8gles-de-bonne-conduite-dans-le-1er-post";
+	public static final String TOPIC_CANARDS_GENEREUX = "http://forum.canardpc.com/threads/91654-Le-topic-des-canards-g%C3%A9n%C3%A9reux-%C3%A9pisode-IV-Un-nouvel-espoir";
 	
 	public static final String TOPIC_DEV = "http://forum.canardpc.com/threads/79082-CPC-Gifts-Le-topic-des-d%C3%A9veloppeurs-g%C3%A9n%C3%A9reux-%28et-des-autres%29";
 	
