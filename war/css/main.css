@@ -125,6 +125,11 @@
 	color : #B94A48 !important;
 }
 
+.icon-smiley {
+	background: url(/img/smile.png);
+	background-repeat: no-repeat;
+}
+
 /*====================================
 		 css for timepicker 
 ====================================== */
