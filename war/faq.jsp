@@ -45,7 +45,7 @@
 		
 		<h4>J'ai gagné un concours, mais le donateur refuse de me donner mon gain.</h4>
 		<p>
-			Si le donateur ne peut pas vous donner votre gain alors que vous remplissez toutes les conditions d'inscriptions,
+			Si le donateur ne veut pas vous donner votre gain alors que vous remplissez toutes les conditions d'inscriptions,
 			merci de le signaler à un admin afin que nous puissions mettre à jour la page du giveaway et, si nécessaire,
 			prendre des mesures à l'encontre du canard en question.<br />
 			Merci de rester poli et courtois, un oubli/une erreur peut arriver à tout le monde ;-)
