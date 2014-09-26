@@ -842,6 +842,14 @@
                   e.setSelection(cursor + 6,cursor + 6 + link.length)
                 }
               }
+          },
+          {
+            name: 'cmdSmiley',
+            title: 'Smiley',
+            icon: 'icon icon-smiley',
+            callback: function(e){
+              window.open("/img/smilies/smilies.html", "_blank", "width=390, height=600, scrollbars=yes");
+            }
           }]
       },{
         name: 'groupMisc',
