@@ -64,7 +64,7 @@ function getSmilies() {
 		if(smilies_json === null) {
 			$.ajax({
 				dataType: "json",
-				url: "smilies.json",
+				url: "/img/smilies/smilies.json",
 				success: function( data ) {
 					smilies = data;
 					smilies_json = JSON.stringify(smilies);
@@ -79,7 +79,7 @@ function getSmilies() {
 	} else { //si le navigateur ne supporte pas web storage
 		$.ajax({
 			dataType: "json",
-			url: "smilies.json",
+			url: "/img/smilies/smilies.json",
 			success: function( data ) {
 				smilies = data;
 			},
