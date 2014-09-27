@@ -94,19 +94,13 @@ expose.escapeRegExp = function escapeRegExp(string) {
  * Convert smilies int markdown image syntax.
  */
 expose.toSmilies = function toSmilies(input) {
-  $.ajaxSetup({ mimeType: "text/plain" });
-  $.ajax({
-    dataType: "json",
-    url: "/img/smilies/smilies.json",
-    success: function( data ) {
-      $.each(data, function (key, value) {
-        var title = value.title;
-        var img = value.image;
-        var regex = new RegExp( expose.escapeRegExp(title), 'g');
-        input = input.replace(regex, '![' + title + '](/img/smilies/' + img + ' "' + title + '")');
-      });
-    },
-    async: false
+  var smilies = getSmilies();
+
+  $.each(smilies, function (key, value) {
+    var title = value.title;
+    var img = value.base64;
+    var regex = new RegExp( expose.escapeRegExp(title), 'g');
+    input = input.replace(regex, '![' + title + '](' + img + ' "' + title + '")');
   });
 
   return input;
