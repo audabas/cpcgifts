@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Liste de smileys</title>
+	
+	<link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+<style type="text/css">
+	html {
+		overflow-y: scroll;
+	}
+
+	.content {
+		text-align: center;
+		margin: 15px;
+	}
+
+	.line {
+		margin-bottom: 25px;
+	}
+
+	.smiley {
+		padding: 5px;
+		cursor: pointer;
+		background-color: #EEE;
+		border-radius: 5px;
+	}
+</style>
+
+<body>
+
+<div class="content" id="smilies-list"></div>
+
+<script type="text/javascript" src="/js/vendor/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/js/vendor/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/vendor/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script type="text/javascript">
+	var smilies = getSmilies();
+	for(var i = 0; i < smilies.length; i++) {
+
+		var line = Math.floor(i/4);
+
+		if(i%4 === 0) {
+			$("#smilies-list").append("<div class='row line' id='line_" + line + "'></div>");
+		}
+
+		$("#line_" + line).append("<div class='span1 smiley' data-key=\"" + smilies[i].title + "\"><div class=''><img src='" + smilies[i].base64 + "'/></div><div class=''>" + smilies[i].title + "</div></div>");
+	}
+
+	$(".content").on("click", ".smiley", function(e) {
+		e.preventDefault();
+		var key = $(this).data('key');
+
+		window.opener.$("#comment").insertAtCaret(key);
+	});
+
+</script>
+
+</body>
+</html>
