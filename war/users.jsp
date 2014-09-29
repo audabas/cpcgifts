@@ -57,6 +57,8 @@
 		<%
 		}
 		%>
+		
+		<%@ include file="footer.jspf"%>
 
 
 	</div>

@@ -126,8 +126,7 @@
 
 		<hr />
 		
-		<footer>
-		</footer>
+		<%@ include file="footer.jspf"%>
 	
 	</div>
 	<!-- /container -->
