@@ -21,4 +21,9 @@
     <schedule>every day 05:00</schedule>
     <target>ah-builtin-python-bundle</target>
   </cron>
+  <cron>
+    <url>/_ah/sessioncleanup?clear</url>
+    <description>Clean up sessions</description>
+    <schedule>every 30 minutes</schedule>
+  </cron>
 </cronentries>
