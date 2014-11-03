@@ -679,6 +679,8 @@
             	$(hash).css("background-color", "yellow");
             }
             
+            $(".container").fitVids();
+            
 		});
 		
 		function deleteComment(commentId) {
