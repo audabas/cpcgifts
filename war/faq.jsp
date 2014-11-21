@@ -108,10 +108,10 @@
 		<h4>Qui sont les admins ?</h4>
 		<p>
 			<ul>
-				<li><a href="http://cpcgifts.appspot.com/user?userID=6001">bastien09</a> (créateur de CPC Gifts)</li>
-				<li><a href="http://cpcgifts.appspot.com/user?userID=131001">sebarnolds</a></li>
-				<li><a href="http://cpcgifts.appspot.com/user?userID=12005">SiGarrett</a></li>
-				<li><a href="http://cpcgifts.appspot.com/user?userID=6005">Yakaaa</a></li>
+				<li><a href="http://cpcgifts.ovh/user?userID=6001">bastien09</a> (créateur de CPC Gifts)</li>
+				<li><a href="http://cpcgifts.ovh/user?userID=131001">sebarnolds</a></li>
+				<li><a href="http://cpcgifts.ovh/user?userID=12005">SiGarrett</a></li>
+				<li><a href="http://cpcgifts.ovh/user?userID=6005">Yakaaa</a></li>
 			</ul>
 			Merci de ne pas nous contacter individuellement pour des demandes pouvant se faire via CPC Gifts.
 		</p>
