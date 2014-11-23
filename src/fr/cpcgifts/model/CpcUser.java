@@ -242,6 +242,11 @@ public class CpcUser implements Serializable {
 		this.profilesMap.put(key, link);
 	}
 	
+	public void removeProfile(String key) {
+		getProfiles();
+		
+		this.profilesMap.remove(key);
+	}	
 	
 	public boolean isBanned() {
 		return banned;

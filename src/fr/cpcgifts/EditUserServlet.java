@@ -54,7 +54,11 @@ public class EditUserServlet extends HttpServlet {
 					String service = params.get("service")[0];
 					String link = TextTools.escapeHtml(params.get("link")[0]);
 					
-					userToUpdate.addProfile(service, link);
+					if(link.length() > 0) {
+						userToUpdate.addProfile(service, link);				
+					} else {
+						userToUpdate.removeProfile(service);
+					}
 					log.info(cpcuser + " added " + service + " link to profile " + link);					
 				} else if("email".equals(reqType)) {
 					String acceptEmails = null;

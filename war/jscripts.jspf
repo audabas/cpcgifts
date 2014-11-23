@@ -8,7 +8,7 @@
 
 <script src="/js/vendor/jquery.lazyload.min.js"></script>
 <script src="/js/vendor/jquery.fitvids.js"></script>
-<script src="js/vendor/jquery.caret.js"></script>
+<script src="/js/vendor/jquery.caret.js"></script>
 
 <script src="/js/vendor/bootstrap.min.js"></script>
 

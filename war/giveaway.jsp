@@ -137,7 +137,7 @@
 				<%
 					if (currentGA.getNbCopies() > 1) {
 				%>
-				<span class="gray">(<%=currentGA.getNbCopies()%> copies)</span>
+				<span class="gray">(<%=currentGA.getNbCopies()%>&nbsp;copies)</span>
 				<%
 					}
 				%>
@@ -307,6 +307,12 @@
 					%>
 					
 					<%@ include file="/templates/commentview.jspf" %>
+					
+					<% if(userService.isUserLoggedIn()) { %>
+						<a href="javascript:quoteComment('<%= CpcUserPersistance.getCpcUser(comment.getAuthor()).getCpcNickname() %>', <%=comment.getKey().getId()%>)" class="btn btn-mini">
+							<i class="icon-comment"></i> Répondre avec citation
+						</a>
+					<% } %>
 					
 					<%
 											if (userService.isUserLoggedIn()
@@ -705,6 +711,20 @@
 						$("#comment-form").submit();
 					}
 			);
+		}
+		
+		function quoteComment(author, commentId) {
+			var text = $("#comment-" + commentId).val();
+			var lines = text.split('\n');
+			var quote = "> **Envoyé par *" + author + "* **  ";
+			
+			for(var i = 0;i < lines.length;i++) {
+				var l = lines[i];
+				quote += "\n> " + l;
+			}
+			
+			$("#comment").val($("#comment").val() + "\n" + quote + "\n");
+			window.location.hash = '#comment';
 		}
 		
 		<%if (isAuthor || isAdmin) {%>

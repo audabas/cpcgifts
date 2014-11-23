@@ -376,9 +376,7 @@
 	
 	<script type="text/javascript">
 		function submitProfileForm() {
-			if ($("#profile-link").val() != "") {
-				$("#profileform").submit();
-			}
+			$("#profileform").submit();
 		}
 	</script>
 
