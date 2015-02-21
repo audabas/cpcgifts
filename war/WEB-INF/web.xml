@@ -107,6 +107,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<jsp-file>/users.jsp</jsp-file>
 	</servlet>
 	<servlet>
+		<servlet-name>UserStats</servlet-name>
+		<jsp-file>/users-stats.jsp</jsp-file>
+	</servlet>
+	<servlet>
 		<servlet-name>Profile</servlet-name>
 		<jsp-file>/profile.jsp</jsp-file>
 		<load-on-startup>1</load-on-startup>
@@ -136,6 +140,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet-mapping>
 		<servlet-name>UserList</servlet-name>
 		<url-pattern>/users</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>UserStats</servlet-name>
+		<url-pattern>/stats</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Profile</servlet-name>

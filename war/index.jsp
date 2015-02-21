@@ -117,6 +117,7 @@
 					<li><strong><%= CpcUserPersistance.getAllUserCountFromCache() %></strong> membres</li>
 					<li><strong><%= opengas.size() %></strong> concours en cours</li>
 					<li><strong><%= GiveawayPersistance.getAllGACount() %></strong> concours créés</li>
+					<li><a href="/stats">Statistiques par utilisateur</a></li>
 				</ul>
 			</div>
 		</div>
