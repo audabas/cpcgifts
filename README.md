@@ -1,7 +1,7 @@
 CPC Gifts
 ========
 
-Plateforme d'organisation de concours pour le forum Canard PC ([Canard PC Gifts] (http://cpcgifts.appspot.com))
+Plateforme d'organisation de concours pour le forum Canard PC ([Canard PC Gifts] (http://cpcgifts.ovh))
 
 * [Le site CPC Gifts](http://cpcgifts.ovh)
 * [Le topic des canards généreux](http://forum.canardpc.com/threads/63940-Le-topic-des-canards-g%C3%A9n%C3%A9reux)
