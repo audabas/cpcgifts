@@ -27,6 +27,7 @@
 <%@ include file="css.jspf" %>
 
 <link rel="stylesheet" href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.css">
+<link rel="stylesheet" href="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/2/dataTables.bootstrap.css">
 
 <script src="/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
@@ -41,7 +42,7 @@
 
 	<div class="container">
 	
-		<table id="usertable" class="display" cellspacing="0" width="100%" style="text-align: right;">
+		<table id="usertable" class="display table table-striped table-bordered" cellspacing="0" width="100%">
 	        <thead>
 	            <tr>
 	                <th>Identifiant</th>
@@ -85,6 +86,7 @@
 	<%@ include file="jscripts.jspf" %>
 	
 	<script src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+	<script src="http://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/2/dataTables.bootstrap.js"></script>
 	
 	
 	<script type="text/javascript">
