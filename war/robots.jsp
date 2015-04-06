@@ -1,7 +1,7 @@
 <%
 	String domain = request.getServerName().replace("www.", "");
 
-	if("cpcgifts.ovh".equals(domain)) {
+	if("cpcgifts.fr".equals(domain)) {
 
 %>
 User-Agent: *    

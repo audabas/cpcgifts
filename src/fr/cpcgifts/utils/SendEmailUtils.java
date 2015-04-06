@@ -35,7 +35,7 @@ public class SendEmailUtils {
 				"<p>\n" +
 				"Bonjour " + author.getCpcNickname() + ",<br />\n" +
 				"<br />\n" +
-				"votre concours <a href='http://cpcgifts.ovh/giveaway?gaID=" + ga.getKey().getId() + "'>" + ga.getTitle() + "</a> vient de se terminer.<br />\n");
+				"votre concours <a href='http://cpcgifts.fr/giveaway?gaID=" + ga.getKey().getId() + "'>" + ga.getTitle() + "</a> vient de se terminer.<br />\n");
 		
 		if(winners.size() == 0) {
 			body.append("Aucune personne n'a participé à ce concours.<br /><br />\n" +
@@ -44,11 +44,11 @@ public class SendEmailUtils {
 		} else if(winners.size() == 1) {
 			CpcUser winner = (CpcUser) winners.toArray()[0];
 			body.append("Le gagnant qui a été tiré au sort est : " +
-					"<a href='http://cpcgifts.ovh/user?userID=" + winner.getKey().getId() + "'>" + winner.getCpcNickname() + "</a>.\n" +
+					"<a href='http://cpcgifts.fr/user?userID=" + winner.getKey().getId() + "'>" + winner.getCpcNickname() + "</a>.\n" +
 					"</p>\n" );
 			body.append("<p>\n" +
 					"S'il ne respecte pas une des conditions indiquées sur " +
-					"<a href='http://cpcgifts.ovh/giveaway?gaID=" + ga.getKey().getId() + "'>la page du concours</a>, " +
+					"<a href='http://cpcgifts.fr/giveaway?gaID=" + ga.getKey().getId() + "'>la page du concours</a>, " +
 					"vous pouvez demander la désignation d'un nouveau gagnant en utilisant le formulaire présent sur la page du concours.\n" +
 					"</p>\n");
 		} else {
@@ -56,27 +56,27 @@ public class SendEmailUtils {
 			
 			body.append("<ul>\n");
 			for(CpcUser winner : winners) {
-				body.append("<li><a href='http://cpcgifts.ovh/user?userID=" + winner.getKey().getId() + "'>" + winner.getCpcNickname() + "</a></li>\n");
+				body.append("<li><a href='http://cpcgifts.fr/user?userID=" + winner.getKey().getId() + "'>" + winner.getCpcNickname() + "</a></li>\n");
 			}
 			body.append("</ul>\n");
 			
 			body.append("<p>\n" +
 					"Si l'un d'eux ne respecte pas une des conditions indiquées sur " +
-					"<a href='http://cpcgifts.ovh/giveaway?gaID=" + ga.getKey().getId() + "'>la page du concours</a>, " +
+					"<a href='http://cpcgifts.fr/giveaway?gaID=" + ga.getKey().getId() + "'>la page du concours</a>, " +
 					"vous pouvez demander la désignation d'un nouveau gagnant en utilisant le formulaire présent sur la page du concours.\n" +
 					"</p>\n");
 		}
 		
 		body.append("<p>\n" +
 				"Cordialement,<br />\n" +
-				"L'équipe cpcgifts.ovh\n" +
+				"L'équipe cpcgifts.fr\n" +
 				"</p>\n");
 		
 		body.append("</p>\n" +
 				"<p>***************</p>\n" +
 				"<p>\n" +
 				"Si vous ne souhaitez plus recevoir d'emails en provenance de CPC Gifts, rendez sur la page de " +
-				"<a href='http://cpcgifts.ovh/user?userID=" + author.getKey().getId() + "'>votre profil</a> " +
+				"<a href='http://cpcgifts.fr/user?userID=" + author.getKey().getId() + "'>votre profil</a> " +
 				"pour désactiver l'envoi d'emails." +
 				"</p>\n");
 		

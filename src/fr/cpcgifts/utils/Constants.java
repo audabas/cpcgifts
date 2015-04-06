@@ -19,7 +19,7 @@ public final class Constants {
 			"* Au moins 25 messages postés sur le forum  \n" +
 			"* Ne pas déjà posséder le jeu  \n";
 	
-	public static final String DEFAULT_CONTACT_EMAIL = "cpcgifts.appspot@gmail.com";
+	public static final String DEFAULT_CONTACT_EMAIL = "noreply@cpcgifts.fr";
 	public static final String DEFAULT_CONTACT_PERSONAL = "CPC Gifts";
 	
 	public static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";

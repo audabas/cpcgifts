@@ -29,6 +29,8 @@
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width">
 
+<meta name="google-site-verification" content="vJan731WjYKDm9bp5est5ZWJTOjWSntpNMGekvfU7vs" />
+
 <script src="/js/vendor/modernizr-2.6.2.min.js"></script>
 
 <%@ include file="css.jspf" %>
