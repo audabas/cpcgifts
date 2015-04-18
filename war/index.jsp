@@ -56,7 +56,7 @@
 	<h2>Le site des canards généreux</h2>
 	<br />
 	<%
-		if(opengas.size() > 3) {
+		if(opengas.size() > 3 && userService.isUserLoggedIn()) {
 	%>
 		<div id="featuredGAs" class="carousel slide visible-desktop" style="width: 460px; margin : auto;">
 			<ol class="carousel-indicators">
@@ -92,6 +92,14 @@
 				href="#featuredGAs" data-slide="next">&rsaquo;</a>
 		</div>
 		<%
+		} else {
+		
+		%>
+		
+		<iframe width="640" height="360" src="https://www.youtube.com/embed/tem_PBiHUx8?rel=0" frameborder="0" allowfullscreen></iframe>
+		
+	<%
+			
 		}
 	%>
 	</div>
