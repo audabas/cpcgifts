@@ -18,3 +18,5 @@ Technologies utilisées
 ## Licence
 
 CPC Gifts est distribué sous [Licence Publique Rien À Branler](http://www.wtfpl.net/)
+
+[![Donate Bitcoin](https://img.shields.io/badge/donate-bitcoin-orange.svg)](https://bastien09.github.io/donate-bitcoin)
