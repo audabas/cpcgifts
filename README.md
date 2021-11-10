@@ -1,7 +1,7 @@
 CPC Gifts
 ========
 
-Plateforme d'organisation de concours pour le forum Canard PC ([Canard PC Gifts] (http://cpcgifts.fr))
+Plateforme d'organisation de concours pour le forum Canard PC ([Canard PC Gifts](http://cpcgifts.fr))
 
 * [Le site CPC Gifts](http://cpcgifts.fr)
 * [Le topic des canards généreux](http://forum.canardpc.com/threads/63940-Le-topic-des-canards-g%C3%A9n%C3%A9reux)
@@ -20,6 +20,5 @@ Technologies utilisées
 CPC Gifts est distribué sous [Licence Publique Rien À Branler](http://www.wtfpl.net/)
 
 [![Donate with Bitcoin](https://cryptobadges.io/badge/micro/17KfQiHn1QKbZkzhETSG7Zq7qGUcdcrfBT)](https://cryptobadges.io/donate/17KfQiHn1QKbZkzhETSG7Zq7qGUcdcrfBT)
-[![Faire un don en Litecoin](https://cryptobadges.io/badge/micro/LRYcfvbc64ZepZgrQbRZPatt3UqthoZuDp)](https://cryptobadges.io/donate/LRYcfvbc64ZepZgrQbRZPatt3UqthoZuDp)
-[![Faire un don en Ripple](https://cryptobadges.io/badge/micro/rfKCQ5H8rQKbZkz6NTSGfZqfqG7cdciCBT)](https://cryptobadges.io/donate/rfKCQ5H8rQKbZkz6NTSGfZqfqG7cdciCBT)
+[![Donate with Litecoin](https://cryptobadges.io/badge/micro/LRYcfvbc64ZepZgrQbRZPatt3UqthoZuDp)](https://cryptobadges.io/donate/LRYcfvbc64ZepZgrQbRZPatt3UqthoZuDp)
 
