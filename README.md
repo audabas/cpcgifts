@@ -19,7 +19,7 @@ Technologies utilisées
 
 CPC Gifts est distribué sous [Licence Publique Rien À Branler](http://www.wtfpl.net/)
 
-[![Donate with Bitcoin](https://en.cryptobadges.io/badge/micro/17KfQiHn1QKbZkzhETSG7Zq7qGUcdcrfBT)](https://en.cryptobadges.io/donate/17KfQiHn1QKbZkzhETSG7Zq7qGUcdcrfBT)
-[![Faire un don en Litecoin](https://fr.cryptobadges.io/badge/micro/LRYcfvbc64ZepZgrQbRZPatt3UqthoZuDp)](https://fr.cryptobadges.io/donate/LRYcfvbc64ZepZgrQbRZPatt3UqthoZuDp)
-[![Faire un don en Ripple](https://fr.cryptobadges.io/badge/micro/rfKCQ5H8rQKbZkz6NTSGfZqfqG7cdciCBT)](https://fr.cryptobadges.io/donate/rfKCQ5H8rQKbZkz6NTSGfZqfqG7cdciCBT)
+[![Donate with Bitcoin](https://cryptobadges.io/badge/micro/17KfQiHn1QKbZkzhETSG7Zq7qGUcdcrfBT)](https://cryptobadges.io/donate/17KfQiHn1QKbZkzhETSG7Zq7qGUcdcrfBT)
+[![Faire un don en Litecoin](https://cryptobadges.io/badge/micro/LRYcfvbc64ZepZgrQbRZPatt3UqthoZuDp)](https://cryptobadges.io/donate/LRYcfvbc64ZepZgrQbRZPatt3UqthoZuDp)
+[![Faire un don en Ripple](https://cryptobadges.io/badge/micro/rfKCQ5H8rQKbZkz6NTSGfZqfqG7cdciCBT)](https://cryptobadges.io/donate/rfKCQ5H8rQKbZkz6NTSGfZqfqG7cdciCBT)
 
