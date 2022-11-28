@@ -18,7 +18,3 @@ Technologies utilisées
 ## Licence
 
 CPC Gifts est distribué sous [Licence Publique Rien À Branler](http://www.wtfpl.net/)
-
-[![Donate with Bitcoin](https://cryptobadges.io/badge/micro/17KfQiHn1QKbZkzhETSG7Zq7qGUcdcrfBT)](https://cryptobadges.io/donate/17KfQiHn1QKbZkzhETSG7Zq7qGUcdcrfBT)
-[![Donate with Litecoin](https://cryptobadges.io/badge/micro/LRYcfvbc64ZepZgrQbRZPatt3UqthoZuDp)](https://cryptobadges.io/donate/LRYcfvbc64ZepZgrQbRZPatt3UqthoZuDp)
-
